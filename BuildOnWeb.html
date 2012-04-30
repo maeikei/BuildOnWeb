@@ -1,20 +1,79 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>
-			Build Your Program On Web
-		</title>
-	</head>
-	<body>
-		<nav>
-			<a href="/login">log in</a> |
-			<a href="/logout">log out</a> |
-		</nav>
-		<select>
-			<option value="volvo">Volvo</option>
-			<option value="saab">Saab</option>
-			<option value="opel">Opel</option>
-			<option value="audi">Audi</option>
-		</select>
-		
+<head>
+<title>
+Build Your Program On Web
+</title>
+
+<style type="text/css">
+ul#toolbar {
+margin: 20px 0;
+padding: 0;
+font: 12px Verdana;
+list-style-type: none;
+}
+ul#toolbar li {
+display: inline;
+}
+ul#toolbar li a {
+padding: 5px 10px;
+border: 1px solid #aaa;
+background-color: #eee;
+color: #47a;
+text-decoration: none;
+}
+</style>
+
+</head>
+<body>
+
+<div id = "toolbar">
+<ul id="toolbar">
+  <li class="current">
+ 	<a href="first.html">First page</a>
+  </li>
+  <li><a href="second.html">Second page</a></li>
+  <li><a href="third.html">Third page</a></li>
+  <li><a href="fourth.html">Fourth page</a></li>
+  <li><a href="fifth.html">Fifth page</a></li>
+</ul>
+</div>
+
+
+<div id="markup">
+	<ul class="tree">
+		<li class="expanded">List 0
+			<ul>
+				<li class="expanded">List 0-0
+					<ul>
+						<li>item 0-0-0</li>
+						<li><a target="_new" href="www.elsewhere.com" title="go elsewhere">elsewhere</a></li>
+					</ul>
+				</li>
+			</ul>
+		</li>
+		<li>List 1
+			<ul>
+				<li>List 1-0
+					<ul>
+						<li yuiConfig='{"type":"DateNode","editable":true}'>02/01/2009</li>
+						<li><span>item <strong>1-1-0</strong></span></li>
+					</ul>
+				</li>
+			</ul>
+		</li>
+	</ul>
+</div>
+	
+<div>
+<textarea rows="3" cols="30">
+
+</textarea>
+</div>
+
+
+
+
+</body>
+
 </html>
