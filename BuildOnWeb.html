@@ -22,10 +22,86 @@ background-color: #eee;
 color: #47a;
 text-decoration: none;
 }
+
+#toolbar{
+	height: 30px;
+	width: 100%;
+	margin: 0;
+	padding: 5px;
+	position: fixed;
+	top: 0;
+	left: 0;
+	background: #000;
+	color: #fff;
+}
+
+
+menu {
+    list-style-type:none;
+    background:grey;
+    padding:0px;
+    margin:0px;
+}
+menu:before, command:before {
+    border:1px solid lime;
+    display:block;
+    content:attr(label);
+}
+menu[type=toolbar] {
+    position:relative;
+}
+menu[type=toolbar]>menu, menu[type=toolbar]>comman {
+    display:inline-block;
+    position:relative;
+    border:1px solid red;
+}
+menu[type=toolbar]>menu>menu, menu[type=toolbar]>menu>command {
+    visibility:hidden;
+    display:block;
+    height:0px;
+}
+menu[type=toolbar]>menu:hover>menu, menu[type=toolbar]>menu:hover>command {
+    //position:absolute;
+    visibility:visible;
+    height:20px;
+    background:yellow;
+    border: 1px solid blue;
+}
+
 </style>
 
 </head>
 <body>
+
+<div id="toolbar">
+<button>abc</button>
+<button>efg</button>
+</div>
+
+
+
+
+<menu type="toolbar">
+    <menu label="File">
+        <command onclick="fnew()" label="New..." />
+        <command onclick="fopen()" label="Open..." />
+        <command onclick="fsave()" label="Save" />
+        <command onclick="fsaveas()" label="Save as..." />
+    </menu>
+    <menu label="Edit">
+        <command onclick="ecopy()" label="Copy" />
+        <command onclick="ecut()" label="Cut" />
+        <command onclick="epaste()" label="Paste" />
+    </menu>
+    <menu label="Help">
+        <command href="help.html" label="Help" />
+        <command href="about.html" label="About" />
+    </menu>
+</menu>
+
+
+
+
 
 <div id = "toolbar">
 <ul id="toolbar">
