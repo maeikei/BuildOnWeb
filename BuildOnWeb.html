@@ -4,6 +4,7 @@
 		<meta charset="utf-8">
 		<title>Build On Web</title>
 		<link rel="stylesheet" href="css/nav.css">
+		<link rel="stylesheet" href="css/treeview.css">
 	</head>
 	<body class="no-js">
 		<nav id="topNav">
@@ -24,5 +25,21 @@
 				<li><a href="#" title="Nav Link 1">Nav Link 5</a></li>
 			</ul>
 		</nav>
+		<section id="treeview">
+			<article>First Item</article>
+				<article>
+					<input type="checkbox" class="treeview" id="item2" /><label for="item2">Second Item</label>
+					<article>Child one</article>
+					<article>Child two</article>
+					<article>
+						<input type="checkbox" class="treeview" id="nested1" checked /><label for="nested1">Nested Parent 1</label>
+						<article>Nested Item 1</article>
+					</article>
+				</article>
+				<article>
+					<input type="checkbox" class="treeview" id="item3" disabled /><label for="item3">This treeview</label>
+					<article>is disabled</article>
+				</article>
+		</section>			
 	</body>
 </html>
