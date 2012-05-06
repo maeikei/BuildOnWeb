@@ -1,31 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>Build On Web</title>
-		<link rel="stylesheet" href="css/layaout.css">
-		<link rel="stylesheet" href="css/nav.css">
-		<link rel="stylesheet" href="css/treeview.css">
-	</head>
-	<body class="no-js">
-		<nav id="topNav">
-	        	<ul>
-       		     	<li><a href="#" title="Nav Link 1">Nav Link 1</a></li>
-				<li>
-                	<a href="#" title="Nav Link 1">Nav Link 2
-					<ul>
-                    	<li><a href="#" title="Sub Nav Link 1">Sub Nav Link 1</a></li>
-						<li><a href="#" title="Sub Nav Link 2">Sub Nav Link 2</a></li>
-						<li><a href="#" title="Sub Nav Link 3">Sub Nav Link 3</a></li>
-						<li><a href="#" title="Sub Nav Link 4">Sub Nav Link 4</a></li>
-						<li class="last"><a href="#" title="Sub Nav Link 5">Sub Nav Link 5</a></li>
-                    </ul>
-				</li>
-				<li><a href="#" title="Nav Link 1">Nav Link 3</a></li>
-				<li><a href="#" title="Nav Link 1">Nav Link 4</a></li>
-				<li><a href="#" title="Nav Link 1">Nav Link 5</a></li>
-			</ul>
-		</nav>
+<head>
+	<meta charset="utf-8">
+	<title>Build On Web</title>
+	<link rel="stylesheet" href="css/layaout.css">
+	<link rel="stylesheet" href="css/nav.css">
+	<link rel="stylesheet" href="css/treeview.css">
+</head>
+<body class="no-js">
+	<div id="header">  
+	</div>
+	<div id="treeView">  
 		<section id="treeview">
 			<article>First Item</article>
 				<article>
@@ -41,6 +26,63 @@
 					<input type="checkbox" class="treeview" id="item3" disabled /><label for="item3">This treeview</label>
 					<article>is disabled</article>
 				</article>
-		</section>			
-	</body>
+		</section>
+	</div>
+	<div id="mainLayout">  
+		<nav id="topNav">
+			<ul>
+				<li><a href="#" title="Nav Link 1">Nav Link 1</a></li>
+				<li>
+					<a href="#" title="Nav Link 1">Nav Link 2
+					<ul>
+						<li><a href="#" title="Sub Nav Link 1">Sub Nav Link 1</a></li>
+						<li><a href="#" title="Sub Nav Link 2">Sub Nav Link 2</a></li>
+						<li><a href="#" title="Sub Nav Link 3">Sub Nav Link 3</a></li>
+						<li><a href="#" title="Sub Nav Link 4">Sub Nav Link 4</a></li>
+						<li class="last"><a href="#" title="Sub Nav Link 5">Sub Nav Link 5</a></li>
+					</ul>
+				</li>
+				<li><a href="#" title="Nav Link 1">Nav Link 3</a></li>
+				<li><a href="#" title="Nav Link 1">Nav Link 4</a></li>
+				<li><a href="#" title="Nav Link 1">Nav Link 5</a></li>
+			</ul>
+		</nav>
+		
+	</div>
+	<div id="footer">  
+	</div>
+	<script id="script">
+	window.onload = function() {
+	  var te = document.getElementById("code");
+	  var sc = document.getElementById("script");
+	  te.value = (sc.textContent || sc.innerText || sc.innerHTML).replace(/^\s*/, "");
+	  sc.innerHTML = "";
+	  var te_html = document.getElementById("code-html");
+	  te_html.value = "<html>\n  " + document.documentElement.innerHTML + "\n</html>";
+
+	  var foldFunc = CodeMirror.newFoldFunction(CodeMirror.braceRangeFinder);
+	  window.editor = CodeMirror.fromTextArea(te, {
+		mode: "javascript",
+		lineNumbers: true,
+		lineWrapping: true,
+		onGutterClick: foldFunc,
+		extraKeys: {"Ctrl-Q": function(cm){foldFunc(cm, cm.getCursor().line);}}
+	  });
+	  foldFunc(editor, 9);
+	  foldFunc(editor, 20);
+
+	  var foldFunc_html = CodeMirror.newFoldFunction(CodeMirror.tagRangeFinder);
+	  window.editor_html = CodeMirror.fromTextArea(te_html, {
+		mode: "text/html",
+		lineNumbers: true,
+		lineWrapping: true,
+		onGutterClick: foldFunc_html,
+		extraKeys: {"Ctrl-Q": function(cm){foldFunc_html(cm, cm.getCursor().line);}}
+	  })
+	  foldFunc_html(editor_html, 1);
+	  foldFunc_html(editor_html, 15);
+	};
+	</script>
+
+</body>
 </html>
