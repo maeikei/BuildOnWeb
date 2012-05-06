@@ -6,6 +6,14 @@
 	<link rel="stylesheet" href="css/layaout.css">
 	<link rel="stylesheet" href="css/nav.css">
 	<link rel="stylesheet" href="css/treeview.css">
+    <link rel="stylesheet" href="CodeMirror/lib/codemirror.css">
+    <!--link rel="stylesheet" href="CodeMirror/doc/docs.css"-->
+    <script src="CodeMirror/lib/codemirror.js"></script>
+    <script src="CodeMirror/mode/clike/clike.js"></script>
+    <script src="CodeMirror/keymap/vim.js"></script>
+    <style type="text/css">
+      .CodeMirror {border-top: 1px solid #eee; border-bottom: 1px solid #eee;}
+    </style>
 </head>
 <body class="no-js">
 	<div id="header">  
@@ -47,42 +55,35 @@
 				<li><a href="#" title="Nav Link 1">Nav Link 5</a></li>
 			</ul>
 		</nav>
+		<form>
+		<textarea id="code" name="code">
+#include "syscalls.h"
+/* getchar:  simple buffered version */
+int getchar(void)
+{
+  static char buf[BUFSIZ];
+  static char *bufp = buf;
+  static int n = 0;
+  if (n == 0) {  /* buffer is empty */
+    n = read(0, buf, sizeof buf);
+    bufp = buf;
+  }
+  return (--n >= 0) ? (unsigned char) *bufp++ : EOF;
+}
 		
+		</textarea>
+		</form>
 	</div>
-	<div id="footer">  
+	<div id="footer">
 	</div>
-	<script id="script">
-	window.onload = function() {
-	  var te = document.getElementById("code");
-	  var sc = document.getElementById("script");
-	  te.value = (sc.textContent || sc.innerText || sc.innerHTML).replace(/^\s*/, "");
-	  sc.innerHTML = "";
-	  var te_html = document.getElementById("code-html");
-	  te_html.value = "<html>\n  " + document.documentElement.innerHTML + "\n</html>";
-
-	  var foldFunc = CodeMirror.newFoldFunction(CodeMirror.braceRangeFinder);
-	  window.editor = CodeMirror.fromTextArea(te, {
-		mode: "javascript",
-		lineNumbers: true,
-		lineWrapping: true,
-		onGutterClick: foldFunc,
-		extraKeys: {"Ctrl-Q": function(cm){foldFunc(cm, cm.getCursor().line);}}
-	  });
-	  foldFunc(editor, 9);
-	  foldFunc(editor, 20);
-
-	  var foldFunc_html = CodeMirror.newFoldFunction(CodeMirror.tagRangeFinder);
-	  window.editor_html = CodeMirror.fromTextArea(te_html, {
-		mode: "text/html",
-		lineNumbers: true,
-		lineWrapping: true,
-		onGutterClick: foldFunc_html,
-		extraKeys: {"Ctrl-Q": function(cm){foldFunc_html(cm, cm.getCursor().line);}}
-	  })
-	  foldFunc_html(editor_html, 1);
-	  foldFunc_html(editor_html, 15);
-	};
-	</script>
+    <script>
+      CodeMirror.commands.save = function(){alert("Saving");};
+      CodeMirror.fromTextArea(document.getElementById("code"), {
+        lineNumbers: true,
+        mode: "text/x-csrc",
+        keyMap: "vim"
+      });
+    </script>
 
 </body>
 </html>
