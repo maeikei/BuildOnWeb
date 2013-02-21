@@ -1,0 +1,7 @@
+#treeview article * { padding-left: 10px; }
+#treeview article *:not(:nth-child(2)) { margin-left: 10px; }
+.treeview { display: none; }
+.treeview:checked + label { background: URL("svg/plus.svg") left center no-repeat; }
+.treeview:not(:checked) ~ label { background: URL("svg/minus.svg") left center no-repeat; }
+.treeview:checked ~ *:not(:nth-child(2)) { display: none; }
+.treeview:disabled ~ * { color: #707070; }
