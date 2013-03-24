@@ -1,0 +1,2 @@
+.\b2.exe --prefix=E:\develop\BuildOnWeb-dev\object\3rdpart link=static toolset=msvc-11.0 install
+
