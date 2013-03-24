@@ -15,7 +15,7 @@
 #include <boost/tuple/tuple.hpp>
 
 namespace http {
-namespace server3 {
+namespace server_threadpool {
 
 struct request;
 
@@ -89,7 +89,7 @@ private:
   } state_;
 };
 
-} // namespace server3
+} // namespace server_threadpool
 } // namespace http
 
-#endif // HTTP_SERVER3_REQUEST_PARSER_HPP
+#endif // HTTP_SERVERserver_threadpool_REQUEST_PARSER_HPP

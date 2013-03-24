@@ -14,7 +14,7 @@
 #include <string>
 
 namespace http {
-namespace server3 {
+namespace server_threadpool {
 
 struct header
 {
@@ -22,7 +22,7 @@ struct header
   std::string value;
 };
 
-} // namespace server3
+} // namespace server_threadpool
 } // namespace http
 
-#endif // HTTP_SERVER3_HEADER_HPP
+#endif // HTTP_SERVERserver_threadpool_HEADER_HPP

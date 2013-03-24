@@ -22,7 +22,7 @@
 #include "request_parser.hpp"
 
 namespace http {
-namespace server3 {
+namespace server_threadpool {
 
 /// Represents a single connection from a client.
 class connection
@@ -72,7 +72,7 @@ private:
 
 typedef boost::shared_ptr<connection> connection_ptr;
 
-} // namespace server3
+} // namespace server_threadpool
 } // namespace http
 
-#endif // HTTP_SERVER3_CONNECTION_HPP
+#endif // HTTP_SERVERserver_threadpool_CONNECTION_HPP

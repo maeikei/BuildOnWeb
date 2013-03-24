@@ -9,13 +9,15 @@
 //
 
 #include "server.hpp"
-#include <boost/thread/thread.hpp>
+//#include <boost/thread/thread.hpp>
 #include <boost/bind.hpp>
-#include <boost/shared_ptr.hpp>
+//#include <boost/shared_ptr.hpp>
 #include <vector>
+#include <thread>
+#include <memory>
 
 namespace http {
-namespace server3 {
+namespace server_threadpool {
 
 server::server(const std::string& address, const std::string& port,
     const std::string& doc_root, std::size_t thread_pool_size)
@@ -33,7 +35,7 @@ server::server(const std::string& address, const std::string& port,
 #if defined(SIGQUIT)
   signals_.add(SIGQUIT);
 #endif // defined(SIGQUIT)
-  signals_.async_wait(boost::bind(&server::handle_stop, this));
+  signals_.async_wait(std::bind(&server::handle_stop, this));
 
   // Open the acceptor with the option to reuse the address (i.e. SO_REUSEADDR).
   boost::asio::ip::tcp::resolver resolver(io_service_);
@@ -50,10 +52,10 @@ server::server(const std::string& address, const std::string& port,
 void server::run()
 {
   // Create a pool of threads to run all of the io_services.
-  std::vector<boost::shared_ptr<boost::thread> > threads;
+  std::vector<std::shared_ptr<std::thread> > threads;
   for (std::size_t i = 0; i < thread_pool_size_; ++i)
   {
-    boost::shared_ptr<boost::thread> thread(new boost::thread(
+    std::shared_ptr<std::thread> thread(new std::thread(
           boost::bind(&boost::asio::io_service::run, &io_service_)));
     threads.push_back(thread);
   }
@@ -86,5 +88,5 @@ void server::handle_stop()
   io_service_.stop();
 }
 
-} // namespace server3
+} // namespace server_threadpool
 } // namespace http

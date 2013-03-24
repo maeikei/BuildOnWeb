@@ -18,7 +18,7 @@
 #include "request.hpp"
 
 namespace http {
-namespace server3 {
+namespace server_threadpool {
 
 request_handler::request_handler(const std::string& doc_root)
   : doc_root_(doc_root)
@@ -118,5 +118,5 @@ bool request_handler::url_decode(const std::string& in, std::string& out)
   return true;
 }
 
-} // namespace server3
+} // namespace server_threadpool
 } // namespace http

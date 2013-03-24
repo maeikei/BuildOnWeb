@@ -15,7 +15,7 @@
 #include <boost/noncopyable.hpp>
 
 namespace http {
-namespace server3 {
+namespace server_threadpool {
 
 struct reply;
 struct request;
@@ -40,7 +40,7 @@ private:
   static bool url_decode(const std::string& in, std::string& out);
 };
 
-} // namespace server3
+} // namespace server_threadpool
 } // namespace http
 
-#endif // HTTP_SERVER3_REQUEST_HANDLER_HPP
+#endif // HTTP_SERVERserver_threadpool_REQUEST_HANDLER_HPP

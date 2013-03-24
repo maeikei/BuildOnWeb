@@ -17,7 +17,7 @@
 #include "header.hpp"
 
 namespace http {
-namespace server3 {
+namespace server_threadpool {
 
 /// A reply to be sent to a client.
 struct reply
@@ -58,7 +58,7 @@ struct reply
   static reply stock_reply(status_type status);
 };
 
-} // namespace server3
+} // namespace server_threadpool
 } // namespace http
 
-#endif // HTTP_SERVER3_REPLY_HPP
+#endif // HTTP_SERVERserver_threadpool_REPLY_HPP

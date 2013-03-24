@@ -14,7 +14,7 @@
 #include "request_handler.hpp"
 
 namespace http {
-namespace server3 {
+namespace server_threadpool {
 
 connection::connection(boost::asio::io_service& io_service,
     request_handler& handler)
@@ -94,5 +94,5 @@ void connection::handle_write(const boost::system::error_code& e)
   // destructor closes the socket.
 }
 
-} // namespace server3
+} // namespace server_threadpool
 } // namespace http

@@ -20,7 +20,7 @@
 #include "request_handler.hpp"
 
 namespace http {
-namespace server3 {
+namespace server_threadpool {
 
 /// The top-level class of the HTTP server.
 class server
@@ -64,7 +64,7 @@ private:
   request_handler request_handler_;
 };
 
-} // namespace server3
+} // namespace server_threadpool
 } // namespace http
 
-#endif // HTTP_SERVER3_SERVER_HPP
+#endif // HTTP_SERVER_threadpool_SERVER_HPP

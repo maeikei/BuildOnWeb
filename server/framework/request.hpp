@@ -16,7 +16,7 @@
 #include "header.hpp"
 
 namespace http {
-namespace server3 {
+namespace server_threadpool {
 
 /// A request received from a client.
 struct request
@@ -28,7 +28,7 @@ struct request
   std::vector<header> headers;
 };
 
-} // namespace server3
+} // namespace server_threadpool
 } // namespace http
 
-#endif // HTTP_SERVER3_REQUEST_HPP
+#endif // HTTP_SERVERserver_threadpool_REQUEST_HPP
