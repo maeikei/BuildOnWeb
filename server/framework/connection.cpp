@@ -38,6 +38,8 @@ void connection::start()
           boost::asio::placeholders::bytes_transferred)));
 }
 
+//#define DEBUG
+
 void connection::handle_read(const boost::system::error_code& e,
     std::size_t bytes_transferred)
 {
@@ -46,7 +48,12 @@ void connection::handle_read(const boost::system::error_code& e,
     boost::tribool result;
     boost::tie(result, boost::tuples::ignore) = request_parser_.parse(
         request_, buffer_.data(), buffer_.data() + bytes_transferred);
-
+#ifdef DEBUG
+	std::cout << "bytes_transferred=" << bytes_transferred << std::endl;
+	std::string buff_str(buffer_.data(),bytes_transferred);
+	std::cout << buff_str << std::endl;
+	std::cout << result << std::endl;
+#endif
     if (result)
     {
       request_handler_.handle_request(request_, reply_);
@@ -81,6 +88,10 @@ void connection::handle_read(const boost::system::error_code& e,
 
 void connection::handle_write(const boost::system::error_code& e)
 {
+#ifdef DEBUG
+  std::cout << e.message() << std::endl;
+#endif
+
   if (!e)
   {
     // Initiate graceful connection closure.
