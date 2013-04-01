@@ -8,12 +8,11 @@ target_link_libraries( BuildOnWeb
   boost_iostreams
   boost_system
 )
-if(WIN32)
-else(WIN32)
+if(APPLE)
   target_link_libraries( BuildOnWeb
     c++
     c++abi
   )
-endif(WIN32)
+endif(APPLE)
 
 install(TARGETS BuildOnWeb DESTINATION ${PROJECT_BINARY_DIR}/InstallRoot/bin)
