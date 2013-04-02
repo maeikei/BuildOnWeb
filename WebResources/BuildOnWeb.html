@@ -20,12 +20,13 @@
     </div>
     <script src="http://d1n0x3qji82z53.cloudfront.net/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
     <script>
-      var editor1 = ace.edit("SourceView");
-      editor1.setTheme("ace/theme/monokai");
-      editor1.getSession().setMode("ace/mode/javascript");
-      var editor2 = ace.edit("OutPutFrame");
-      editor2.setTheme("ace/theme/monokai");
-      editor2.getSession().setMode("ace/mode/javascript");
+      var editor = ace.edit("SourceView");
+      editor.setTheme("ace/theme/xcode");
+      editor.getSession().setMode("ace/mode/javascript");
+      
+      var output = ace.edit("OutPutFrame");
+      output.setTheme("ace/theme/terminal");
+      output.getSession().setMode("ace/mode/text");
     </script>
 </body>
 </html>
