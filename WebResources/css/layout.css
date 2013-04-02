@@ -1,7 +1,7 @@
 body { font-family:Verdana; font-size:14px; margin:0;}
-#container {margin:0 auto;}
-#header { height:40px; background:#6cf; margin-bottom:5px;}
-#mainContent { height:600px; margin-bottom:5px;}
-#sidebar { float:left; width:16%; height:inherit; background:#9ff;}
-#content { float:right; width:84%; height:inherit; background:#cff;}
-#footer { height:40px; background:#6cf;}
+#ContainerFrame {min-height: 100%;margin: 0 auto -30px;}
+#Header { height:90%; background:#6cf; margin-bottom:5px;}
+#SlideFrame { height:auto; margin-bottom:5px;}
+#SourceViewerFrame {height:auto; background:#6ff;margin-bottom:5px;}
+#SourceViewer {margin:0;position: absolute;top: 0;right:0;bottom:0;left: 0;}
+#Footer { height:30px; background:#6cf;}

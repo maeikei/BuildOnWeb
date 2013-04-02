@@ -16,15 +16,17 @@ namespace mime_types {
 
 struct mapping
 {
-  const char* extension;
-  const char* mime_type;
+  const char* const extension;
+  const char* const mime_type;
 } mappings[] =
 {
-  { "gif", "image/gif" },
-  { "htm", "text/html" },
+  { "gif",  "image/gif" },
+  { "htm",  "text/html" },
   { "html", "text/html" },
-  { "jpg", "image/jpeg" },
-  { "png", "image/png" },
+  { "jpg",  "image/jpeg" },
+  { "png",  "image/png" },
+  { "css",  "text/css" },
+  { "js",   "text/javascript" },
   { 0, 0 } // Marks end of list.
 };
 
