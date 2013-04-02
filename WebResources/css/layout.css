@@ -11,7 +11,6 @@ body
 #Header
 { 
     height:50px; 
-    background:#6cf; 
 }
 #ContentFrame
 { 
@@ -20,35 +19,42 @@ body
 }
 #Footer {
     height: 50px;
-    background:#6cf;
 }
 
 
 #SourceViewFrame
 {
-    float :left ; 
-    height:100%; 
-    width :60%;
+    float :top ; 
+    height:70%; 
+    width :100%;
+}
+#OutputInfo
+{
+    float :top; 
+    height:5%; 
+    width :100%;    
 }
 #OutPutFrame
 {
-    float :left; 
-    height:100%; 
-    width :40%;
+    float :top; 
+    height:25%; 
+    width :100%;
 }
-
 
 #SourcePath 
 {
     float :left; 
     height:6%; 
     width :100%;
-    background:#3cf;  
 }
 #SourceView
 {
     float :left; 
     height:94%; 
     width :100%;    
-    background:#fcf;  
+    position: relative;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
 }

@@ -13,18 +13,19 @@
                 <div id="SourcePath"></div>
                 <div id="SourceView">$BOW_TMPL_SOURCE$</div>
             </div>
-            <div id="OutPutFrame">
-		<!--textarea id="SourceViewer" name="SourceViewer" class="SourceViewer">$BOW_TMPL_SOURCE$</textarea-->
-            </div>
+            <div id="OutputInfo">Infomations</div>
+            <div id="OutPutFrame"></div>
 	</div>   
         <div id="Footer">This is the footer</div>
     </div>
-    <script src="ace/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="http://d1n0x3qji82z53.cloudfront.net/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
     <script>
-      var ace = require("ace/ace");
-      var editor = ace.edit("SourceView");
-      editor.setTheme("ace/theme/monokai");
-      editor.getSession().setMode("ace/mode/javascript");
+      var editor1 = ace.edit("SourceView");
+      editor1.setTheme("ace/theme/monokai");
+      editor1.getSession().setMode("ace/mode/javascript");
+      var editor2 = ace.edit("OutPutFrame");
+      editor2.setTheme("ace/theme/monokai");
+      editor2.getSession().setMode("ace/mode/javascript");
     </script>
 </body>
 </html>
