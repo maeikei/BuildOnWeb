@@ -1,7 +1,54 @@
-body { font-family:Verdana; font-size:14px; margin:0;}
-#ContainerFrame {min-height: 100%;margin: 0 auto -30px;}
-#Header { height:90%; background:#6cf; margin-bottom:5px;}
-#SlideFrame { height:auto; margin-bottom:5px;}
-#SourceViewerFrame {height:auto; background:#6ff;margin-bottom:5px;}
-#SourceViewer {margin:0;position: absolute;top: 0;right:0;bottom:0;left: 0;}
-#Footer { height:30px; background:#6cf;}
+body 
+{ 
+    font-family:Verdana; 
+    font-size:14px; margin:0;
+}
+#Container
+{
+    width:96%;
+    margin: 0 auto -30px;
+}
+#Header
+{ 
+    height:50px; 
+    background:#6cf; 
+}
+#ContentFrame
+{ 
+    height:500px; 
+    margin-bottom:5px;
+}
+#Footer {
+    height: 50px;
+    background:#6cf;
+}
+
+
+#SourceViewFrame
+{
+    float :left ; 
+    height:100%; 
+    width :60%;
+}
+#OutPutFrame
+{
+    float :left; 
+    height:100%; 
+    width :40%;
+}
+
+
+#SourcePath 
+{
+    float :left; 
+    height:6%; 
+    width :100%;
+    background:#3cf;  
+}
+#SourceView
+{
+    float :left; 
+    height:94%; 
+    width :100%;    
+    background:#fcf;  
+}

@@ -6,21 +6,25 @@
     <link rel="stylesheet" href="css/layout.css">
 </head>
 <body>
-    <div id="ContainerFrame">
+    <div id="Container">
 	<div id="Header">This is the Header</div>
-	<div id="SlideFrame">
-            <div id="SourceViewerFrame">
+	<div id="ContentFrame">
+            <div id="SourceViewFrame">
+                <div id="SourcePath"></div>
+                <div id="SourceView">$BOW_TMPL_SOURCE$</div>
+            </div>
+            <div id="OutPutFrame">
 		<!--textarea id="SourceViewer" name="SourceViewer" class="SourceViewer">$BOW_TMPL_SOURCE$</textarea-->
             </div>
 	</div>   
+        <div id="Footer">This is the footer</div>
     </div>
-    <div id="Footer">This is the footer</div>
     <script src="ace/ace.js" type="text/javascript" charset="utf-8"></script>
     <script>
       var ace = require("ace/ace");
-      var SourceViewer = ace.edit("SourceViewer");
-      SourceViewer.setTheme("ace/theme/monokai");
-      SourceViewer.getSession().setMode("ace/mode/javascript");
+      var editor = ace.edit("SourceView");
+      editor.setTheme("ace/theme/monokai");
+      editor.getSession().setMode("ace/mode/javascript");
     </script>
 </body>
 </html>
