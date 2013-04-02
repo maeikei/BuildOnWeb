@@ -22,8 +22,7 @@
     <script>
       var editor = ace.edit("SourceView");
       editor.setTheme("ace/theme/xcode");
-      editor.getSession().setMode("ace/mode/javascript");
-      
+      editor.getSession().setMode("ace/mode/$BOW_TMPL_TYPE$");      
       var output = ace.edit("OutPutFrame");
       output.setTheme("ace/theme/terminal");
       output.getSession().setMode("ace/mode/text");
