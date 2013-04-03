@@ -11,11 +11,16 @@ add_executable(BuildOnWeb
   framework//server.hpp
   ${framework_SRCS}
 )
+
 target_link_libraries( BuildOnWeb lua)
-target_link_libraries( BuildOnWeb
-  boost_iostreams
-  boost_system
-)
+
+if(NOT WIN32)
+  target_link_libraries( BuildOnWeb
+    boost_iostreams
+    boost_system
+  )
+endif(NOT WIN32)
+
 if(APPLE)
   target_link_libraries( BuildOnWeb
     c++
@@ -23,4 +28,4 @@ if(APPLE)
   )
 endif(APPLE)
 
-install(TARGETS BuildOnWeb DESTINATION ${PROJECT_BINARY_DIR}/InstallRoot/bin)
+install(TARGETS BuildOnWeb DESTINATION ${PROJECT_BINARY_DIR}/InstallRoot)
