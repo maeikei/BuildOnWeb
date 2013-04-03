@@ -13,7 +13,11 @@
                 <div id="SourcePath"></div>
                 <div id="SourceView">$BOW_TMPL_SOURCE$</div>
             </div>
-            <div id="OutputInfo">Infomations</div>
+            <div id="OutputInfo">
+                <!--form method="post" onsubmit= "return go_editor(this);">
+                    <input type="submit" value="go"/>
+                </form-->
+            </div>
             <div id="OutPutFrame">$BOW_TMPL_OUTPUT$</div>
 	</div>   
         <div id="Footer">This is the footer</div>
@@ -22,10 +26,41 @@
     <script>
       var editor = ace.edit("SourceView");
       editor.setTheme("ace/theme/xcode");
-      editor.getSession().setMode("ace/mode/$BOW_TMPL_TYPE$");      
+      editor.getSession().setMode("ace/mode/$BOW_TMPL_TYPE$");
+      editor.getSession().on('change', function(e) {
+/*            alert(editor.getValue());*/
+            var xmlHttpRequest = new XMLHttpRequest();
+            xmlHttpRequest.onreadystatechange = function()
+            {
+                var READYSTATE_COMPLETED = 4;
+                var HTTP_STATUS_OK = 200;
+
+                if( xmlHttpRequest.readyState == READYSTATE_COMPLETED
+                    && xmlHttpRequest.status == HTTP_STATUS_OK )
+                {
+                    // レスポンスの表示
+                    /*alert( xmlHttpRequest.responseText );*/
+                }
+            }
+            xmlHttpRequest.open( 'POST', '/main.c' );
+            xmlHttpRequest.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded');
+            xmlHttpRequest.send( editor.getValue() );
+      });
       var output = ace.edit("OutPutFrame");
       output.setTheme("ace/theme/terminal");
       output.getSession().setMode("ace/mode/text");
+      output.setReadOnly(true);
+
+/*
+ * 
+ * @returns {undefined}
+ */      
+      function go_editor(frm) {
+          frm.name = "main.c";
+          frm.value = editor.getValue();
+          frm.submit();
+          return false;
+      }
     </script>
 </body>
 </html>
