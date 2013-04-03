@@ -16,6 +16,7 @@
 #include "mime_types.hpp"
 #include "reply.hpp"
 #include "request.hpp"
+#include "template.hpp"
 
 namespace http {
 namespace server_threadpool {
@@ -28,7 +29,7 @@ request_handler::request_handler(const std::string& doc_root)
     
     
 //#define DEBUG_PATH
-#define DEBUG_REP
+//#define DEBUG_REP
 
 void request_handler::handle_request(const request& req, reply& rep)
 {
@@ -90,6 +91,12 @@ void request_handler::handle_request(const request& req, reply& rep)
   while (is.read(buf, sizeof(buf)).gcount() > 0) {
     rep.content.append(buf, is.gcount());
   }
+
+
+// replace BOW var in template.
+  BuildOnWeb::BOWTemplate temp(rep.content);
+  temp.replace();
+  
   rep.headers.resize(2);
   rep.headers[0].name = "Content-Length";
   rep.headers[0].value = boost::lexical_cast<std::string>(rep.content.size());

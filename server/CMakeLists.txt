@@ -26,6 +26,7 @@ if(NOT WIN32)
   target_link_libraries( BuildOnWeb
     boost_iostreams
     boost_system
+    boost_filesystem
   )
 endif(NOT WIN32)
 
