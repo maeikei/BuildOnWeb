@@ -17,6 +17,7 @@ add_executable(BuildOnWeb
   app/template.hpp
   app/env.cpp
   app/env.hpp
+  app/main.cpp
 )
 
 target_link_libraries( BuildOnWeb lua)
