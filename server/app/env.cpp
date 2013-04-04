@@ -20,11 +20,13 @@ BOWEnv::BOWEnv(const string & www_root)
 }
 ,_env_build_commands_debug
 {
+/*
     "rm -rf " + _www_root + "/temp",
     "mkdir -p " + _www_root + "/temp",
     "git clone file:///Users/maeikei/workspace/BuildOnWeb-dev/repositories/c_cxx/helloworld.git "
     + _www_root + "/temp/helloworld",
     "make exe -C " + _www_root + "/temp/helloworld",
+ */
 }
 {
 }
@@ -35,7 +37,7 @@ void BOWEnv::build_env(void)
         system(it->c_str());
     }
     fs::path helloworld(_www_root + "/temp/helloworld");
-    if(not fs::exists(helloworld))
+    if( false == fs::exists(helloworld) )
     {
         for(auto it = _env_build_commands_debug.begin(); it != _env_build_commands_debug.end();it++)
         {
