@@ -20,13 +20,13 @@ struct mapping
   const char* const mime_type;
 } mappings[] =
 {
-  { "gif",  "image/gif" },
-  { "htm",  "text/html" },
-  { "html", "text/html" },
-  { "jpg",  "image/jpeg" },
-  { "png",  "image/png" },
-  { "css",  "text/css" },
-  { "js",   "text/javascript" },
+  { ".gif",  "image/gif" },
+  { ".htm",  "text/html" },
+  { ".html", "text/html" },
+  { ".jpg",  "image/jpeg" },
+  { ".png",  "image/png" },
+  { ".css",  "text/css" },
+  { ".js",   "text/javascript" },
   { 0, 0 } // Marks end of list.
 };
 

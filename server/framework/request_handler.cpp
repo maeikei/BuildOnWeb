@@ -17,6 +17,13 @@
 #include "reply.hpp"
 #include "request.hpp"
 #include "template.hpp"
+#include "source_update.hpp"
+
+#include <boost/filesystem.hpp>
+namespace fs = boost::filesystem;
+#include <boost/algorithm/string.hpp>
+
+
 
 namespace http {
 namespace server_threadpool {
@@ -29,6 +36,8 @@ request_handler::request_handler(const std::string& doc_root)
     
     
 //#define DEBUG_PATH
+//#define DEBUG_POST
+//#define DEBUG_DATA
 //#define DEBUG_REP
 
 void request_handler::handle_request(const request& req, reply& rep)
@@ -48,66 +57,93 @@ void request_handler::handle_request(const request& req, reply& rep)
     rep = reply::stock_reply(reply::bad_request);
     return;
   }
-
+  // If path ends in slash (i.e. is a directory) then add "BuildOnWeb.html".
+    if (request_path[request_path.size() - 1] == '/')
+    {
+        request_path += "BuildOnWeb.html";
+    }
 #ifdef DEBUG_PATH
 	std::cout << "request_path=" << request_path << std::endl;
 #endif
-
-  // If path ends in slash (i.e. is a directory) then add "index.html".
-  if (request_path[request_path.size() - 1] == '/')
-  {
-//    request_path += "index.html";
-    request_path += "BuildOnWeb.html";
-  }
-
-  // Determine the file extension.
-  std::size_t last_slash_pos = request_path.find_last_of("/");
-  std::size_t last_dot_pos = request_path.find_last_of(".");
-  std::string extension;
-  if (last_dot_pos != std::string::npos && last_dot_pos > last_slash_pos)
-  {
-    extension = request_path.substr(last_dot_pos + 1);
-  }
-
 #ifdef DEBUG_PATH
-	std::cout << "request_path=" << request_path << std::endl;
+	std::cout << "method=" << req.method << std::endl;
 #endif
-  // Open the file to send back.
-  std::string full_path = doc_root_ + request_path;
-  std::ifstream is(full_path.c_str(), std::ios::in | std::ios::binary);
-  if (!is)
-  {
-    rep = reply::stock_reply(reply::not_found);
-    return;
-  }
-
-#ifdef DEBUG_PATH
-	std::cout << "request_path=" << request_path << std::endl;
+#ifdef DEBUG_DATA
+	std::cout << "data=" << req.data << std::endl;
 #endif
-
-  // Fill out the reply to be sent to the client.
-  rep.status = reply::ok;
-  char buf[512];
-  while (is.read(buf, sizeof(buf)).gcount() > 0) {
-    rep.content.append(buf, is.gcount());
-  }
-
-
+    if( "GET" == req.method || "get" == req.method )
+    {
+        this->handle_get(req,request_path,rep);
+    }
+    if( "POST" == req.method || "post" == req.method )
+    {
+        this->handle_post(req,request_path,rep);
+    }
 // replace BOW var in template.
   BuildOnWeb::BOWTemplate temp(rep.content);
-  temp.replace();
-  
+  temp.replace();  
   rep.headers.resize(2);
   rep.headers[0].name = "Content-Length";
   rep.headers[0].value = boost::lexical_cast<std::string>(rep.content.size());
+    
+  fs::path rq_path(request_path);
+  std::string extension = rq_path.extension().string();
   rep.headers[1].name = "Content-Type";
   rep.headers[1].value = mime_types::extension_to_type(extension);
+
 #ifdef DEBUG_REP
 	std::cout << "rep.content=" << rep.content << std::endl;
 #endif
 
 }
 
+
+void request_handler::handle_get(const request& req,const std::string &request_path, reply& rep)
+{
+#ifdef DEBUG_PATH
+	std::cout << "request_path=" << request_path << std::endl;
+#endif
+    // Open the file to send back.
+    std::string full_path = doc_root_ + request_path;
+    std::ifstream is(full_path.c_str(), std::ios::in | std::ios::binary);
+    if (!is)
+    {
+        rep = reply::stock_reply(reply::not_found);
+        return;
+    }
+    
+#ifdef DEBUG_PATH
+	std::cout << "request_path=" << request_path << std::endl;
+#endif
+    
+    // Fill out the reply to be sent to the client.
+    rep.status = reply::ok;
+    char buf[512];
+    while (is.read(buf, sizeof(buf)).gcount() > 0) {
+        rep.content.append(buf, is.gcount());
+    }
+}
+    
+    
+void request_handler::handle_post(const request& req, const std::string &request_path,reply& rep)
+{
+#ifdef DEBUG_POST
+    for( auto it = req.headers.begin(); it != req.headers.end();it++)
+    {
+        std::cout << "it->name=<" << it->name << ">" << "it->value<" << it->value << ">" << std::endl;
+    }
+#endif
+    if( string::npos != request_path.find("EventAceOnChange"))
+    {
+        string postpath = boost::algorithm::replace_all_copy(request_path,"/EventAceOnChange/","");
+        BuildOnWeb::BOWSoureUpdate source(req.data,postpath,rep);
+        source.run();
+    }
+}
+    
+    
+    
+    
 bool request_handler::url_decode(const std::string& in, std::string& out)
 {
   out.clear();

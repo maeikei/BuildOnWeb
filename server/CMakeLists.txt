@@ -17,6 +17,8 @@ add_executable(BuildOnWeb
   app/template.hpp
   app/env.cpp
   app/env.hpp
+  app/source_update.cpp
+  app/source_update.hpp
   app/main.cpp
 )
 

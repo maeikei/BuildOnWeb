@@ -11,17 +11,17 @@ namespace fs = boost::filesystem;
 BOWTemplate::BOWTemplate(string & content)
 :_content(content)
 ,_file("temp/helloworld/main.c")
-,_extensions
- {
-     {".h","c_cpp"},
-     {".hpp","c_cpp"},
-     {".c","c_cpp"},
-     {".cxx","c_cpp"},
-     {".cpp","c_cpp"},
-     {".cp","c_cpp"},
- }
 ,_mode("c_cpp")
 ,_output("temp/helloworld/output.log")
+,_extensions
+{
+    {".h","c_cpp"},
+    {".hpp","c_cpp"},
+    {".c","c_cpp"},
+    {".cxx","c_cpp"},
+    {".cpp","c_cpp"},
+    {".cp","c_cpp"},
+}
 {
     
 }
@@ -61,4 +61,6 @@ void BOWTemplate::replace(void)
         }
         boost::algorithm::replace_all(_content, "$BOW_TMPL_OUTPUT$", output);
     }
+    // replace html template path.
+    boost::algorithm::replace_all(_content, "$BOW_TMPL_PATH$", _file);
 }

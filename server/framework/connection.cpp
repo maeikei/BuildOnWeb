@@ -38,7 +38,7 @@ void connection::start()
           boost::asio::placeholders::bytes_transferred)));
 }
 
-#define DEBUG
+// #define DEBUG
 
 void connection::handle_read(const boost::system::error_code& e,
     std::size_t bytes_transferred)

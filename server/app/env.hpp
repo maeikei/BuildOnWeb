@@ -10,7 +10,8 @@ namespace BuildOnWeb {
         void build_env(void);
     private:
         const string & _www_root;
-        const list<string> env_build_commands;
+        const list<string> _env_build_commands;
+        const list<string> _env_build_commands_debug;
     };
 }
 #endif // BUILD_ON_WEB_ENV_HPP

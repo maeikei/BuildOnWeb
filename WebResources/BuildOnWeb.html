@@ -34,15 +34,13 @@
             {
                 var READYSTATE_COMPLETED = 4;
                 var HTTP_STATUS_OK = 200;
-
                 if( xmlHttpRequest.readyState == READYSTATE_COMPLETED
                     && xmlHttpRequest.status == HTTP_STATUS_OK )
                 {
-                    // レスポンスの表示
-                    /*alert( xmlHttpRequest.responseText );*/
+                    alert( xmlHttpRequest.responseText );
                 }
             }
-            xmlHttpRequest.open( 'POST', '/main.c' );
+            xmlHttpRequest.open('POST','/EventAceOnChange/$BOW_TMPL_PATH$');
             xmlHttpRequest.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded');
             xmlHttpRequest.send( editor.getValue() );
       });
@@ -50,17 +48,7 @@
       output.setTheme("ace/theme/terminal");
       output.getSession().setMode("ace/mode/text");
       output.setReadOnly(true);
-
-/*
- * 
- * @returns {undefined}
- */      
-      function go_editor(frm) {
-          frm.name = "main.c";
-          frm.value = editor.getValue();
-          frm.submit();
-          return false;
-      }
+      
     </script>
 </body>
 </html>

@@ -14,6 +14,9 @@
 #include <boost/logic/tribool.hpp>
 #include <boost/tuple/tuple.hpp>
 
+#include <iostream>
+#include "request.hpp"
+
 namespace http {
 namespace server_threadpool {
 
@@ -40,8 +43,14 @@ public:
     while (begin != end)
     {
       boost::tribool result = consume(req, *begin++);
+//      std::cout << *begin << std::endl;
+//      std::cout << result << std::endl;
       if (result || !result)
+      {
+//        std::cout << "begin" << begin << "end" << end << std::endl;
+        req.data = std::string(begin,end);
         return boost::make_tuple(result, begin);
+      }
     }
     boost::tribool result = boost::indeterminate;
     return boost::make_tuple(result, begin);
