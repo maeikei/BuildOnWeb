@@ -79,20 +79,13 @@ void request_handler::handle_request(const request& req, reply& rep)
     {
         this->handle_post(req,request_path,rep);
     }
-// replace BOW var in template.
-  BuildOnWeb::BOWTemplate temp(rep.content);
-  temp.replace();  
-  rep.headers.resize(2);
-  rep.headers[0].name = "Content-Length";
-  rep.headers[0].value = boost::lexical_cast<std::string>(rep.content.size());
-    
-  fs::path rq_path(request_path);
-  std::string extension = rq_path.extension().string();
-  rep.headers[1].name = "Content-Type";
-  rep.headers[1].value = mime_types::extension_to_type(extension);
 
 #ifdef DEBUG_REP
 	std::cout << "rep.content=" << rep.content << std::endl;
+    for(auto it = rep.headers.begin();it != rep.headers.end();it++)
+    {
+        std::cout << "it=" << it->name << " " << it->value << std::endl;
+    }
 #endif
 
 }
@@ -122,6 +115,17 @@ void request_handler::handle_get(const request& req,const std::string &request_p
     while (is.read(buf, sizeof(buf)).gcount() > 0) {
         rep.content.append(buf, is.gcount());
     }
+    // replace BOW var in template.
+    BuildOnWeb::BOWTemplate temp(rep.content);
+    temp.replace();
+    rep.headers.resize(2);
+    rep.headers[0].name = "Content-Length";
+    rep.headers[0].value = boost::lexical_cast<std::string>(rep.content.size());
+    
+    fs::path rq_path(request_path);
+    std::string extension = rq_path.extension().string();
+    rep.headers[1].name = "Content-Type";
+    rep.headers[1].value = mime_types::extension_to_type(extension);
 }
     
     

@@ -38,7 +38,7 @@ void connection::start()
           boost::asio::placeholders::bytes_transferred)));
 }
 
-// #define DEBUG
+// #define DEBUG_READ
 
 void connection::handle_read(const boost::system::error_code& e,
     std::size_t bytes_transferred)
@@ -48,15 +48,16 @@ void connection::handle_read(const boost::system::error_code& e,
     boost::tribool result;
     boost::tie(result, boost::tuples::ignore) = request_parser_.parse(
         request_, buffer_.data(), buffer_.data() + bytes_transferred);
-#ifdef DEBUG
+#ifdef DEBUG_READ
 	std::cout << "bytes_transferred=" << bytes_transferred << std::endl;
 	std::string buff_str(buffer_.data(),bytes_transferred);
 	std::cout << buff_str << std::endl;
-	std::cout << result << std::endl;
+	std::cout << "result" << result << std::endl;
 #endif
     if (result)
     {
       request_handler_.handle_request(request_, reply_);
+      
       boost::asio::async_write(socket_, reply_.to_buffers(),
           strand_.wrap(
             boost::bind(&connection::handle_write, shared_from_this(),

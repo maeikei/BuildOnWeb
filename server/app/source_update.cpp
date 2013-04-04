@@ -3,6 +3,7 @@ using namespace BuildOnWeb;
 #include <boost/filesystem.hpp>
 namespace fs = boost::filesystem;
 #include <boost/algorithm/string.hpp>
+#include <boost/lexical_cast.hpp>
 #include <reply.hpp>
 
 #include <iostream>
@@ -17,6 +18,7 @@ BOWSoureUpdate::BOWSoureUpdate(const string & source,const string & path,http::s
 :_source(source)
 ,_path(path)
 ,_rep(rep)
+,_output("temp/helloworld/output.log")
 ,_env_build_commands
 {
     "cd temp/helloworld && git diff ",
@@ -47,4 +49,21 @@ void BOWSoureUpdate::run(void)
     {
         system(it->c_str());
     }
+    // replace html template output.
+    {
+        std::ifstream ifs(_output.c_str(), std::ios::in | std::ios::binary);
+        char buf[512];
+        string output;
+        while (ifs.read(buf, sizeof(buf)).gcount() > 0) {
+            output.append(buf, ifs.gcount());
+        }
+        _rep.content = output;
+    }
+    _rep.status = http::server_threadpool::reply::ok;
+    _rep.headers.resize(2);
+    _rep.headers[0].name = "Content-Length";
+    _rep.headers[0].value = boost::lexical_cast<std::string>(_rep.content.size());
+    
+    _rep.headers[1].name = "Content-Type";
+    _rep.headers[1].value = "plain/txt";
 }

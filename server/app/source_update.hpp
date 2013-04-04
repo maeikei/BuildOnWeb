@@ -19,6 +19,7 @@ namespace BuildOnWeb {
         const string & _source;
         const string & _path;
         http::server_threadpool::reply& _rep;
+        const string _output;
         const list<string> _env_build_commands;
     };
 }
