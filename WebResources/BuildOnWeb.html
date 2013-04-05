@@ -7,7 +7,25 @@
 </head>
 <body>
     <div id="Container">
-	<div id="Header">This is the Header</div>
+	<div id="Header">
+            <div id ="SearchText">
+                <form accept-charset="UTF-8" action="/search" id="top_search_form" method="get">
+                    <input type="text" name="q" id="js-command-bar-field" placeholder="Search or type a command" tabindex="1" data-username="$BOW_TMPL_USER$">
+                </form>
+            </div>
+            <ul id ="UserLink">
+                <li>
+                    <a href="/users/$BOW_TMPL_USER$">
+                        $BOW_TMPL_USER$
+                    </a>
+                </li>
+                <li>
+                    <a href="/logout" data-method="post" id="logout">
+                        logout
+                    </a>
+                </li>
+            </ul>
+        </div>
 	<div id="ContentFrame">
             <div id="SourceViewFrame">
                 <div id="SourcePath"></div>
@@ -23,38 +41,6 @@
         <div id="Footer">This is the footer</div>
     </div>
     <script src="http://d1n0x3qji82z53.cloudfront.net/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
-    <script>
-      var output = ace.edit("OutPutFrame");
-      output.setTheme("ace/theme/terminal");
-      output.getSession().setMode("ace/mode/text");
-      output.setReadOnly(true);
-      
-      var editor = ace.edit("SourceView");
-      editor.setTheme("ace/theme/xcode");
-      editor.getSession().setMode("ace/mode/$BOW_TMPL_TYPE$");
-      editor.getSession().on('change', function(e) {
-            var xmlHttpRequest = new XMLHttpRequest();
-            xmlHttpRequest.onreadystatechange = function()
-            {
-                var READYSTATE_COMPLETED = 4;
-                var HTTP_STATUS_OK = 200;
-/*
-                console.log(xmlHttpRequest.readyState);
-                console.log(xmlHttpRequest.status);
-*/
-                if( xmlHttpRequest.readyState == READYSTATE_COMPLETED
-                    && xmlHttpRequest.status == HTTP_STATUS_OK )
-                {
-/*
-                    console.log( xmlHttpRequest.responseText );
-*/
-                    output.setValue(xmlHttpRequest.responseText,1);
-                }
-            }
-            xmlHttpRequest.open('POST','/EventAceOnChange/$BOW_TMPL_PATH$');
-            xmlHttpRequest.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded');
-            xmlHttpRequest.send( editor.getValue() );
-      });
-    </script>
+    <script src="js/ace_wrap.js" type="text/javascript" charset="utf-8"></script>    
 </body>
 </html>
