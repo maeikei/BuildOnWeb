@@ -36,7 +36,7 @@ connection::connection(boost::asio::io_service& io_service,
 : strand_(io_service)
 ,socket_(io_service)
 ,remote_adress_()
-,request_handler_(doc_root)
+,doc_root_(doc_root)
 {
 }
 
@@ -78,6 +78,8 @@ void connection::handle_read(const boost::system::error_code& e,
 #endif
     if (result)
     {
+      /// The handler used to process the incoming request.
+      request_handler request_handler_(doc_root_,remote_adress_);
       request_handler_.handle_request(request_, reply_);
       
       boost::asio::async_write(socket_, reply_.to_buffers(),

@@ -28,7 +28,7 @@ namespace fs = boost::filesystem;
 namespace http {
 namespace server_threadpool {
 
-request_handler::request_handler(const std::string& doc_root)
+request_handler::request_handler(const std::string& doc_root,const std::string& remote)
   : doc_root_(doc_root)
 {
 }

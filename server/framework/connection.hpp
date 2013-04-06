@@ -59,9 +59,8 @@ private:
   boost::asio::ip::tcp::socket socket_;
   /// Socket for the connection address.
   std::string remote_adress_;
-
-  /// The handler used to process the incoming request.
-  request_handler request_handler_;
+  /// www document root
+  std::string doc_root_;
 
   /// Buffer for incoming data.
   boost::array<char, 8192> buffer_;
