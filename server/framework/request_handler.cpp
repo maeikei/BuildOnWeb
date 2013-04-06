@@ -30,17 +30,18 @@ namespace server_threadpool {
 
 request_handler::request_handler(const std::string& doc_root,const std::string& remote)
   : doc_root_(doc_root)
+  ,remote_(remote)
 {
 }
 
     
     
-#define DEBUG_REQ
+//#define DEBUG_REQ
 //#define DEBUG_PATH
 //#define DEBUG_POST
 //#define DEBUG_DATA
 //#define DEBUG_REP
-
+#define DEBUG_RET
     
 void request_handler::handle_request(const request& req, reply& rep)
 {
@@ -49,13 +50,25 @@ void request_handler::handle_request(const request& req, reply& rep)
     std::cout << "req.uri=" << req.uri << std::endl;
     std::cout << "req.http_version_major=" << req.http_version_major << std::endl;
     std::cout << "req.http_version_minor=" << req.http_version_minor << std::endl;
-    std::cout << "req.headers------*****------";
+    std::cout << "req.headers------*****------" << std::endl;
     for(auto it = req.headers.begin();it != req.headers.end();it++)
     {
         std::cout << "name=<" << it->name << "> value=<"<< it->value << ">" << std::endl;
     }
     std::cout << "------*****------" << std::endl;
 #endif
+    for(auto it = req.headers.begin();it != req.headers.end();it++)
+    {
+        if("X-Real-IP" == it->name)
+        {
+            remote_ = it->value;
+            break;
+        }
+    }
+#ifdef DEBUG_RET
+    std::cout << "remote_=" << remote_ << std::endl;
+#endif
+   
   // Decode url to path.
   std::string request_path;
   if (!url_decode(req.uri, request_path))

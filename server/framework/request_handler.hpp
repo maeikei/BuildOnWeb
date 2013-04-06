@@ -33,6 +33,7 @@ public:
 private:
   /// The directory containing the files to be served.
   std::string doc_root_;
+  std::string remote_;
 
   /// Perform URL-decoding on a string. Returns false if the encoding was
   /// invalid.
