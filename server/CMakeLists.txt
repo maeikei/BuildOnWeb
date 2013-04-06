@@ -19,7 +19,6 @@ add_executable(BuildOnWeb
   app/env.hpp
   app/source_update.cpp
   app/source_update.hpp
-  app/main.cpp
 )
 
 target_link_libraries( BuildOnWeb lua)
