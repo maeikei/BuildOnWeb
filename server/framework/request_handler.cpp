@@ -146,8 +146,6 @@ void request_handler::handle_post(const request& req, const std::string &request
 }
     
     
-    
-    
 bool request_handler::url_decode(const std::string& in, std::string& out)
 {
   out.clear();
