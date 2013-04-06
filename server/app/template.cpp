@@ -7,6 +7,8 @@ namespace fs = boost::filesystem;
 #include <fstream>
 #include <iostream>
 
+// #define DEBUG_REPLACE
+
 
 BOWTemplate::BOWTemplate(string & content)
 :_content(content)
@@ -42,7 +44,9 @@ void BOWTemplate::replace(void)
     {
         fs::path file(_file);
         string extension = file.extension().string();
+#ifdef DEBUG_REPLACE
         cout << extension << endl;
+#endif
         auto it = _extensions.find(extension);
         string mode = _mode;
         if( _extensions.end() != it )

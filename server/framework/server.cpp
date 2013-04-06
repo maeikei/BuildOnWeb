@@ -25,7 +25,7 @@ server::server(const std::string& address, const std::string& port,
     signals_(io_service_),
     acceptor_(io_service_),
     new_connection_(),
-    request_handler_(doc_root)
+    doc_root_(doc_root)
 {
   // Register to handle the signals that indicate when the server should exit.
   // It is safe to register for the same signal multiple times in a program,
@@ -62,12 +62,14 @@ void server::run()
 
   // Wait for all threads in the pool to exit.
   for (std::size_t i = 0; i < threads.size(); ++i)
+  {
     threads[i]->join();
+  }
 }
 
 void server::start_accept()
 {
-  new_connection_.reset(new connection(io_service_, request_handler_));
+  new_connection_.reset(new connection(io_service_, doc_root_));
   acceptor_.async_accept(new_connection_->socket(),
       boost::bind(&server::handle_accept, this,
         boost::asio::placeholders::error));

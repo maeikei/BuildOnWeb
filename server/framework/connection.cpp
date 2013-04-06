@@ -13,17 +13,30 @@
 #include <boost/bind.hpp>
 #include "request_handler.hpp"
 
+#include "thread"
+
 #define DEBUG_IP
 
 namespace http {
 namespace server_threadpool {
 
+/*
 connection::connection(boost::asio::io_service& io_service,
     request_handler& handler)
   : strand_(io_service)
     ,socket_(io_service)
     ,remote_adress_()
     ,request_handler_(handler)
+{
+}
+*/
+
+connection::connection(boost::asio::io_service& io_service,
+                        const std::string& doc_root)
+: strand_(io_service)
+,socket_(io_service)
+,remote_adress_()
+,request_handler_(doc_root)
 {
 }
 
@@ -36,7 +49,9 @@ void connection::start()
 {
   remote_adress_ = socket_.remote_endpoint().address().to_string();
 #ifdef DEBUG_IP
-  std::cout << remote_adress_ << std::endl;
+  std::cout << "remote_adress_" << remote_adress_ << std::endl;
+  std::thread::id this_id = std::this_thread::get_id();
+  std::cout << "this_id" << this_id << std::endl;
 #endif
   socket_.async_read_some(boost::asio::buffer(buffer_),
       strand_.wrap(

@@ -61,7 +61,9 @@ private:
   connection_ptr new_connection_;
 
   /// The handler for all incoming requests.
-  request_handler request_handler_;
+//  request_handler request_handler_;
+  /// doc root.
+  std::string doc_root_;
 };
 
 } // namespace server_threadpool
