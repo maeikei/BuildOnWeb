@@ -35,13 +35,27 @@ request_handler::request_handler(const std::string& doc_root,const std::string& 
 
     
     
+#define DEBUG_REQ
 //#define DEBUG_PATH
 //#define DEBUG_POST
 //#define DEBUG_DATA
 //#define DEBUG_REP
 
+    
 void request_handler::handle_request(const request& req, reply& rep)
 {
+#ifdef DEBUG_REQ
+    std::cout << "req.method=" << req.method << std::endl;
+    std::cout << "req.uri=" << req.uri << std::endl;
+    std::cout << "req.http_version_major=" << req.http_version_major << std::endl;
+    std::cout << "req.http_version_minor=" << req.http_version_minor << std::endl;
+    std::cout << "req.headers------*****------";
+    for(auto it = req.headers.begin();it != req.headers.end();it++)
+    {
+        std::cout << "name=<" << it->name << "> value=<"<< it->value << ">" << std::endl;
+    }
+    std::cout << "------*****------" << std::endl;
+#endif
   // Decode url to path.
   std::string request_path;
   if (!url_decode(req.uri, request_path))
@@ -64,9 +78,6 @@ void request_handler::handle_request(const request& req, reply& rep)
     }
 #ifdef DEBUG_PATH
 	std::cout << "request_path=" << request_path << std::endl;
-#endif
-#ifdef DEBUG_PATH
-	std::cout << "method=" << req.method << std::endl;
 #endif
 #ifdef DEBUG_DATA
 	std::cout << "data=" << req.data << std::endl;
