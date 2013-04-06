@@ -22,7 +22,7 @@ server {
 #	listen [::]:80 default_server ipv6_only=on;
 
 	root /usr/share/nginx/html;
-	index index.html index.htm;
+	index index.php index.php;
 
 	# Make site accessible from http://localhost/
 	server_name localhost;
@@ -30,28 +30,30 @@ server {
 	location / {
 		# First attempt to serve request as file, then
 		# as directory, then fall back to displaying a 404.
-		try_files $uri $uri/ /index.html;
+		try_files $uri $uri/ /index.php;
 		# Uncomment to enable naxsi on this location
 		# include /etc/nginx/naxsi.rules
-		proxy_pass       http://127.0.0.1:8081;
+	       proxy_pass       http://127.0.0.1:8081;
+               proxy_set_header X-Real-IP $remote_addr;
 	}
 
-	location ~ ^/login/(.*\.php)$ {
-		fastcgi_pass   127.0.0.1:9000;
-		fastcgi_index  login.php;
-        	fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
-		include        fastcgi_params;
+	location ~ ^/users/(.*) {
+		proxy_pass       http://127.0.0.1:8081;
+               proxy_set_header X-Real-IP $remote_addr;
 	}
 
 	location ~ ^/css/(.*\.css)$ {
 		proxy_pass       http://127.0.0.1:8081;
+               proxy_set_header X-Real-IP $remote_addr;
 	}
 
 	location ~ ^/js/(.*\.js)$ {
 		proxy_pass       http://127.0.0.1:8081;
+               proxy_set_header X-Real-IP $remote_addr;
 	}
 	location ~ ^/EventAceOnChange/(.*) {
 		proxy_pass       http://127.0.0.1:8081;
+               proxy_set_header X-Real-IP $remote_addr;
 	}
 
 	location /doc/ {
