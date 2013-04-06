@@ -35,6 +35,14 @@ server {
 		# include /etc/nginx/naxsi.rules
 		proxy_pass       http://127.0.0.1:8081;
 	}
+
+	location ~ ^/login/(.*\.php)$ {
+		fastcgi_pass   127.0.0.1:9000;
+		fastcgi_index  login.php;
+        	fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+		include        fastcgi_params;
+	}
+
 	location ~ ^/css/(.*\.css)$ {
 		proxy_pass       http://127.0.0.1:8081;
 	}
