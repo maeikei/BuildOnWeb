@@ -1,7 +1,12 @@
 include_directories(app)
 include_directories(framework)
 link_directories(${CMAKE_BINARY_DIR}/3rdpart/lib)
+
 aux_source_directory(framework framework_SRCS)
+aux_source_directory(app app_SRCS)
+
+
+
 add_executable(BuildOnWeb
   framework/connection.hpp
   framework/header.hpp
@@ -13,12 +18,11 @@ add_executable(BuildOnWeb
   framework/server.hpp
   ${framework_SRCS}
 
-  app/template.cpp
   app/template.hpp
-  app/env.cpp
   app/env.hpp
-  app/source_update.cpp
+  app/list_dir.hpp
   app/source_update.hpp
+  ${app_SRCS}
 )
 
 target_link_libraries( BuildOnWeb lua)

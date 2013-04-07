@@ -169,36 +169,39 @@ void request_handler::handle_get(const request& req,const std::string &request_p
         std::cout <<"language=" <<  language << endl;
         std::cout <<"repos=" <<  repos << endl;        
     }
-    // Open the file to send back.
-    std::string full_path = doc_root_ + request_path;
-    std::ifstream is(full_path.c_str(), std::ios::in | std::ios::binary);
-    if (!is)
+    else
     {
-        rep = reply::stock_reply(reply::not_found);
-        return;
-    }
+        // Open the file to send back.
+        std::string full_path = doc_root_ + request_path;
+        std::ifstream is(full_path.c_str(), std::ios::in | std::ios::binary);
+        if (!is)
+        {
+            rep = reply::stock_reply(reply::not_found);
+            return;
+        }
     
 #ifdef DEBUG_PATH
 	std::cout << "request_path=" << request_path << std::endl;
 #endif
     
-    // Fill out the reply to be sent to the client.
-    rep.status = reply::ok;
-    char buf[512];
-    while (is.read(buf, sizeof(buf)).gcount() > 0) {
-        rep.content.append(buf, is.gcount());
-    }
-    // replace BOW var in template.
-    BuildOnWeb::BOWTemplate temp(rep.content);
-    temp.replace();
-    rep.headers.resize(2);
-    rep.headers[0].name = "Content-Length";
-    rep.headers[0].value = boost::lexical_cast<std::string>(rep.content.size());
+        // Fill out the reply to be sent to the client.
+        rep.status = reply::ok;
+        char buf[512];
+        while (is.read(buf, sizeof(buf)).gcount() > 0) {
+            rep.content.append(buf, is.gcount());
+        }
+        // replace BOW var in template.
+        BuildOnWeb::BOWTemplate temp(rep.content);
+        temp.replace();
+        rep.headers.resize(2);
+        rep.headers[0].name = "Content-Length";
+        rep.headers[0].value = boost::lexical_cast<std::string>(rep.content.size());
     
-    fs::path rq_path(request_path);
-    std::string extension = rq_path.extension().string();
-    rep.headers[1].name = "Content-Type";
-    rep.headers[1].value = mime_types::extension_to_type(extension);
+        fs::path rq_path(request_path);
+        std::string extension = rq_path.extension().string();
+        rep.headers[1].name = "Content-Type";
+        rep.headers[1].value = mime_types::extension_to_type(extension);
+    }
 }
     
     
