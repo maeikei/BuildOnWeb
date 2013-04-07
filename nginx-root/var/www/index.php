@@ -24,8 +24,9 @@
 	if (!$user_accout_table_exist) {
 		$sql = "CREATE TABLE user_acount
 		(
+            ID varchar(32),
 			RemoteIp varchar(32),
-			ID varchar(128),
+            name varchar(128),
 			PASSWORD varchar(16),
 			APP_URL varchar(256)
 		)";
@@ -50,7 +51,9 @@
 	if( !$row )
 	{
 //		echo "insert table!";
-		$sql = "INSERT INTO user_acount (RemoteIp,ID,PASSWORD,APP_URL) VALUES ('". $remote_ip."','guest','','c_cxx/helloworld/main.c')";
+	        $userid = md5( $remote_ip . "guest" );
+//        	echo $userid;
+		$sql = "INSERT INTO user_acount (ID,RemoteIp,name,PASSWORD,APP_URL) VALUES ('". $userid."','" . $remote_ip."','guest','','c_cxx/helloworld/main.c')";
 		$result2 = mysql_query($sql, $link);
 		if (!$result2) {
 			die("Failed!".mysql_error());
@@ -66,16 +69,14 @@
         }
         $row = mysql_fetch_row($result);
 	if ( $row ) {
-		$userid = $row[1];
-		$last_app = $row[3];
+		$userid = $row[2];
+		$last_app = $row[4];
 	}
 	mysql_free_result($result);
 //	echo $userid;
 //	echo $last_app;
 	mysql_close($link);
-	$redirect_url= "Location: http://" . $_SERVER['SERVER_ADDR'] . "/users/id=".$userid."/app=".$last_app;
-	echo $redirect_url . "\n";
-//	echo $_SERVER['HTTP_HOST'] . "\n";
-//	echo $_SERVER['HTTP_X_REAL_IP'] . "\n";
+	$redirect_url= "Location: http://" . $_SERVER['SERVER_ADDR'] . "/users/".$userid."/".$last_app;
+//	echo $redirect_url . "\n";
 	header($redirect_url)
 ?>

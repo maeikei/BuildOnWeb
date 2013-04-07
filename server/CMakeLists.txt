@@ -28,6 +28,7 @@ if(NOT WIN32)
     boost_iostreams
     boost_system
     boost_filesystem
+    boost_regex
   )
 endif(NOT WIN32)
 

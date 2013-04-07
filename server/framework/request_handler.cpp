@@ -22,6 +22,7 @@
 #include <boost/filesystem.hpp>
 namespace fs = boost::filesystem;
 #include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string_regex.hpp>
 
 
 
@@ -37,11 +38,11 @@ request_handler::request_handler(const std::string& doc_root,const std::string& 
     
     
 //#define DEBUG_REQ
-//#define DEBUG_PATH
+#define DEBUG_PATH
 //#define DEBUG_POST
 //#define DEBUG_DATA
 //#define DEBUG_REP
-#define DEBUG_RET
+//#define DEBUG_RET
     
 void request_handler::handle_request(const request& req, reply& rep)
 {
@@ -56,6 +57,9 @@ void request_handler::handle_request(const request& req, reply& rep)
         std::cout << "name=<" << it->name << "> value=<"<< it->value << ">" << std::endl;
     }
     std::cout << "------*****------" << std::endl;
+#endif
+#ifdef DEBUG_DATA
+	std::cout << "data=" << req.data << std::endl;
 #endif
     for(auto it = req.headers.begin();it != req.headers.end();it++)
     {
@@ -76,6 +80,10 @@ void request_handler::handle_request(const request& req, reply& rep)
     rep = reply::stock_reply(reply::bad_request);
     return;
   }
+#ifdef DEBUG_PATH
+	std::cout << "req.uri=" << req.uri << std::endl;
+	std::cout << "request_path=" << request_path << std::endl;
+#endif
 
   // Request path must be absolute and not contain "..".
   if (request_path.empty() || request_path[0] != '/'
@@ -84,42 +92,83 @@ void request_handler::handle_request(const request& req, reply& rep)
     rep = reply::stock_reply(reply::bad_request);
     return;
   }
-  // If path ends in slash (i.e. is a directory) then add "BuildOnWeb.html".
-    if (request_path[request_path.size() - 1] == '/')
-    {
-        request_path += "BuildOnWeb.html";
-    }
-#ifdef DEBUG_PATH
-	std::cout << "request_path=" << request_path << std::endl;
-#endif
-#ifdef DEBUG_DATA
-	std::cout << "data=" << req.data << std::endl;
-#endif
-    if( "GET" == req.method || "get" == req.method )
-    {
-        this->handle_get(req,request_path,rep);
-    }
-    if( "POST" == req.method || "post" == req.method )
-    {
-        this->handle_post(req,request_path,rep);
-    }
-
+  if( "GET" == req.method || "get" == req.method )
+  {
+      this->handle_get(req,request_path,rep);
+  }
+  if( "POST" == req.method || "post" == req.method )
+  {
+      this->handle_post(req,request_path,rep);
+  }
 #ifdef DEBUG_REP
-	std::cout << "rep.content=" << rep.content << std::endl;
+    std::cout << "rep.content=" << rep.content << std::endl;
     for(auto it = rep.headers.begin();it != rep.headers.end();it++)
     {
         std::cout << "it=" << it->name << " " << it->value << std::endl;
     }
 #endif
-
 }
 
 
 void request_handler::handle_get(const request& req,const std::string &request_path, reply& rep)
 {
+    fs::path req_path(request_path);
 #ifdef DEBUG_PATH
 	std::cout << "request_path=" << request_path << std::endl;
 #endif
+    boost::regex ex("^/users/.*");
+    if(boost::regex_match(request_path, ex))
+    {
+        std::list<std::string> results;
+        boost::split(results, request_path, boost::is_any_of("/"));
+#ifdef DEBUG_PATH
+        std::cout << "match request_path=" << request_path << std::endl;
+        std::cout <<"results.size()=" <<  results.size() << endl;
+//        std::cout <<"results[0]=" <<  results[0] << endl;
+//        std::cout <<"results[1]=" <<  results[1] << endl;
+//        std::cout <<"results[2]=" <<  results[2] << endl;
+//        std::cout <<"results[3]=" <<  results[3] << endl;
+//        std::cout <<"results[4]=" <<  results[4] << endl;
+#endif
+        results.pop_front();
+        results.pop_front();
+        std::string username;
+        if(results.empty())
+        {
+            rep = reply::stock_reply(reply::not_found);
+            return;
+        }
+        else
+        {
+            username = results.front();
+            results.pop_front();
+        }
+        std::string language;
+        if(results.empty())
+        {
+            // view all repositories.
+        }
+        else
+        {
+            language = results.front();
+            results.pop_front();
+        }
+        std::string repos;
+        if(results.empty())
+        {
+            // view all language repositories.
+        }
+        else
+        {
+            repos = results.front();
+            results.pop_front();
+        }
+        std::list<std::string> path;
+        path = results;
+        std::cout <<"username=" <<  username << endl;
+        std::cout <<"language=" <<  language << endl;
+        std::cout <<"repos=" <<  repos << endl;        
+    }
     // Open the file to send back.
     std::string full_path = doc_root_ + request_path;
     std::ifstream is(full_path.c_str(), std::ios::in | std::ios::binary);
