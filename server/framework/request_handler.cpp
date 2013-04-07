@@ -17,13 +17,13 @@
 #include "reply.hpp"
 #include "request.hpp"
 #include "template.hpp"
-#include "source_update.hpp"
 
 
 #include "reply_view.hpp"
 #include "navi_view.hpp"
 #include "source_view.hpp"
 #include "directory_view.hpp"
+#include "source_update.hpp"
 
 #include <boost/filesystem.hpp>
 namespace fs = boost::filesystem;
@@ -44,11 +44,11 @@ request_handler::request_handler(const std::string& doc_root,const std::string& 
     
     
 //#define DEBUG_REQ
-#define DEBUG_PATH
-//#define DEBUG_POST
+//#define DEBUG_PATH
 //#define DEBUG_DATA
 //#define DEBUG_REP
 //#define DEBUG_RET
+#define DEBUG_POST
     
 void request_handler::handle_request(const request& req, reply& rep)
 {
@@ -221,11 +221,32 @@ void request_handler::handle_post(const request& req, const std::string &request
         std::cout << "it->name=<" << it->name << ">" << "it->value<" << it->value << ">" << std::endl;
     }
 #endif
-    if( string::npos != request_path.find("EventAceOnChange"))
+    boost::regex ex("^/EventAceOnChange/.*");
+    if(boost::regex_match(request_path, ex))
     {
         string postpath = boost::algorithm::replace_all_copy(request_path,"/EventAceOnChange/","");
-        BuildOnWeb::BOWSoureUpdate source(req.data,postpath,rep);
-        source.run();
+#ifdef DEBUG_POST
+        std::cout << "postpath=<" << postpath << ">" << std::endl;
+#endif
+        std::list<std::string> results;
+        boost::split(results, postpath, boost::is_any_of("<>"));
+#ifdef DEBUG_POST
+        for( auto it = results.begin(); it != results.end();it++)
+        {
+            std::cout << "it=<" << *it << ">"  << std::endl;
+        }
+#endif
+        results.pop_front();
+        string src(results.front());
+        results.pop_front();
+        results.pop_front();
+        string wc(results.front());
+#ifdef DEBUG_POST
+        std::cout << "src=<" << src << ">" << std::endl;
+        std::cout << "wc=<" << wc << ">" << std::endl;
+#endif
+        BOW::SoureUpdate source(req.data,src,wc);
+        source.response(doc_root_, rep);
     }
 }
     

@@ -1,26 +1,29 @@
-#ifndef BUILD_ON_WEB_SOURCE_UPDATE_HPP
-#define BUILD_ON_WEB_SOURCE_UPDATE_HPP
+#ifndef BOW_SOURCE_UPDATE_HPP
+#define BOW_SOURCE_UPDATE_HPP
 #include <string>
 #include <list>
 using namespace std;
 
-namespace http {
-namespace server_threadpool {
-struct reply;
-}
+namespace http
+{
+    namespace server_threadpool
+    {
+        class ReplyView;
+    }
 }
 
-namespace BuildOnWeb {
-    class BOWSoureUpdate {
+namespace BOW {
+    class SoureUpdate: public http::server_threadpool::ReplyView
+    {
     public:
-        BOWSoureUpdate(const string & source,const string & path,http::server_threadpool::reply& rep);
-        void run(void);
+        SoureUpdate(const string & source,const string & path,const string & ws);
+        virtual bool getContent(const string &doc_root,string &contents);
     private:
         const string & _source;
         const string & _path;
-        http::server_threadpool::reply& _rep;
+        const string & _wc;
         const string _output;
         const list<string> _env_build_commands;
     };
 }
-#endif // BUILD_ON_WEB_SOURCE_UPDATE_HPP
+#endif // BOW_SOURCE_UPDATE_HPP

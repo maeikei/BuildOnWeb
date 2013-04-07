@@ -2,6 +2,7 @@
 #define BOW_SOURCE_VIEW_HPP
 #include <string>
 #include <list>
+#include <map>
 using namespace std;
 
 namespace http
@@ -20,10 +21,15 @@ namespace BOW {
         SourceView(const string &username,const string &category,const string &repo,const list<string> &path );
         virtual bool getContent(const string &doc_root,string &contents);
     private:
+        const string user_;
+        const string category_;
+        const string repo_;
+        const list<string> &path_;
         const string workspace_;
         const string git_repositories_;
         const list<string> env_build_commands_;
         const list<string> env_build_commands_debug_;
+        const map<string,string> _extensions;
     };
 }
 #endif // BOW_SOURCE_VIEW_HPP

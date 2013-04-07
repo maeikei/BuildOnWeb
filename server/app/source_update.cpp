@@ -1,5 +1,6 @@
+#include "reply_view.hpp"
 #include "source_update.hpp"
-using namespace BuildOnWeb;
+using namespace BOW;
 #include <boost/filesystem.hpp>
 namespace fs = boost::filesystem;
 #include <boost/algorithm/string.hpp>
@@ -14,20 +15,18 @@ using namespace std;
 // #define DEBUG_PARAM
 
 
-BOWSoureUpdate::BOWSoureUpdate(const string & source,const string & path,http::server_threadpool::reply& rep)
-:_source(source)
+SoureUpdate::SoureUpdate(const string & source,const string & path,const string & ws)
+:ReplyView()
+,_source(source)
 ,_path(path)
-,_rep(rep)
-,_output("temp/helloworld/output.log")
+,_wc(ws)
+,_output(_wc + "/output.log")
 ,_env_build_commands
 {
-    "cd temp/helloworld && git diff ",
-    "cd temp/helloworld && git commit -am \"web auto modify\" ",
-    "make exe -C temp/helloworld",
+    "cd " + _wc + " && git diff ",
+    "cd " + _wc + " && git commit -am \"web auto modify\" ",
+    "make exe -C "+_wc,
 }
-{
-}
-void BOWSoureUpdate::run(void)
 {
 #ifdef DEBUG_PARAM
     cout << "_source=<" << _source<< ">" << endl;
@@ -49,21 +48,17 @@ void BOWSoureUpdate::run(void)
     {
         system(it->c_str());
     }
-    // replace html template output.
-    {
-        std::ifstream ifs(_output.c_str(), std::ios::in | std::ios::binary);
-        char buf[512];
-        string output;
-        while (ifs.read(buf, sizeof(buf)).gcount() > 0) {
-            output.append(buf, ifs.gcount());
-        }
-        _rep.content = output;
-    }
-    _rep.status = http::server_threadpool::reply::ok;
-    _rep.headers.resize(2);
-    _rep.headers[0].name = "Content-Length";
-    _rep.headers[0].value = boost::lexical_cast<std::string>(_rep.content.size());
-    
-    _rep.headers[1].name = "Content-Type";
-    _rep.headers[1].value = "plain/txt";
 }
+bool SoureUpdate::getContent(const string &doc_root,string &contents)
+{
+    // read out file .
+    std::ifstream ifs(_output.c_str(), std::ios::in | std::ios::binary);
+    char buf[512];
+    string output;
+    while (ifs.read(buf, sizeof(buf)).gcount() > 0)
+    {
+        contents.append(buf, ifs.gcount());
+    }
+    return true;
+}
+
