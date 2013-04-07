@@ -1,4 +1,5 @@
 #include "list_dir.hpp"
+#include "list_root.hpp"
 using namespace BuildOnWeb;
 #include <boost/filesystem.hpp>
 namespace fs = boost::filesystem;
@@ -9,14 +10,17 @@ namespace fs = boost::filesystem;
 
 // #define DEBUG_REPLACE
 
-#include "reply.hpp"
-#include "request.hpp"
-
-BOWListDir::BOWListDir()
+BOWListRoot::BOWListRoot(void)
+:BOWListDir()
+,languagelist
+{
+    "c_cxx",
+}
 {
     
 }
-void BOWListDir::response(const http::server_threadpool::request& req, http::server_threadpool::reply& rep)
+list<string> BOWListRoot::getlist()
 {
-    
+    list<string> ret;
+    return ret;
 }

@@ -1,7 +1,7 @@
 #ifndef BUILD_ON_WEB_LIST_DIR_HPP
 #define BUILD_ON_WEB_LIST_DIR_HPP
 #include <string>
-#include <map>
+#include <list>
 using namespace std;
 
 namespace http {
@@ -14,10 +14,9 @@ namespace http {
 namespace BuildOnWeb {
     class BOWListDir {
     public:
-        BOWListDir(string & dir);
+        BOWListDir(void);
         void response(const http::server_threadpool::request& req, http::server_threadpool::reply& rep);
-    private:
-        const string & _dir;
+        virtual list<string> getlist() = 0;
     };
 }
 #endif // BUILD_ON_WEB_LIST_DIR_HPP
