@@ -20,11 +20,7 @@
 #include "source_update.hpp"
 
 
-
-#include "list_dir.hpp"
-#include "list_root.hpp"
-#include "list_repo.hpp"
-
+#include "reply_view.hpp"
 #include "navi_view.hpp"
 
 #include <boost/filesystem.hpp>

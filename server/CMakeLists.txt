@@ -21,11 +21,6 @@ add_executable(BuildOnWeb
 
   app/template.hpp
   app/env.hpp
-
-  app/list_dir.hpp
-  app/list_root.hpp
-  app/list_repo.hpp
-
   app/navi_view.hpp
   app/source_view.hpp
   app/directory_view.hpp

@@ -1,3 +1,4 @@
+#include "reply_view.hpp"
 #include "navi_view.hpp"
 using namespace BOW;
 

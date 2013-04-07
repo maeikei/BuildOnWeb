@@ -3,8 +3,17 @@
 #include <string>
 using namespace std;
 
+namespace http
+{
+    namespace server_threadpool
+    {
+        class ReplyView;
+    }
+}
+
 namespace BOW {
-    class NaviView {
+    class NaviView: public http::server_threadpool::ReplyView
+    {
     public:
         NaviView(const string &username);
         NaviView(const string &username,const string &category);

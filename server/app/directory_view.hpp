@@ -3,8 +3,18 @@
 #include <string>
 using namespace std;
 
+namespace http
+{
+    namespace server_threadpool
+    {
+        class ReplyView;
+    }
+}
+
+
 namespace BOW {
-    class DirecoryView {
+    class DirecoryView: public http::server_threadpool::ReplyView
+    {
     public:
         DirecoryView(const string &username);
     private:
