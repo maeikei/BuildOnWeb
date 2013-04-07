@@ -26,7 +26,8 @@ class ReplyView
 {
 public:
     ReplyView(void);
-    void response(const request& req, reply& rep);
+    void response(const std::string &doc_root, reply& rep);
+    virtual bool getContent(const std::string &doc_root,std::string &contents) = 0;
 private:
     
 };

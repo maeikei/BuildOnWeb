@@ -30,6 +30,10 @@ public:
 
   /// Handle a request and produce a reply.
   void handle_request(const request& req, reply& rep);
+
+    
+    const std::string& get_doc_root() const { return doc_root_;}
+    const std::string& get_remote() const { return remote_;}
 private:
   /// The directory containing the files to be served.
   std::string doc_root_;

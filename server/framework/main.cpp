@@ -30,8 +30,6 @@ int main(int argc, char* argv[])
       std::cerr << "    receiver 0::0 80 1 .\n";
       return 1;
     }
-    BuildOnWeb::BOWEnv env(argv[4]);
-    env.build_env();
 
     // Initialise the server.
     std::size_t num_threads = boost::lexical_cast<std::size_t>(argv[3]);

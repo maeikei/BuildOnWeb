@@ -22,6 +22,8 @@
 
 #include "reply_view.hpp"
 #include "navi_view.hpp"
+#include "source_view.hpp"
+#include "directory_view.hpp"
 
 #include <boost/filesystem.hpp>
 namespace fs = boost::filesystem;
@@ -116,7 +118,6 @@ void request_handler::handle_request(const request& req, reply& rep)
 
 void request_handler::handle_get(const request& req,const std::string &request_path, reply& rep)
 {
-    fs::path req_path(request_path);
 #ifdef DEBUG_PATH
 	std::cout << "request_path=" << request_path << std::endl;
 #endif
@@ -124,15 +125,10 @@ void request_handler::handle_get(const request& req,const std::string &request_p
     if(boost::regex_match(request_path, ex))
     {
         std::list<std::string> results;
-        boost::split(results, request_path, boost::is_any_of("/"));
+        boost::split(results, request_path, boost::is_any_of("/"),boost::algorithm::token_compress_on);
 #ifdef DEBUG_PATH
         std::cout << "match request_path=" << request_path << std::endl;
         std::cout <<"results.size()=" <<  results.size() << endl;
-//        std::cout <<"results[0]=" <<  results[0] << endl;
-//        std::cout <<"results[1]=" <<  results[1] << endl;
-//        std::cout <<"results[2]=" <<  results[2] << endl;
-//        std::cout <<"results[3]=" <<  results[3] << endl;
-//        std::cout <<"results[4]=" <<  results[4] << endl;
 #endif
         results.pop_front();
         results.pop_front();
@@ -152,7 +148,7 @@ void request_handler::handle_get(const request& req,const std::string &request_p
         {
             // view all repositories.
             BOW::NaviView navi(username);
-            navi.response(req, rep);
+            navi.response(doc_root_, rep);
             return;
         }
         else
@@ -165,7 +161,7 @@ void request_handler::handle_get(const request& req,const std::string &request_p
         {
             // view all language repositories.
             BOW::NaviView navi(username,language);
-            navi.response(req, rep);
+            navi.response(doc_root_, rep);
             return;
         }
         else
@@ -173,11 +169,13 @@ void request_handler::handle_get(const request& req,const std::string &request_p
             repos = results.front();
             results.pop_front();
         }
-        std::list<std::string> path;
-        path = results;
+#ifdef DEBUG_PATH
         std::cout <<"username=" <<  username << endl;
         std::cout <<"language=" <<  language << endl;
-        std::cout <<"repos=" <<  repos << endl;        
+        std::cout <<"repos=" <<  repos << endl;
+#endif
+        BOW::SourceView source(username,language,repos,results);
+        source.response(doc_root_, rep);
     }
     // remain of files such ass css,javascript files.
     else

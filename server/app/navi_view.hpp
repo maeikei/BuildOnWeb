@@ -17,6 +17,7 @@ namespace BOW {
     public:
         NaviView(const string &username);
         NaviView(const string &username,const string &category);
+        virtual bool getContent(const string &doc_root,string &contents);
     private:
         const string username_;
         const string category_;
