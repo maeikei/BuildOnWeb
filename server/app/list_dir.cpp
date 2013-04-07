@@ -9,12 +9,14 @@ namespace fs = boost::filesystem;
 
 // #define DEBUG_REPLACE
 
+#include "reply.hpp"
+#include "request.hpp"
 
 BOWListDir::BOWListDir(string & dir)
 :_dir(dir)
 {
     
 }
-void BOWListDir::replace(void)
+void BOWListDir::response(const http::server_threadpool::request& req, http::server_threadpool::reply& rep)
 {
 }

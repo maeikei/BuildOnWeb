@@ -18,6 +18,7 @@
 #include "request.hpp"
 #include "template.hpp"
 #include "source_update.hpp"
+#include "list_dir.hpp"
 
 #include <boost/filesystem.hpp>
 namespace fs = boost::filesystem;
