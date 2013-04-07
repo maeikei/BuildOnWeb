@@ -10,7 +10,7 @@ namespace fs = boost::filesystem;
 
 // #define DEBUG_REPLACE
 
-BOWListRepo::BOWListRepo(const string & _root,const string & _lang)
+BOWListRepo::BOWListRepo(const string &username,const string & lang)
 :BOWListDir()
 ,reposlist{}
 ,repos_map
@@ -21,7 +21,7 @@ BOWListRepo::BOWListRepo(const string & _root,const string & _lang)
 {
     for(auto it = repos_map.begin();it != repos_map.end();it++)
     {
-        if( _root == it->first)
+        if( lang == it->first)
         {
             reposlist.push_back (it->second);
         }

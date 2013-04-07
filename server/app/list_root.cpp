@@ -10,7 +10,7 @@ namespace fs = boost::filesystem;
 
 // #define DEBUG_REPLACE
 
-BOWListRoot::BOWListRoot(void)
+BOWListRoot::BOWListRoot(const string &username)
 :BOWListDir()
 ,languagelist
 {

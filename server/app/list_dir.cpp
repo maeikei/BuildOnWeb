@@ -18,5 +18,5 @@ BOWListDir::BOWListDir()
 }
 void BOWListDir::response(const http::server_threadpool::request& req, http::server_threadpool::reply& rep)
 {
-    
+    std::system("pwd");
 }

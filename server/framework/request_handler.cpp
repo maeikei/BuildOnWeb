@@ -19,6 +19,8 @@
 #include "template.hpp"
 #include "source_update.hpp"
 #include "list_dir.hpp"
+#include "list_root.hpp"
+#include "list_repo.hpp"
 
 #include <boost/filesystem.hpp>
 namespace fs = boost::filesystem;
@@ -148,6 +150,9 @@ void request_handler::handle_get(const request& req,const std::string &request_p
         if(results.empty())
         {
             // view all repositories.
+            BuildOnWeb::BOWListRoot root(username);
+            root.response(req, rep);
+            return;
         }
         else
         {
@@ -158,6 +163,9 @@ void request_handler::handle_get(const request& req,const std::string &request_p
         if(results.empty())
         {
             // view all language repositories.
+            BuildOnWeb::BOWListRepo repo(username,language);
+            repo.response(req, rep);
+            return;
         }
         else
         {
@@ -170,6 +178,7 @@ void request_handler::handle_get(const request& req,const std::string &request_p
         std::cout <<"language=" <<  language << endl;
         std::cout <<"repos=" <<  repos << endl;        
     }
+    // remain of files such ass css,javascript files.
     else
     {
         // Open the file to send back.
@@ -184,7 +193,6 @@ void request_handler::handle_get(const request& req,const std::string &request_p
 #ifdef DEBUG_PATH
 	std::cout << "request_path=" << request_path << std::endl;
 #endif
-    
         // Fill out the reply to be sent to the client.
         rep.status = reply::ok;
         char buf[512];
