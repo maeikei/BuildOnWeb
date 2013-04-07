@@ -19,7 +19,7 @@ namespace BuildOnWeb {
     class BOWListRoot :public BOWListDir {
     public:
         BOWListRoot();
-        virtual list<string> getlist();
+        virtual const list<string> &getlist(void);
     private:
         const list<string> languagelist;
     };

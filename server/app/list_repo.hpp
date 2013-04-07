@@ -19,9 +19,10 @@ namespace BuildOnWeb {
     class BOWListRepo :public BOWListDir {
     public:
         BOWListRepo(const string & _root,const string & _lang);
-        virtual list<string> getlist();
+        virtual const list<string> &getlist(void);
     private:
-        const map<string,string> reposlist;
+        list<string> reposlist;
+        const map<string,string> repos_map;
     };
 }
 #endif // BUILD_ON_WEB_LIST_REPO_HPP

@@ -12,16 +12,22 @@ namespace fs = boost::filesystem;
 
 BOWListRepo::BOWListRepo(const string & _root,const string & _lang)
 :BOWListDir()
-,reposlist
+,reposlist{}
+,repos_map
 {
     {"c_cxx","helloworld.git"},
     {"c_cxx","helloworldcxx.git"},
 }
 {
-    
+    for(auto it = repos_map.begin();it != repos_map.end();it++)
+    {
+        if( _root == it->first)
+        {
+            reposlist.push_back (it->second);
+        }
+    }
 }
-list<string> BOWListRepo::getlist()
+const list<string>& BOWListRepo::getlist()
 {
-    list<string> ret;
-    return ret;
+    return reposlist;
 }

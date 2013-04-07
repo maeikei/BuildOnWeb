@@ -19,8 +19,7 @@ BOWListRoot::BOWListRoot(void)
 {
     
 }
-list<string> BOWListRoot::getlist()
+const list<string> &BOWListRoot::getlist(void)
 {
-    list<string> ret;
-    return ret;
+    return languagelist;
 }
