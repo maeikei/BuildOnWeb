@@ -18,9 +18,14 @@
 #include "request.hpp"
 #include "template.hpp"
 #include "source_update.hpp"
+
+
+
 #include "list_dir.hpp"
 #include "list_root.hpp"
 #include "list_repo.hpp"
+
+#include "navi_view.hpp"
 
 #include <boost/filesystem.hpp>
 namespace fs = boost::filesystem;
@@ -150,8 +155,8 @@ void request_handler::handle_get(const request& req,const std::string &request_p
         if(results.empty())
         {
             // view all repositories.
-            BuildOnWeb::BOWListRoot root(username);
-            root.response(req, rep);
+            BOW::NaviView navi(username);
+            navi.response(req, rep);
             return;
         }
         else
@@ -163,8 +168,8 @@ void request_handler::handle_get(const request& req,const std::string &request_p
         if(results.empty())
         {
             // view all language repositories.
-            BuildOnWeb::BOWListRepo repo(username,language);
-            repo.response(req, rep);
+            BOW::NaviView navi(username,language);
+            navi.response(req, rep);
             return;
         }
         else

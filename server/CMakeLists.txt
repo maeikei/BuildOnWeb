@@ -12,6 +12,7 @@ add_executable(BuildOnWeb
   framework/header.hpp
   framework/mime_types.hpp
   framework/reply.hpp
+  framework/reply_view.hpp
   framework/request.hpp
   framework/request_handler.hpp
   framework/request_parser.hpp
