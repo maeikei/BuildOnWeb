@@ -76,7 +76,14 @@
 //	echo $userid;
 //	echo $last_app;
 	mysql_close($link);
-	$redirect_url= "Location: http://" . $_SERVER['SERVER_ADDR'] . "/users/".$userid."/".$last_app;
+	if($_SERVER['HTTP_X_REAL_IP'])
+	{
+		$redirect_url= "Location: http://" . $_SERVER['HTTP_HOST'] . "/users/".$userid."/".$last_app;
+	}
+	else
+	{
+		$redirect_url= "Location: http://" . $_SERVER['SERVER_ADDR'] . "/users/".$userid."/".$last_app;
+	}
 //	echo $redirect_url . "\n";
 	header($redirect_url)
 ?>
