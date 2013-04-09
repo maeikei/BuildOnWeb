@@ -14,10 +14,11 @@ namespace http
 
 
 namespace BOW {
-    class DirecoryView: public http::server_threadpool::ReplyView
+    class SourceView;
+    class DirecoryView: public SourceView
     {
     public:
-        DirecoryView(const string &username,const string &category,const string &repo,const list<string> &path );
+        DirecoryView(const SourceView &src);
         virtual ~DirecoryView();
         virtual bool getContent(const string &doc_root,string &contents);
     private:

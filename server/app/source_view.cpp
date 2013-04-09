@@ -1,5 +1,6 @@
 #include "reply_view.hpp"
 #include "source_view.hpp"
+#include "directory_view.hpp"
 using namespace BOW;
 
 #include <boost/filesystem.hpp>
@@ -77,7 +78,22 @@ SourceView::~SourceView()
     
 bool SourceView::getContent(const string &doc_root,string &contents)
 {
-    // Open the file to send back.
+    std::string source_path(workspace_ + "/" + repo_);
+    for(auto it = path_.begin();it != path_.end();it++)
+    {
+        source_path.append( "/" + *it);
+    }
+#ifdef DEBUG_CONTENT
+    std::cout << "source_path=" << source_path << std::endl;
+#endif
+    // if is a direcotry 
+    fs::path src_path(source_path);
+    if(fs::is_directory(src_path))
+    {
+        DirecoryView dir(*this);
+        return dir.getContent(doc_root, contents);
+    }
+    // Open the template file to add to contents.
     {
         std::string full_path = doc_root + "/BuildOnWebViewSource.html";
 #ifdef DEBUG_CONTENT
@@ -109,14 +125,6 @@ bool SourceView::getContent(const string &doc_root,string &contents)
     }
     // replace source & file extension type
     {
-        std::string source_path(workspace_ + "/" + repo_);
-        for(auto it = path_.begin();it != path_.end();it++)
-        {
-            source_path.append( "/" + *it);
-        }
-#ifdef DEBUG_CONTENT
-        std::cout << "source_path=" << source_path << std::endl;
-#endif
         string source;
         std::ifstream isf(source_path.c_str(), std::ios::in | std::ios::binary);
         if (isf)
