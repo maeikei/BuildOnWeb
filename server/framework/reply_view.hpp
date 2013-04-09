@@ -29,8 +29,10 @@ public:
     void response(const std::string &doc_root, reply& rep);
     virtual bool getContent(const std::string &doc_root,std::string &contents) = 0;
     virtual ~ReplyView(){}
+protected:
 private:
-    
+    // replace commont of reply.
+    void replace(reply& rep);    
 };
 
 } // namespace server_threadpool

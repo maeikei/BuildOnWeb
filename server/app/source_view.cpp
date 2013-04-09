@@ -110,15 +110,6 @@ bool SourceView::getContent(const string &doc_root,string &contents)
             contents.append(buf, is.gcount());
         }
     }
-    // replace css paht & javascript to root path.
-    {
-        boost::algorithm::replace_all(contents,
-                                  "<link rel=\"stylesheet\" href=\"css/layout.css\">",
-                                  "<link rel=\"stylesheet\" href=\"/css/layout.css\">");
-        boost::algorithm::replace_all(contents,
-                                  "<script src=\"js/ace_wrap.js\" type=\"text/javascript\" charset=\"utf-8\"></script>",
-                                  "<script src=\"/js/ace_wrap.js\" type=\"text/javascript\" charset=\"utf-8\"></script>");
-    }
     // replace users
     {
         boost::algorithm::replace_all(contents,"$BOW_TMPL_USER$",user_);        
