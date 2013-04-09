@@ -14,6 +14,9 @@ NaviView::NaviView(const string &username,const string &category)
 {
     
 }
+NaviView::~NaviView()
+{
+}
 
 bool NaviView::getContent(const string &doc_root,string &contents)
 {

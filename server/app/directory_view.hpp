@@ -18,6 +18,7 @@ namespace BOW {
     {
     public:
         DirecoryView(const string &username,const string &category,const string &repo,const list<string> &path );
+        virtual ~DirecoryView();
         virtual bool getContent(const string &doc_root,string &contents);
     private:
     };

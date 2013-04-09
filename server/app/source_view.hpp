@@ -19,6 +19,7 @@ namespace BOW {
     {
     public:
         SourceView(const string &username,const string &category,const string &repo,const list<string> &path );
+        virtual ~SourceView();
         virtual bool getContent(const string &doc_root,string &contents);
     private:
         const string user_;

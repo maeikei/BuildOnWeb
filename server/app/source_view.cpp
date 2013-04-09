@@ -68,7 +68,13 @@ SourceView::SourceView(const string &username,const string &category,const strin
         
     }
 }
+SourceView::~SourceView()
+{
+}
 
+    
+    
+    
 bool SourceView::getContent(const string &doc_root,string &contents)
 {
     // Open the file to send back.
@@ -163,4 +169,3 @@ bool SourceView::getContent(const string &doc_root,string &contents)
     }
     return true;
 }
-

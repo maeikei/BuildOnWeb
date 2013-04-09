@@ -17,3 +17,6 @@ bool DirecoryView::getContent(const string &doc_root,string &contents)
 {
     return true;
 }
+DirecoryView::~DirecoryView()
+{
+}
