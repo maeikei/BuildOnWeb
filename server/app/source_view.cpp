@@ -139,7 +139,7 @@ bool SourceView::getContent(const string &doc_root,string &contents)
     }
     // replace output
     {
-        std::string output_path(workspace_ + "/" + repo_ +"/output.log");
+        std::string output_path(workspace_ + "/" + repo_ +"/.bow_output/output.log");
 #ifdef DEBUG_CONTENT
         std::cout << "output_path=" << output_path << std::endl;
 #endif
@@ -166,5 +166,49 @@ bool SourceView::getContent(const string &doc_root,string &contents)
         path.append(workspace_ + "/" + repo_ + ">");
         boost::algorithm::replace_all(contents,"$BOW_TMPL_PATH$",path);
     }
+    this->replace_source_path(contents);
     return true;
+}
+
+void SourceView::replace_source_path(string &contents)
+{
+    string href("/users");
+    std::string path;
+// user_
+    href += "/" + user_;
+    path += "<a href=\"";
+    path += href;
+    path += "\">";
+    path += user_;
+    path += "</a>";
+// category_
+    path += "<span>/</span>";
+    href += "/" + category_;
+    path += "<a href=\"";
+    path += href;
+    path += "\">";
+    path += category_;
+    path += "</a>";
+// repo_
+    path += "<span>/</span>";
+    href += "/" + repo_;
+    path += "<a href=\"";
+    path += href;
+    path += "\">";
+    path += repo_;
+    path += "</a>";
+    
+// add remain paths.
+    for(auto it = path_.begin();it != path_.end();it++)
+    {
+        path += "<span>/</span>";
+        // path
+        href += "/" + *it;
+        path += "<a href=\"";
+        path += href;
+        path += "\">";
+        path += *it;
+        path += "</a>";        
+    }
+    boost::algorithm::replace_all(contents,"$BOW_TMPL_SOURCE_PATH$",path);
 }

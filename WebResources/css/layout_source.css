@@ -1,3 +1,9 @@
+#SourcePath 
+{
+    float :left; 
+    height:6%;
+    width :100%;
+}
 #SourceViewFrame
 {
     float :top; 
@@ -17,12 +23,6 @@
     width :100%;
 }
 
-#SourcePath 
-{
-    float :left; 
-    height:6%;
-    width :100%;
-}
 #SourceView
 {
     float :left; 
