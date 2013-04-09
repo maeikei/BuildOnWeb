@@ -1,13 +1,13 @@
 #SourcePath 
 {
     float :top; 
-    height:20px;
-    width :100%;
+    height:6%;
+    width :96%;
 }
 #TableViewFrame
 {
     float :top; 
-    height:96%;
-    width :100%;
+    height:90%;
+    width :96%;
     border:2px solid gray;
 }
