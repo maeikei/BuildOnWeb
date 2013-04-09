@@ -5,27 +5,25 @@
 {
     float :top; 
     height:75%; 
-    width :100%;
-    border:2px solid blue;
+    width :96%;
 }
 #OutputInfo
 {
     float :top;
     height:5%;
-    width :100%;
-    border:2px solid gold;    
+    width :96%;
 }
 #OutPutFrame
 {
     float :top; 
-    height:20%; 
-    width :100%;
-    border:2px solid greenyellow;    
+    height:18%; 
+    width :96%;
     position: relative;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
+    border:2px solid gray;
 }
 
 /*
@@ -35,9 +33,8 @@
 #SourcePath 
 {
     float :left; 
-    height:10%;
-    width :100%;
-    border:2px solid red;    
+    height:9%;
+    width :90%;
 }
 
 #SourceView
@@ -50,5 +47,5 @@
     right: 0;
     bottom: 0;
     left: 0;
-    border:2px solid gray;    
+    border:2px solid gray;
 }

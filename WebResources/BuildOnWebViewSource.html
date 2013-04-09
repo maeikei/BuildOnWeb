@@ -9,23 +9,28 @@
 <body>
     <div id="Container">
 	<div id="Header">
-            <div id ="SearchText">
-                <form accept-charset="UTF-8" action="/search" id="top_search_form" method="get">
-                    <input type="text" name="q" id="js-command-bar-field" placeholder="Search or type a command" tabindex="1" data-username="$BOW_TMPL_USER$">
-                </form>
+            <div id="HeaderTopLevel">
+                <div id ="SearchText">
+                    <form accept-charset="UTF-8" action="/search" id="top_search_form" method="get">
+                        <input type="text" name="q" id="js-command-bar-field" placeholder="Search or type a command" tabindex="1" data-username="$BOW_TMPL_USER$">
+                    </form>
+                </div>
+                <div id ="UserInfo">
+                    <ul>
+                        <li>
+                            <a href="/users/$BOW_TMPL_USER$">$BOW_TMPL_USER$</a>
+                        </li>
+                        <li>
+                            <a href="/login.php" data-method="post" id="logout">login</a>
+                        </li>
+                        <li>
+                            <a href="/logout.php" data-method="post" id="logout">logout</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <ul id ="UserLink">
-                <li>
-                    <a href="/users/$BOW_TMPL_USER$">
-                        $BOW_TMPL_USER$
-                    </a>
-                </li>
-                <li>
-                    <a href="/logout" data-method="post" id="logout">
-                        logout
-                    </a>
-                </li>
-            </ul>
+            <div id="HeaderBottumLevel">
+            </div>
         </div>
 	<div id="ContentFrame">
             <div id="SourceViewFrame">
