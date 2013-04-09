@@ -8,5 +8,6 @@
 {
     float :top; 
     height:96%;
-    width :100%;    
+    width :100%;
+    border:2px solid gray;
 }
