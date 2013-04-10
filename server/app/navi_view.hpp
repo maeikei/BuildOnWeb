@@ -1,6 +1,7 @@
 #ifndef BOW_NAVI_VIEW_HPP
 #define BOW_NAVI_VIEW_HPP
 #include <string>
+#include <map>
 using namespace std;
 
 namespace http
@@ -20,8 +21,9 @@ namespace BOW {
         virtual ~NaviView();
         virtual bool getContent(const string &doc_root,string &contents);
     private:
-        const string username_;
+        const string user_;
         const string category_;
+        const map<string,string> navi_items_;
     };
 }
 #endif // BOW_NAVI_VIEW_HPP

@@ -33,7 +33,7 @@ SourceView::SourceView(const string &username,const string &category,const strin
     "git clone " + git_repositories_+ "/" + category + "/" + repo_ + ".git " + workspace_ + "/" + repo_,
     "make exe -C " + workspace_ + "/" + repo_,
 }
-,_extensions
+,extensions_
 {
     {".h","c_cpp"},
     {".hpp","c_cpp"},
@@ -130,8 +130,8 @@ bool SourceView::getContent(const string &doc_root,string &contents)
         
         string mode("c_cpp");
         const fs::path fs_path(source_path);
-        auto it = _extensions.find( fs_path.extension().string());
-        if(it != _extensions.end())
+        auto it = extensions_.find( fs_path.extension().string());
+        if(it != extensions_.end())
         {
             mode = it->second;
         }

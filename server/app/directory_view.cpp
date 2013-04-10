@@ -6,7 +6,6 @@ using namespace BOW;
 #include <boost/filesystem.hpp>
 namespace fs = boost::filesystem;
 #include <boost/algorithm/string.hpp>
-
 #include <fstream>
 
 #define DEBUG_CONTENT

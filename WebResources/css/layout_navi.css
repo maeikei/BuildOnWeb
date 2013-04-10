@@ -1,0 +1,13 @@
+#NaviPathFrame
+{
+    float :top; 
+    height:6%;
+    width :96%;
+}
+#NaviViewFrame
+{
+    float :top; 
+    height:90%;
+    width :96%;
+    border:2px solid gray;
+}

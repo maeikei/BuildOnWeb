@@ -30,7 +30,7 @@ namespace BOW {
         const string git_repositories_;
         const list<string> env_build_commands_;
         const list<string> env_build_commands_debug_;
-        const map<string,string> _extensions;
+        const map<string,string> extensions_;
     protected:
         void replace_source_path(string &contents);
     };
