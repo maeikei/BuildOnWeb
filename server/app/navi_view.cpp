@@ -23,8 +23,9 @@ NaviView::NaviView(const string &username,const string &category)
 ,category_(category)
 ,navi_items_
  {
-     {"c_cxx","helloworld"},
-     {"c_cxx","helloworldcxx"},
+     { "c_cxx",
+         {"helloworld","helloworldcxx" }
+     },
  }
 {
     
@@ -63,6 +64,48 @@ bool NaviView::getContent(const string &doc_root,string &contents)
     // search all navi items and create a table.
     {
         std::string table_navi;
+        for(auto it =navi_items_.begin();it != navi_items_.end();it++ )
+        {
+#ifdef DEBUG_CONTENT
+            std::cout << "it->first=<" << it->first << ">" << std::endl;
+#endif
+            // if no category is speciled,list all categories
+            if(category_.empty())
+            {
+                string tr("<tr>\n");
+                tr +=  "<td class=\"content\">";
+                tr +=  "<a href=\"/users";
+                tr +=  "/" + user_;
+                tr +=  "/" + it->first;
+                tr +=  "\">";
+                tr +=  it->first;
+                tr += "</a></td>\n";
+                tr += "</tr>\n";
+                
+                table_navi += tr;
+                continue;
+            }
+            // category is speciled,list all in the category
+            if(category_ == it->first)
+            {
+                for(auto subit = it->second.begin();subit != it->second.end();subit++)
+                {
+                    string tr("<tr>\n");
+                    tr +=  "<td class=\"content\">";
+                    tr +=  "<a href=\"/users";
+                    tr +=  "/" + user_;
+                    tr +=  "/" + it->first;
+                    tr +=  "/" + *subit;
+                    tr +=  "\">";
+                    tr +=  *subit;
+                    tr += "</a></td>\n";
+                    tr += "</tr>\n";
+                    
+                    table_navi += tr;
+                }
+                break;
+            }
+        }
         boost::algorithm::replace_all(contents,"$BOW_TMPL_NAVI_TABLE$",table_navi);
     }
     return true;

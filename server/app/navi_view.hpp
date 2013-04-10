@@ -1,6 +1,7 @@
 #ifndef BOW_NAVI_VIEW_HPP
 #define BOW_NAVI_VIEW_HPP
 #include <string>
+#include <vector>
 #include <map>
 using namespace std;
 
@@ -23,7 +24,7 @@ namespace BOW {
     private:
         const string user_;
         const string category_;
-        const map<string,string> navi_items_;
+        const map<string,vector<string>> navi_items_;
     private:
         void replace_source_path(string &contents);
     };
