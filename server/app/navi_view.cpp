@@ -12,21 +12,23 @@ namespace fs = boost::filesystem;
 #define DEBUG_CONTENT
 
 
+const map<string,vector<string>> NaviView::navi_items_ =
+{
+    { "c_cxx",
+        {"helloworld","helloworldcxx" }
+    },
+}
+;
+
 NaviView::NaviView(const string &username)
 :user_(username)
-,category_("")
+,category_()
 {
 }
 
 NaviView::NaviView(const string &username,const string &category)
 :user_(username)
 ,category_(category)
-,navi_items_
- {
-     { "c_cxx",
-         {"helloworld","helloworldcxx" }
-     },
- }
 {
     
 }
@@ -64,13 +66,13 @@ bool NaviView::getContent(const string &doc_root,string &contents)
     // search all navi items and create a table.
     {
         std::string table_navi;
-        for(auto it =navi_items_.begin();it != navi_items_.end();it++ )
+        for(auto it = navi_items_.begin();it != navi_items_.end();it++ )
         {
 #ifdef DEBUG_CONTENT
             std::cout << "it->first=<" << it->first << ">" << std::endl;
 #endif
             // if no category is speciled,list all categories
-            if(category_.empty())
+            if(true == category_.empty())
             {
                 string tr("<tr>\n");
                 tr +=  "<td class=\"content\">";
