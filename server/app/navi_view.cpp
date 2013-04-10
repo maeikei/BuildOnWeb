@@ -17,6 +17,9 @@ const map<string,vector<string>> NaviView::navi_items_ =
     { "c_cxx",
         {"helloworld","helloworldcxx" }
     },
+    { "ruby",
+        {"helloworld"}
+    },
 }
 ;
 

@@ -19,7 +19,7 @@ SourceView::SourceView(const string &username,const string &category,const strin
 ,category_(category)
 ,repo_(repo)
 ,path_(path)
-,workspace_(".temp/" + username)
+,workspace_(".temp/" + username + "/" + category_ )
 ,git_repositories_("ssh://eikei@192.168.0.140//Volumes/DataHD/BuildOnWeb/repositories")
 ,env_build_commands_
 {
@@ -41,6 +41,9 @@ SourceView::SourceView(const string &username,const string &category,const strin
     {".cxx","c_cpp"},
     {".cpp","c_cpp"},
     {".cp","c_cpp"},
+    
+    {".rb","ruby"},
+    {".php","php"},
 }
 
 {
