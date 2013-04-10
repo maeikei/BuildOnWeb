@@ -58,8 +58,7 @@ bool NaviView::getContent(const string &doc_root,string &contents)
     }
     // replace navi path
     {
-        std::string path_navi;
-        boost::algorithm::replace_all(contents,"$BOW_TMPL_NAVI_PATH$",path_navi);
+        this->replace_source_path(contents);
     }
     // search all navi items and create a table.
     {
@@ -67,4 +66,29 @@ bool NaviView::getContent(const string &doc_root,string &contents)
         boost::algorithm::replace_all(contents,"$BOW_TMPL_NAVI_TABLE$",table_navi);
     }
     return true;
+}
+
+void NaviView::replace_source_path(string &contents)
+{
+    string href("/users");
+    std::string path;
+    // user_
+    href += "/" + user_;
+    path += "<a href=\"";
+    path += href;
+    path += "\">";
+    path += user_;
+    path += "</a>";
+    // category_
+    if(false == category_.empty())
+    {
+        path += "<span>/</span>";
+        href += "/" + category_;
+        path += "<a href=\"";
+        path += href;
+        path += "\">";
+        path += category_;
+        path += "</a>";
+    }
+    boost::algorithm::replace_all(contents,"$BOW_TMPL_NAVI_PATH$",path);
 }

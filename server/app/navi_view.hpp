@@ -24,6 +24,8 @@ namespace BOW {
         const string user_;
         const string category_;
         const map<string,string> navi_items_;
+    private:
+        void replace_source_path(string &contents);
     };
 }
 #endif // BOW_NAVI_VIEW_HPP
