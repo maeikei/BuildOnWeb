@@ -29,12 +29,11 @@
 /*
  top 2 in SourceViewFrame
 */
-
-#SourcePath 
+#SourceInfo 
 {
     float :left; 
     height:9%;
-    width :90%;
+    width :96%;
 }
 
 #SourceView
@@ -48,4 +47,20 @@
     bottom: 0;
     left: 0;
     border:2px solid gray;
+}
+
+/*
+ top 2 in SourceInfo
+*/
+#SourcePath 
+{
+    float :left; 
+    height:95%;
+    width :70%;
+}
+#SourceManual
+{
+    float :right; 
+    height:95%;
+    width :20%;
 }

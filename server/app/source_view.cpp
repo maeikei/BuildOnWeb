@@ -13,6 +13,9 @@ namespace fs = boost::filesystem;
 
 #define DEBUG_CONTENT
 
+const string strConstManualFormat = "<a href=\"/manual/$repo_$\">$repo_$</a>";
+
+
 SourceView::SourceView(const string &username,const string &category,const string &repo,const list<string> &path )
 :ReplyView()
 ,user_(username)
@@ -169,6 +172,13 @@ bool SourceView::getContent(const string &doc_root,string &contents)
         path.append(workspace_ + "/" + repo_ + ">");
         boost::algorithm::replace_all(contents,"$BOW_TMPL_PATH$",path);
     }
+    // replace manual link $BOW_TMPL_SOURCE_MANUAL$
+    {
+        std::string manual(strConstManualFormat);
+        boost::algorithm::replace_all(manual,"$repo_$",repo_);
+        boost::algorithm::replace_all(contents,"$BOW_TMPL_SOURCE_MANUAL$",manual);
+    }
+
     this->replace_source_path(contents);
     return true;
 }

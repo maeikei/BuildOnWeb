@@ -122,6 +122,7 @@ void request_handler::handle_get(const request& req,const std::string &request_p
 	std::cout << "request_path=" << request_path << std::endl;
 #endif
     boost::regex ex("^/users/.*");
+    boost::regex ex_manual("^/manual/.*");
     if(boost::regex_match(request_path, ex))
     {
         std::list<std::string> results;
@@ -176,6 +177,10 @@ void request_handler::handle_get(const request& req,const std::string &request_p
 #endif
         BOW::SourceView source(username,language,repos,results);
         source.response(doc_root_, rep);
+    }
+    // deal with manual.
+    else if(boost::regex_match(request_path, ex_manual))
+    {
     }
     // remain of files such ass css,javascript files.
     else
