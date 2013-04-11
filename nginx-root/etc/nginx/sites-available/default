@@ -71,7 +71,7 @@ server {
 		proxy_set_header Host $host;
 	}
 	location ~ ^/man/(.*) {
-		proxy_pass       http://192.168.0.160:8081;
+		proxy_pass       http://192.168.0.160:8080;
 		proxy_set_header X-Real-IP $remote_addr;
 		proxy_set_header Host $host;
 	}
