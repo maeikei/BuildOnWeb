@@ -9,5 +9,10 @@
     float :top; 
     height:90%;
     width :96%;
+    overflow-y:scroll;
     border:2px solid gray;
+}
+#NaviListTable
+{
+    border: 1px;
 }

@@ -24,6 +24,7 @@ namespace BOW {
     private:
         const string user_;
         const string category_;
+        static const unsigned int iConstColNum_ = 5;
         static const map<string,vector<string>> navi_items_;
     private:
         void replace_source_path(string &contents);

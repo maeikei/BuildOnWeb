@@ -59,6 +59,7 @@ bool NaviView::getContent(const string &doc_root,string &contents)
     // search all navi items and create a table.
     {
         std::string table_navi;
+        unsigned int counter = iConstColNum_;
         for(auto it = navi_items_.begin();it != navi_items_.end();it++ )
         {
 #ifdef DEBUG_CONTENT
@@ -67,7 +68,11 @@ bool NaviView::getContent(const string &doc_root,string &contents)
             // if no category is speciled,list all categories
             if(true == category_.empty())
             {
-                string tr("<tr>\n");
+                string tr("");
+                if(iConstColNum_ == counter)
+                {
+                    tr += "<tr>\n";
+                }
                 tr +=  "<td class=\"content\">";
                 tr +=  "<a href=\"/users";
                 tr +=  "/" + user_;
@@ -75,17 +80,25 @@ bool NaviView::getContent(const string &doc_root,string &contents)
                 tr +=  "\">";
                 tr +=  it->first;
                 tr += "</a></td>\n";
-                tr += "</tr>\n";
-                
+                if(0 == --counter )
+                {
+                    tr += "</tr>\n";
+                    counter = iConstColNum_;
+                }
                 table_navi += tr;
                 continue;
             }
             // category is speciled,list all in the category
             if(category_ == it->first)
             {
+                unsigned int counter = iConstColNum_;
                 for(auto subit = it->second.begin();subit != it->second.end();subit++)
                 {
-                    string tr("<tr>\n");
+                    string tr("");
+                    if(iConstColNum_ == counter)
+                    {
+                        tr += "<tr>\n";
+                    }
                     tr +=  "<td class=\"content\">";
                     tr +=  "<a href=\"/users";
                     tr +=  "/" + user_;
@@ -94,12 +107,23 @@ bool NaviView::getContent(const string &doc_root,string &contents)
                     tr +=  "\">";
                     tr +=  *subit;
                     tr += "</a></td>\n";
-                    tr += "</tr>\n";
-                    
+                    if(0 == --counter)
+                    {
+                        tr += "</tr>\n";
+                        counter = iConstColNum_;
+                    }
                     table_navi += tr;
+                }
+                if(iConstColNum_ != counter)
+                {
+                    table_navi += "</tr>\n";
                 }
                 break;
             }
+        }
+        if(true == category_.empty() && iConstColNum_ != counter)
+        {
+            table_navi += "</tr>\n";
         }
         boost::algorithm::replace_all(contents,"$BOW_TMPL_NAVI_TABLE$",table_navi);
     }
