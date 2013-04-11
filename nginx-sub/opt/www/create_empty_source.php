@@ -49,7 +49,7 @@ $Source =
 		$cmd = 'cd temp_dir && git commit -am "first"';
 		$result = shell_exec($cmd);
 		echo $result;
-		$cmd = 'cd temp_dir && git push origin master"';
+		$cmd = 'cd temp_dir && git push origin master';
 		$result = shell_exec($cmd);
 		echo $result;
 		$cmd = 'rm -rf temp_dir';
