@@ -1,5 +1,5 @@
 <?php
-	$url = "127.0.0.1:3306";
+	$url = "192.168.0.160:3306";
 	$user = "root";
 	$pass = "ma";
 	$db = "BuildOnWeb_db";
