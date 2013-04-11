@@ -1,5 +1,5 @@
 #include "reply_view.hpp"
-#include "navi_view.hpp"
+#include "manual_view.hpp"
 using namespace BOW;
 
 
@@ -9,44 +9,48 @@ namespace fs = boost::filesystem;
 #include <fstream>
 
 
+#define DEBUG_PARAM
 #define DEBUG_CONTENT
 
 
-const map<string,vector<string>> NaviView::navi_items_ =
+ManualView::ManualView(const string &repo)
+:repo_(repo)
+,workspace_(".temp/manual/" + repo_)
+,output_(workspace_ +"/" + repo_ + ".man")
+,env_build_commands_
 {
-    { "c_cxx",
+    "mkdir -p " + workspace_,
+}
+,env_build_commands_step_
+{
+    "man " + repo_ + " > " + output_,
+}
+{
+#ifdef DEBUG_PARAM
+    std::cout << __func__ <<":repo_=" <<  repo_ << endl;
+#endif
+    for(auto it = env_build_commands_.begin(); it != env_build_commands_.end();it++)
+    {
+        system(it->c_str());
+    }
+    for(auto it = env_build_commands_step_.begin(); it != env_build_commands_step_.end();it++)
+    {
+        if (0 != system(it->c_str()))
         {
-            "helloworld","helloworldcxx",
-            "assert",
+            break;
         }
-    },
-    { "ruby",
-        {"helloworld"}
-    },
+    }
 }
-;
 
-NaviView::NaviView(const string &username)
-:user_(username)
-,category_()
+ManualView::~ManualView()
 {
 }
 
-NaviView::NaviView(const string &username,const string &category)
-:user_(username)
-,category_(category)
-{
-    
-}
-NaviView::~NaviView()
-{
-}
-
-bool NaviView::getContent(const string &doc_root,string &contents)
+bool ManualView::getContent(const string &doc_root,string &contents)
 {
     // Open the template file to add to contents.
     {
-        std::string full_path = doc_root + "/BuildOnWebViewNavi.html";
+        std::string full_path = doc_root + "/BuildOnWebViewManual.html";
 #ifdef DEBUG_CONTENT
         std::cout << "full_path=" << full_path << std::endl;
 #endif
@@ -61,85 +65,17 @@ bool NaviView::getContent(const string &doc_root,string &contents)
             contents.append(buf, is.gcount());
         }
     }
-    // replace users
+    // get manual txt from.
     {
-        boost::algorithm::replace_all(contents,"$BOW_TMPL_USER$",user_);
-    }
-    // replace navi path
-    {
-        this->replace_source_path(contents);
-    }
-    // search all navi items and create a table.
-    {
-        std::string table_navi;
-        for(auto it = navi_items_.begin();it != navi_items_.end();it++ )
+        // read out file .
+        std::ifstream ifs(output_.c_str(), std::ios::in | std::ios::binary);
+        char buf[512];
+        string man;
+        while (ifs.read(buf, sizeof(buf)).gcount() > 0)
         {
-#ifdef DEBUG_CONTENT
-            std::cout << "it->first=<" << it->first << ">" << std::endl;
-#endif
-            // if no category is speciled,list all categories
-            if(true == category_.empty())
-            {
-                string tr("<tr>\n");
-                tr +=  "<td class=\"content\">";
-                tr +=  "<a href=\"/users";
-                tr +=  "/" + user_;
-                tr +=  "/" + it->first;
-                tr +=  "\">";
-                tr +=  it->first;
-                tr += "</a></td>\n";
-                tr += "</tr>\n";
-                
-                table_navi += tr;
-                continue;
-            }
-            // category is speciled,list all in the category
-            if(category_ == it->first)
-            {
-                for(auto subit = it->second.begin();subit != it->second.end();subit++)
-                {
-                    string tr("<tr>\n");
-                    tr +=  "<td class=\"content\">";
-                    tr +=  "<a href=\"/users";
-                    tr +=  "/" + user_;
-                    tr +=  "/" + it->first;
-                    tr +=  "/" + *subit;
-                    tr +=  "\">";
-                    tr +=  *subit;
-                    tr += "</a></td>\n";
-                    tr += "</tr>\n";
-                    
-                    table_navi += tr;
-                }
-                break;
-            }
+            man.append(buf, ifs.gcount());
         }
-        boost::algorithm::replace_all(contents,"$BOW_TMPL_NAVI_TABLE$",table_navi);
+//        boost::algorithm::replace_all(contents,"$BOW_TMPL_MANAUL_TXT$",man);
     }
     return true;
-}
-
-void NaviView::replace_source_path(string &contents)
-{
-    string href("/users");
-    std::string path;
-    // user_
-    href += "/" + user_;
-    path += "<a href=\"";
-    path += href;
-    path += "\">";
-    path += user_;
-    path += "</a>";
-    // category_
-    if(false == category_.empty())
-    {
-        path += "<span>/</span>";
-        href += "/" + category_;
-        path += "<a href=\"";
-        path += href;
-        path += "\">";
-        path += category_;
-        path += "</a>";
-    }
-    boost::algorithm::replace_all(contents,"$BOW_TMPL_NAVI_PATH$",path);
 }

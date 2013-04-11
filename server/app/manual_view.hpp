@@ -1,7 +1,7 @@
-#ifndef BOW_NAVI_VIEW_HPP
-#define BOW_NAVI_VIEW_HPP
+#ifndef BOW_MANUAL_VIEW_HPP
+#define BOW_MANUAL_VIEW_HPP
 #include <string>
-#include <vector>
+#include <list>
 #include <map>
 using namespace std;
 
@@ -14,19 +14,19 @@ namespace http
 }
 
 namespace BOW {
-    class NaviView: public http::server_threadpool::ReplyView
+    class ManualView: public http::server_threadpool::ReplyView
     {
     public:
-        NaviView(const string &username);
-        NaviView(const string &username,const string &category);
-        virtual ~NaviView();
+        ManualView(const string &repo);
+        virtual ~ManualView();
         virtual bool getContent(const string &doc_root,string &contents);
     private:
-        const string user_;
-        const string category_;
-        static const map<string,vector<string>> navi_items_;
+        const string repo_;
+        const string workspace_;
+        const string output_;
+        const list<string> env_build_commands_;
+        const list<string> env_build_commands_step_;
     private:
-        void replace_source_path(string &contents);
     };
 }
-#endif // BOW_NAVI_VIEW_HPP
+#endif // BOW_MANUAL_VIEW_HPP

@@ -1,0 +1,25 @@
+body 
+{ 
+    font-family:Verdana; 
+    font-size:14px; margin:0;
+}
+#Container
+{
+    width:96%;
+    margin: 0 auto -30px;
+}
+#Header {
+    float: top;
+    height: 50px;
+    /*border:1px solid blue;*/
+}
+#ContentFrame
+{ 
+    height:600px; 
+    /*border:1px solid blue;*/
+}
+#Footer {
+    float: bottom;
+    height: 50px;
+    /*border:1px solid blue;*/
+}

@@ -24,6 +24,7 @@ add_executable(BuildOnWeb
   app/navi_view.hpp
   app/source_view.hpp
   app/directory_view.hpp
+  app/manual_view.hpp
   app/source_update.hpp
   ${app_SRCS}
 )

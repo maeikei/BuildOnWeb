@@ -24,6 +24,7 @@
 #include "source_view.hpp"
 #include "directory_view.hpp"
 #include "source_update.hpp"
+#include "manual_view.hpp"
 
 #include <boost/filesystem.hpp>
 namespace fs = boost::filesystem;
@@ -181,6 +182,10 @@ void request_handler::handle_get(const request& req,const std::string &request_p
     // deal with manual.
     else if(boost::regex_match(request_path, ex_manual))
     {
+        std::list<std::string> results;
+        boost::split(results, request_path, boost::is_any_of("/"),boost::algorithm::token_compress_on);
+        BOW::ManualView man(results.back());
+        man.response(doc_root_, rep);
     }
     // remain of files such ass css,javascript files.
     else
