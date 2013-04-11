@@ -38,6 +38,9 @@ void ReplyView::replace(reply& rep)
                                       "<link rel=\"stylesheet\" href=\"/css/");
         boost::algorithm::replace_all(rep.content,
                                       "<script src=\"js/",
-                                      "<script src=\"/js");
+                                      "<script src=\"/js/");
+        boost::algorithm::replace_all(rep.content,
+                                      "<script src=\"ace/",
+                                      "<script src=\"/ace/");
     }    
 }

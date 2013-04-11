@@ -8,20 +8,13 @@
 <body>
     <div id="Container">
 	<div id="Header"></div>   
-	<div id="ContentFrame">
-            $BOW_TMPL_MANAUL_TXT$
+        <div id="ContentFrame">
+            <iframe src="$BOW_TMPL_REAL_MAN$"></iframe>
         </div>
         <div id="Footer">
             This site is created by Ma Eikei. All sources is hosted on <a href="https://github.com/maeikei/BuildOnWeb">github</a><br>
             Any question please contract me. <a href="mailto:maeikei@gmail.com">maeikei@gmail.com</a>
         </div>
     </div>
-    <script src="http://d1n0x3qji82z53.cloudfront.net/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
-    <script type="text/javascript">
-        var manout = ace.edit("ContentFrame");
-        manout.setTheme("ace/theme/terminal");
-        manout.getSession().setMode("ace/mode/text");
-        manout.setReadOnly(true);
-    </script> 
 </body>
 </html>

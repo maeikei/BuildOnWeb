@@ -9,7 +9,7 @@ namespace fs = boost::filesystem;
 #include <fstream>
 
 
-#define DEBUG_CONTENT
+// #define DEBUG_CONTENT
 
 
 const map<string,vector<string>> NaviView::navi_items_ =
@@ -17,7 +17,7 @@ const map<string,vector<string>> NaviView::navi_items_ =
     { "c_cxx",
         {
             "helloworld","helloworldcxx",
-            "assert",
+            "assert","printf",
         }
     },
     { "ruby",

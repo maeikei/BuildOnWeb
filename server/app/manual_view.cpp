@@ -9,7 +9,7 @@ namespace fs = boost::filesystem;
 #include <fstream>
 
 
-#define DEBUG_PARAM
+//#define DEBUG_PARAM
 #define DEBUG_CONTENT
 
 
@@ -65,17 +65,9 @@ bool ManualView::getContent(const string &doc_root,string &contents)
             contents.append(buf, is.gcount());
         }
     }
-    // get manual txt from.
+    // replace manual link $BOW_TMPL_SOURCE_MANUAL$
     {
-        // read out file .
-        std::ifstream ifs(output_.c_str(), std::ios::in | std::ios::binary);
-        char buf[512];
-        string man;
-        while (ifs.read(buf, sizeof(buf)).gcount() > 0)
-        {
-            man.append(buf, ifs.gcount());
-        }
-//        boost::algorithm::replace_all(contents,"$BOW_TMPL_MANAUL_TXT$",man);
+        boost::algorithm::replace_all(contents,"$BOW_TMPL_REAL_MAN$","/man/"+repo_+".html");
     }
     return true;
 }
