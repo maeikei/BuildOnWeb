@@ -7,7 +7,7 @@ using namespace BOW;
 namespace fs = boost::filesystem;
 #include <boost/algorithm/string.hpp>
 #include <fstream>
-
+#include <iostream>
 
 //#define DEBUG_PARAM
 #define DEBUG_CONTENT
