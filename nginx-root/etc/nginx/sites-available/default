@@ -49,13 +49,7 @@ server {
 		proxy_set_header X-Real-IP $remote_addr;
 		proxy_set_header Host $host;
 	}
-
 	location ~ ^/js/(.*\.js)$ {
-		proxy_pass       http://127.0.0.1:8081;
-		proxy_set_header X-Real-IP $remote_addr;
-		proxy_set_header Host $host;
-	}
-	location ~ ^/ace/(.*) {
 		proxy_pass       http://127.0.0.1:8081;
 		proxy_set_header X-Real-IP $remote_addr;
 		proxy_set_header Host $host;
@@ -70,11 +64,19 @@ server {
 		proxy_set_header X-Real-IP $remote_addr;
 		proxy_set_header Host $host;
 	}
+
+
 	location ~ ^/man/(.*) {
 		proxy_pass       http://192.168.0.160:8080;
 		proxy_set_header X-Real-IP $remote_addr;
 		proxy_set_header Host $host;
 	}
+	location ~ ^/ace/(.*) {
+		proxy_pass       http://192.168.0.160:8080;
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header Host $host;
+	}
+
 
 	location /doc/ {
 		alias /usr/share/doc/;
