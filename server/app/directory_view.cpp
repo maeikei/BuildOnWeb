@@ -9,6 +9,8 @@ namespace fs = boost::filesystem;
 #include <fstream>
 #include <iostream>
 
+
+
 //#define DEBUG_CONTENT
 
 DirecoryView::DirecoryView(const SourceView &src)
@@ -118,5 +120,7 @@ bool DirecoryView::getContent(const string &doc_root,string &contents)
         boost::algorithm::replace_all(contents,"$BOW_TMPL_DIRECTORY_TABLE$",table_trs);
     }
     this->replace_source_path(contents);
+    this->replace_loginout(contents);
     return true;
 }
+

@@ -127,6 +127,7 @@ bool NaviView::getContent(const string &doc_root,string &contents)
         }
         boost::algorithm::replace_all(contents,"$BOW_TMPL_NAVI_TABLE$",table_navi);
     }
+    this->replace_loginout(contents);
     return true;
 }
 
@@ -154,6 +155,25 @@ void NaviView::replace_source_path(string &contents)
     }
     boost::algorithm::replace_all(contents,"$BOW_TMPL_NAVI_PATH$",path);
 }
+
+
+static string strConstLogin =
+"<a href=\"/login.php\" data-method=\"post\" id=\"login\">login</a>";
+static string strConstLogout =
+"<a href=\"/logout.php\" data-method=\"post\" id=\"logout\">logout</a>";
+
+void NaviView::replace_loginout(string &contents)
+{
+    if( "guest" == user_ || user_.empty())
+    {
+        boost::algorithm::replace_all(contents,"$BOW_TMPL_USER_LOGINOUT$",strConstLogin);
+    }
+    else
+    {
+        boost::algorithm::replace_all(contents,"$BOW_TMPL_USER_LOGINOUT$",strConstLogout);
+    }
+}
+
 
 
 

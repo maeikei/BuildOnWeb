@@ -33,6 +33,7 @@ namespace BOW {
         const map<string,string> extensions_;
     protected:
         void replace_source_path(string &contents);
+        void replace_loginout(string &contents);
     };
 }
 #endif // BOW_SOURCE_VIEW_HPP

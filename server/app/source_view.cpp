@@ -17,6 +17,8 @@ namespace fs = boost::filesystem;
 const string strConstManualFormat = "<a href=\"/manual/$repo_$\">$repo_$</a>";
 
 
+
+
 SourceView::SourceView(const string &username,const string &category,const string &repo,const list<string> &path )
 :ReplyView()
 ,user_(username)
@@ -181,6 +183,7 @@ bool SourceView::getContent(const string &doc_root,string &contents)
     }
 
     this->replace_source_path(contents);
+    this->replace_loginout(contents);
     return true;
 }
 
@@ -225,4 +228,23 @@ void SourceView::replace_source_path(string &contents)
         path += "</a>";        
     }
     boost::algorithm::replace_all(contents,"$BOW_TMPL_SOURCE_PATH$",path);
+}
+
+static string strConstLogin =
+    "<a href=\"/login.php\" data-method=\"post\" id=\"login\">login</a>";
+static string strConstLogout =
+    "<a href=\"/logout.php\" data-method=\"post\" id=\"logout\">logout</a>";
+    
+    
+
+void SourceView::replace_loginout(string &contents)
+{
+    if( "guest" == user_ || user_.empty())
+    {
+        boost::algorithm::replace_all(contents,"$BOW_TMPL_USER_LOGINOUT$",strConstLogin);
+    }
+    else
+    {
+        boost::algorithm::replace_all(contents,"$BOW_TMPL_USER_LOGINOUT$",strConstLogout);
+    }
 }

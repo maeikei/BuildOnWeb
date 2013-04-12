@@ -28,6 +28,7 @@ namespace BOW {
         static const map<string,vector<string>> navi_items_;
     private:
         void replace_source_path(string &contents);
+        void replace_loginout(string &contents);
     };
 }
 #endif // BOW_NAVI_VIEW_HPP
