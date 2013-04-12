@@ -11,6 +11,7 @@
 #include "request_handler.hpp"
 #include <fstream>
 #include <sstream>
+#include <iostream>
 #include <string>
 #include <boost/lexical_cast.hpp>
 #include "mime_types.hpp"
