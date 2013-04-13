@@ -24,10 +24,10 @@
 	if (!$user_accout_table_exist) {
 		$sql = "CREATE TABLE user_acount
 		(
-            ID varchar(32),
+            		ID varchar(32),
 			RemoteIp varchar(32),
-            name varchar(128),
-			PASSWORD varchar(16),
+		            name varchar(128),
+			PASSWORD varchar(256),
 			APP_URL varchar(256)
 		)";
 		$result = mysql_query($sql, $link);
