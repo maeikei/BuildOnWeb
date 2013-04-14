@@ -11,8 +11,7 @@ namespace fs = boost::filesystem;
 #include <iostream>
 
 //#define DEBUG_PARAM
-
-#define DEBUG_CONTENT
+//#define DEBUG_CONTENT
 
 const string strConstManualFormat = "<a href=\"/manual/$repo_$\">$repo_$</a>";
 
@@ -31,6 +30,11 @@ SourceView::SourceView(const string &username,const string &category,const strin
 {
     "mkdir -p .temp/" + workspace_,
     "git clone " + git_repositories_+ "/" + category + "/" + repo_ + ".git " + workspace_ + "/" + repo_,
+    "cd " + workspace_ + "/" + repo_ + "&& git branch " + user_,
+    "cd " + workspace_ + "/" + repo_ + "&& git push origin " + user_,
+    "cd " + workspace_ + "/" + repo_ + "&& git branch ",
+    "cd " + workspace_ + "/" + repo_ + "&& git checkout " + user_,
+    "cd " + workspace_ + "/" + repo_ + "&& git branch ",
     "make exe -C " + workspace_ + "/" + repo_,
 }
 ,env_build_commands_debug_

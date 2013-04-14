@@ -12,7 +12,7 @@ namespace fs = boost::filesystem;
 using namespace std;
 
 
-#define DEBUG_PARAM
+//#define DEBUG_PARAM
 
 
 SoureUpdate::SoureUpdate(const string & source,const string & path,const string & ws)
@@ -24,7 +24,8 @@ SoureUpdate::SoureUpdate(const string & source,const string & path,const string 
 ,_env_build_commands
 {
     "cd " + _wc + " && git diff ",
-    "cd " + _wc + " && git commit -am \"web auto modify\" ",
+    "cd " + _wc + " && git commit -am \"web auto modify by user " + "" + "\" ",
+    "cd " + _wc + " && git push ",
     "make exe -C "+ _wc ,
 }
 {

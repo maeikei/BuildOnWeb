@@ -15,7 +15,9 @@
 
 #include "thread"
 
-#define DEBUG_IP
+//#define DEBUG_IP
+//#define DEBUG_READ
+//#define DEBUG
 
 namespace http {
 namespace server_threadpool {
@@ -60,7 +62,6 @@ void connection::start()
           boost::asio::placeholders::bytes_transferred)));
 }
 
- #define DEBUG_READ
 
 void connection::handle_read(const boost::system::error_code& e,
     std::size_t bytes_transferred)

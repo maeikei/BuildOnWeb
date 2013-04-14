@@ -46,11 +46,11 @@ request_handler::request_handler(const std::string& doc_root,const std::string& 
     
     
 //#define DEBUG_REQ
-//#define DEBUG_PATH
 //#define DEBUG_DATA
+//#define DEBUG_PATH
 //#define DEBUG_REP
 //#define DEBUG_RET
-#define DEBUG_POST
+//#define DEBUG_POST
     
 void request_handler::handle_request(const request& req, reply& rep)
 {

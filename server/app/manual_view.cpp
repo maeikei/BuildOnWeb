@@ -10,7 +10,7 @@ namespace fs = boost::filesystem;
 #include <iostream>
 
 //#define DEBUG_PARAM
-#define DEBUG_CONTENT
+//#define DEBUG_CONTENT
 
 
 ManualView::ManualView(const string &repo)
