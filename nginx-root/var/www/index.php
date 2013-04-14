@@ -51,9 +51,9 @@
 	if( !$row )
 	{
 //		echo "insert table!";
-	        $userid = md5( $remote_ip . "guest" );
+	        $user_md5 = md5( $remote_ip . "guest" );
 //        	echo $userid;
-		$sql = "INSERT INTO user_acount (ID,RemoteIp,name,PASSWORD,APP_URL) VALUES ('". $userid."','" . $remote_ip."','guest','','c_cxx/helloworld/main.c')";
+		$sql = "INSERT INTO user_acount (ID,RemoteIp,name,PASSWORD,APP_URL) VALUES ('". $user_md5."','" . $remote_ip."','guest','','c_cxx/helloworld/main.c')";
 		$result2 = mysql_query($sql, $link);
 		if (!$result2) {
 			die("Failed!".mysql_error());
@@ -69,6 +69,7 @@
         }
         $row = mysql_fetch_row($result);
 	if ( $row ) {
+		$user_md5 = $row[0];
 		$userid = $row[2];
 		$last_app = $row[4];
 	}
@@ -76,6 +77,9 @@
 //	echo $userid;
 //	echo $last_app;
 	mysql_close($link);
+//
+    session_start();
+    $_SESSION['user_md5'] = $user_md5;
 	if($_SERVER['HTTP_X_REAL_IP'])
 	{
 		$redirect_url= "Location: http://" . $_SERVER['HTTP_HOST'] . "/users/".$userid."/".$last_app;
