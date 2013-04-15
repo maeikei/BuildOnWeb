@@ -23,9 +23,9 @@ SoureUpdate::SoureUpdate(const string & source,const string & path,const string 
 ,_output(_wc + "/.bow_output/output.log")
 ,_env_build_commands
 {
-    "cd " + _wc + " && git diff ",
-    "cd " + _wc + " && git commit -am \"web auto modify by user " + "" + "\" ",
-    "cd " + _wc + " && git push ",
+    "cd " + _wc + " && git diff -q ",
+    "cd " + _wc + " && git commit -q -am \"web auto modify by user " + "" + "\" ",
+    "cd " + _wc + " && git push -q ",
     "make exe -C "+ _wc ,
 }
 {

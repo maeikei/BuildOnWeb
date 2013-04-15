@@ -18,29 +18,30 @@ const string strConstManualFormat = "<a href=\"/manual/$repo_$\">$repo_$</a>";
 
 
 
-SourceView::SourceView(const string &username,const string &category,const string &repo,const list<string> &path )
+SourceView::SourceView(const string &username,const string &category,const string &repo,const string &user_uid,const list<string> &path )
 :ReplyView()
 ,user_(username)
 ,category_(category)
 ,repo_(repo)
+,user_uid_(user_uid)
 ,path_(path)
-,workspace_(".temp/" + username + "/" + category_ )
+,workspace_(".temp/" + user_uid_ + "/" + category_ )
 ,git_repositories_("ssh://eikei@192.168.0.140//Volumes/DataHD/BuildOnWeb/repositories")
 ,env_build_commands_
 {
     "mkdir -p .temp/" + workspace_,
-    "git clone " + git_repositories_+ "/" + category + "/" + repo_ + ".git " + workspace_ + "/" + repo_,
-    "cd " + workspace_ + "/" + repo_ + "&& git branch " + user_,
-    "cd " + workspace_ + "/" + repo_ + "&& git push origin " + user_,
+    "git clone -q " + git_repositories_+ "/" + category + "/" + repo_ + ".git " + workspace_ + "/" + repo_,
+    "cd " + workspace_ + "/" + repo_ + "&& git branch " + user_uid,
+    "cd " + workspace_ + "/" + repo_ + "&& git push origin " + user_uid,
     "cd " + workspace_ + "/" + repo_ + "&& git branch ",
-    "cd " + workspace_ + "/" + repo_ + "&& git checkout " + user_,
-    "cd " + workspace_ + "/" + repo_ + "&& git branch ",
+    "cd " + workspace_ + "/" + repo_ + "&& git checkout " + user_uid,
+    "cd " + workspace_ + "/" + repo_ + "&& git branch  ",
     "make exe -C " + workspace_ + "/" + repo_,
 }
 ,env_build_commands_debug_
 {
     "mkdir -p .temp/" + workspace_,
-    "git clone " + git_repositories_+ "/" + category + "/" + repo_ + ".git " + workspace_ + "/" + repo_,
+    "git -q clone " + git_repositories_+ "/" + category + "/" + repo_ + ".git " + workspace_ + "/" + repo_,
     "make exe -C " + workspace_ + "/" + repo_,
 }
 ,extensions_
@@ -70,7 +71,7 @@ SourceView::SourceView(const string &username,const string &category,const strin
     std::cout << __func__ <<":username=" <<  username << endl;
     std::cout << __func__ <<":category=" <<  category << endl;
     std::cout << __func__ <<":repo=" <<  repo << endl;
-#endif
+#endif    
     const fs::path localrepo(workspace_ + "/" + repo + "/.git/");
     if( not fs::exists(localrepo) )
     {

@@ -177,7 +177,14 @@ void request_handler::handle_get(const request& req,const std::string &request_p
         std::cout <<"language=" <<  language << endl;
         std::cout <<"repos=" <<  repos << endl;
 #endif
-        BOW::SourceView source(username,language,repos,results);
+        string use_id(username);
+        if("guest"==username)
+        {
+            use_id += "_from_";
+            
+            use_id += boost::algorithm::replace_all_copy(remote_,".","_");
+        }
+        BOW::SourceView source(username,language,repos,use_id,results);
         source.response(doc_root_, rep);
     }
     // deal with manual.
