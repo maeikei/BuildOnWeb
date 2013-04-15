@@ -54,6 +54,7 @@ SourceView::SourceView(const string &username,const string &category,const strin
     
     {".rb","ruby"},
     {".php","php"},
+    {".mk","makefile"},
 }
 ,names_
 {
