@@ -55,6 +55,14 @@ SourceView::SourceView(const string &username,const string &category,const strin
     {".rb","ruby"},
     {".php","php"},
 }
+,names_
+{
+    {"makefile","makefile"},
+    {"Makefile","makefile"},
+    {"GnuMakefile","makefile"},
+    {"Gnumakefile","makefile"},
+    {"gnumakefile","makefile"},
+}
 
 {
 #ifdef DEBUG_PARAM
@@ -143,10 +151,19 @@ bool SourceView::getContent(const string &doc_root,string &contents)
         
         string mode("c_cpp");
         const fs::path fs_path(source_path);
-        auto it = extensions_.find( fs_path.extension().string());
-        if(it != extensions_.end())
         {
-            mode = it->second;
+            auto it = extensions_.find( fs_path.extension().string());
+            if(it != extensions_.end())
+            {
+                mode = it->second;
+            }
+        }
+        {
+            auto it = names_.find( fs_path.filename().string());
+            if(it != names_.end())
+            {
+                mode = it->second;
+            }
         }
         boost::algorithm::replace_all(contents,"$BOW_TMPL_TYPE$",mode);
     }
