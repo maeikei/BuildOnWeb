@@ -32,7 +32,7 @@ SourceView::SourceView(const string &username,const string &category,const strin
     "mkdir -p .temp/" + workspace_,
     "git clone -q " + git_repositories_+ "/" + category + "/" + repo_ + ".git " + workspace_ + "/" + repo_,
     "cd " + workspace_ + "/" + repo_ + "&& git branch " + user_uid,
-    "cd " + workspace_ + "/" + repo_ + "&& git push origin " + user_uid,
+    "cd " + workspace_ + "/" + repo_ + "&& git push --set-upstream origin " + user_uid,
     "cd " + workspace_ + "/" + repo_ + "&& git branch ",
     "cd " + workspace_ + "/" + repo_ + "&& git checkout " + user_uid,
     "cd " + workspace_ + "/" + repo_ + "&& git branch  ",
@@ -77,6 +77,7 @@ SourceView::SourceView(const string &username,const string &category,const strin
     {
         for(auto it = env_build_commands_.begin(); it != env_build_commands_.end();it++)
         {
+            std::cout << __func__ <<"system:it=<" <<  *it << ">" << endl;
             system(it->c_str());
         }        
     }
