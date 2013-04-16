@@ -19,16 +19,18 @@
 namespace http {
 namespace server_threadpool {
 
-struct reply ;
-struct request;
+struct reply;
 /// A reply of view to be sent to a client.
 class ReplyView
 {
 public:
     ReplyView(void);
-    void response(const std::string &doc_root, reply& rep);
-    virtual bool getContent(const std::string &doc_root,std::string &contents) = 0;
     virtual ~ReplyView(){}
+
+    void response(const std::string &doc_root, reply& rep);
+    virtual bool getContent(const std::string &doc_root,std::string &contents){ return true;};
+    void redirect(reply& rep);
+    virtual void getDist(std::string &dist){};
 protected:
 private:
     // replace commont of reply.

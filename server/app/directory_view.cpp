@@ -122,7 +122,7 @@ bool DirecoryView::getContent(const string &doc_root,string &contents)
     }
     this->replace_source_path(contents);
     this->replace_loginout(contents);
-    last_->set(repo_+ "/" + relative);
+    last_->set(category_ + "/" +repo_ + relative);
     return true;
 }
 

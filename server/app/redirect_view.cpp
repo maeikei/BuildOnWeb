@@ -25,8 +25,8 @@ RedirectView::~RedirectView()
 {
 }
 
-bool RedirectView::getContent(const string &doc_root,string &contents)
+void RedirectView::getDist(string &dist)
 {
-    string path = last_->get();
-    return true;
+    dist = "/users/" + user_ + "/";
+    dist += last_->get();
 }

@@ -1,6 +1,7 @@
 #include "reply_view.hpp"
 #include "navi_view.hpp"
 #include "last_position.hpp"
+#include "redirect_view.hpp"
 using namespace BOW;
 
 
@@ -132,6 +133,14 @@ bool NaviView::getContent(const string &doc_root,string &contents)
         boost::algorithm::replace_all(contents,"$BOW_TMPL_NAVI_TABLE$",table_navi);
     }
     this->replace_loginout(contents);
+    if(category_.empty())
+    {
+        last_->set("");
+    }
+    else
+    {
+        last_->set(category_);
+    }
     return true;
 }
 

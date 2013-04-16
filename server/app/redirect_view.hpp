@@ -22,7 +22,7 @@ namespace BOW {
     public:
         RedirectView(const string &username,const string &user_uid);
         virtual ~RedirectView();
-        virtual bool getContent(const string &doc_root,string &contents);
+        virtual void getDist(string &dist);
     private:
         const string user_;
         const std::string user_uid_;

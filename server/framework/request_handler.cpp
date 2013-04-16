@@ -26,6 +26,7 @@
 #include "directory_view.hpp"
 #include "source_update.hpp"
 #include "manual_view.hpp"
+#include "redirect_view.hpp"
 
 #include <boost/filesystem.hpp>
 namespace fs = boost::filesystem;
@@ -48,7 +49,8 @@ request_handler::request_handler(const std::string& doc_root,const std::string& 
 //#define DEBUG_REQ
 //#define DEBUG_DATA
 //#define DEBUG_PATH
-//#define DEBUG_REP
+//#define DEBUG_REP_DATA
+#define DEBUG_REP_HEADER
 //#define DEBUG_RET
 //#define DEBUG_POST
     
@@ -108,8 +110,10 @@ void request_handler::handle_request(const request& req, reply& rep)
   {
       this->handle_post(req,request_path,rep);
   }
-#ifdef DEBUG_REP
+#ifdef DEBUG_REP_DATA
     std::cout << "rep.content=" << rep.content << std::endl;
+#endif
+#ifdef DEBUG_REP_HEADER
     for(auto it = rep.headers.begin();it != rep.headers.end();it++)
     {
         std::cout << "it=" << it->name << " " << it->value << std::endl;
@@ -137,14 +141,6 @@ void request_handler::handle_get(const request& req,const std::string &request_p
         results.pop_front();
         std::string username;
         
-// user id infomation.
-        string use_id(username);
-        if("guest"==username)
-        {
-            use_id += "_from_";
-            
-            use_id += boost::algorithm::replace_all_copy(remote_,".","_");
-        }
 
         if(results.empty())
         {
@@ -156,7 +152,15 @@ void request_handler::handle_get(const request& req,const std::string &request_p
             username = results.front();
             results.pop_front();
         }
-        std::string language;
+        // user id infomation.
+        string use_id(username);
+        if("guest"==username)
+        {
+            use_id += "_from_";
+            
+            use_id += boost::algorithm::replace_all_copy(remote_,".","_");
+        }
+        std::string category;
         if(results.empty())
         {
             // view all repositories.
@@ -166,15 +170,23 @@ void request_handler::handle_get(const request& req,const std::string &request_p
         }
         else
         {
-            language = results.front();
+            category = results.front();
             results.pop_front();
         }
         std::string repos;
         if(results.empty())
         {
-            // view all language repositories.
-            BOW::NaviView navi(username,use_id,language);
-            navi.response(doc_root_, rep);
+            // view all category repositories.
+            if("**?**" == category)
+            {
+                BOW::RedirectView redirect(username,use_id);
+                redirect.redirect(rep);
+            }
+            else
+            {
+                BOW::NaviView navi(username,use_id,category);
+                navi.response(doc_root_, rep);
+            }
             return;
         }
         else
@@ -184,10 +196,10 @@ void request_handler::handle_get(const request& req,const std::string &request_p
         }
 #ifdef DEBUG_PATH
         std::cout <<"username=" <<  username << endl;
-        std::cout <<"language=" <<  language << endl;
+        std::cout <<"category=" <<  category << endl;
         std::cout <<"repos=" <<  repos << endl;
 #endif
-        BOW::SourceView source(username,use_id,language,repos,results);
+        BOW::SourceView source(username,use_id,category,repos,results);
         source.response(doc_root_, rep);
     }
     // deal with manual.

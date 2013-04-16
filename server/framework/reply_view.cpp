@@ -28,6 +28,24 @@ void ReplyView::response(const std::string &doc_root, reply& rep)
     rep.headers[1].name = "Content-Type";
     rep.headers[1].value = "text/html";
 }
+
+
+void ReplyView::redirect(reply& rep)
+{
+    std::string dist;
+    this->getDist(dist);
+    rep.status = reply::moved_permanently;
+    rep.headers.resize(3);
+    rep.headers[0].name = "Location";
+    rep.headers[0].value = dist;
+
+    rep.headers[1].name = "Content-Length";
+    rep.headers[1].value = boost::lexical_cast<std::string>(rep.content.size());
+    
+    rep.headers[2].name = "Content-Type";
+    rep.headers[2].value = "text/html";
+}
+
 // replace commont of reply.
 void ReplyView::replace(reply& rep)
 {
