@@ -1,5 +1,6 @@
 #include "reply_view.hpp"
 #include "navi_view.hpp"
+#include "last_position.hpp"
 using namespace BOW;
 
 
@@ -17,6 +18,7 @@ NaviView::NaviView(const string &username,const string &user_uid)
 :user_(username)
 ,user_uid_(user_uid)
 ,category_()
+,last_(new LastPostion(user_uid_))
 {
 }
 
@@ -24,6 +26,7 @@ NaviView::NaviView(const string &username,const string &user_uid,const string &c
 :user_(username)
 ,user_uid_(user_uid)
 ,category_(category)
+,last_(new LastPostion(user_uid_))
 {
 }
 NaviView::~NaviView()

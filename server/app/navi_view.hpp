@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <memory>
 using namespace std;
 
 namespace http
@@ -14,6 +15,7 @@ namespace http
 }
 
 namespace BOW {
+    class LastPostion;
     class NaviView: public http::server_threadpool::ReplyView
     {
     public:
@@ -25,6 +27,7 @@ namespace BOW {
         const string user_;
         const std::string user_uid_;
         const string category_;
+        shared_ptr<LastPostion> last_;        
         static const unsigned int iConstColNum_ = 5;
         static const map<string,vector<string>> navi_items_;
     private:

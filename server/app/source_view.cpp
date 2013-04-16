@@ -1,6 +1,7 @@
 #include "reply_view.hpp"
 #include "source_view.hpp"
 #include "directory_view.hpp"
+#include "last_position.hpp"
 using namespace BOW;
 
 #include <boost/filesystem.hpp>
@@ -27,6 +28,7 @@ SourceView::SourceView(const string &username,const string &user_uid,const strin
 ,path_(path)
 ,workspace_(".temp/" + user_uid_ + "/" + category_ )
 ,git_repositories_("ssh://eikei@192.168.0.140//Volumes/DataHD/BuildOnWeb/repositories")
+,last_(new LastPostion(user_uid_))
 ,env_build_commands_
 {
     "mkdir -p .temp/" + workspace_,

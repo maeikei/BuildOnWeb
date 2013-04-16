@@ -3,6 +3,7 @@
 #include <string>
 #include <list>
 #include <map>
+#include <memory>
 using namespace std;
 
 namespace http
@@ -15,6 +16,7 @@ namespace http
 
 
 namespace BOW {
+    class LastPostion;
     class SourceView: public http::server_threadpool::ReplyView
     {
     public:
@@ -29,6 +31,7 @@ namespace BOW {
         const list<string> &path_;
         const string workspace_;
         const string git_repositories_;
+        shared_ptr<LastPostion> last_;
         const list<string> env_build_commands_;
         const list<string> env_build_commands_debug_;
         const map<string,string> extensions_;
