@@ -138,6 +138,7 @@ class RandomGenerator {
   }
 };
 
+#if 0 //leveldb warning
 static Slice TrimSpace(Slice s) {
   int start = 0;
   while (start < s.size() && isspace(s[start])) {
@@ -149,7 +150,8 @@ static Slice TrimSpace(Slice s) {
   }
   return Slice(s.data() + start, limit - start);
 }
-
+#endif
+    
 static void AppendWithSpace(std::string* str, Slice msg) {
   if (msg.empty()) return;
   if (!str->empty()) {

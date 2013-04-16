@@ -55,6 +55,7 @@ static int64_t TotalFileSize(const std::vector<FileMetaData*>& files) {
 }
 
 namespace {
+#if 0 ////leveldb warning
 std::string IntSetToString(const std::set<uint64_t>& s) {
   std::string result = "{";
   for (std::set<uint64_t>::const_iterator it = s.begin();
@@ -66,6 +67,7 @@ std::string IntSetToString(const std::set<uint64_t>& s) {
   result += "}";
   return result;
 }
+#endif
 }  // namespace
 
 Version::~Version() {
