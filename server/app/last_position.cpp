@@ -16,6 +16,8 @@ namespace fs = boost::filesystem;
 #define DEBUG_GET
 #define DEBUG_SET
 
+void dump_bt(void);
+
 
 const string LastPostion::db_home_("/opt/BuildOnWeb/leveldb");
 
@@ -65,6 +67,7 @@ void LastPostion::set(const string& path)
     status = db_->Get(leveldb::ReadOptions(), userid_, &new_path);
     std::cout << __func__ <<":path=" <<  path << endl;
     std::cout << __func__ <<":new_path=" <<  new_path << endl;
+    dump_bt();
 #endif
 }
 
@@ -72,3 +75,28 @@ LastPostion::~LastPostion()
 {
 }
 
+
+#include <execinfo.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+void dump_bt(void)
+{
+    const size_t SIZE = 1024;
+    void *buffer[SIZE];
+    char **strings;
+    
+    int nptrs = backtrace(buffer, SIZE);
+    printf("backtrace() returned %d addresses\n", nptrs);
+    strings = backtrace_symbols(buffer, nptrs);
+    if (strings == NULL) {
+        perror("backtrace_symbols");
+        return;
+    }
+    for(int i = 0; i < nptrs; i++)
+    {
+        printf("%s\n", strings[i]);
+    }
+    free(strings);
+}
