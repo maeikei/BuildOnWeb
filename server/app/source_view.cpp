@@ -54,9 +54,13 @@ SourceView::SourceView(const string &username,const string &user_uid,const strin
     {".cxx","c_cpp"},
     {".cpp","c_cpp"},
     {".cp","c_cpp"},
+    {".cc","c_cpp"},
+    {".cx","c_cpp"},
     
     {".rb","ruby"},
+    
     {".php","php"},
+    
     {".mk","makefile"},
 }
 ,names_
