@@ -27,6 +27,7 @@ add_executable(BuildOnWeb
   app/manual_view.hpp
   app/source_update.hpp
   app/last_position.hpp
+  app/redirect_view.hpp
   ${app_SRCS}
 )
 
