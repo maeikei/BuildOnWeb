@@ -12,9 +12,9 @@ namespace fs = boost::filesystem;
 #include <cassert>
 #include "leveldb/db.h"
 
-#define DEBUG_PARAM
-#define DEBUG_GET
-#define DEBUG_SET
+//#define DEBUG_PARAM
+//#define DEBUG_GET
+//#define DEBUG_SET
 
 void dump_bt(void);
 

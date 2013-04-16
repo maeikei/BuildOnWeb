@@ -34,7 +34,7 @@ void ReplyView::redirect(reply& rep)
 {
     std::string dist;
     this->getDist(dist);
-    rep.status = reply::moved_permanently;
+    rep.status = reply::moved_temporarily;
     rep.headers.resize(3);
     rep.headers[0].name = "Location";
     rep.headers[0].value = dist;
