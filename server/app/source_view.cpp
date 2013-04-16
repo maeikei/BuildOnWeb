@@ -210,6 +210,7 @@ bool SourceView::getContent(const string &doc_root,string &contents)
 
     this->replace_source_path(contents);
     this->replace_loginout(contents);
+    last_->set(repo_+ "/" + source_path);
     return true;
 }
 

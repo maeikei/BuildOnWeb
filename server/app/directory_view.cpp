@@ -1,6 +1,7 @@
 #include "reply_view.hpp"
 #include "source_view.hpp"
 #include "directory_view.hpp"
+#include "last_position.hpp"
 using namespace BOW;
 
 #include <boost/filesystem.hpp>
@@ -121,6 +122,7 @@ bool DirecoryView::getContent(const string &doc_root,string &contents)
     }
     this->replace_source_path(contents);
     this->replace_loginout(contents);
+    last_->set(repo_+ "/" + relative);
     return true;
 }
 
