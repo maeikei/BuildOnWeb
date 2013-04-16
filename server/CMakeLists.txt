@@ -26,10 +26,11 @@ add_executable(BuildOnWeb
   app/directory_view.hpp
   app/manual_view.hpp
   app/source_update.hpp
+  app/last_position.hpp
   ${app_SRCS}
 )
 
-target_link_libraries( BuildOnWeb lua)
+target_link_libraries( BuildOnWeb lua leveldb)
 
 if(NOT WIN32)
   target_link_libraries( BuildOnWeb

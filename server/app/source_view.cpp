@@ -18,12 +18,12 @@ const string strConstManualFormat = "<a href=\"/manual/$repo_$\">$repo_$</a>";
 
 
 
-SourceView::SourceView(const string &username,const string &category,const string &repo,const string &user_uid,const list<string> &path )
+SourceView::SourceView(const string &username,const string &user_uid,const string &category,const string &repo,const list<string> &path )
 :ReplyView()
 ,user_(username)
+,user_uid_(user_uid)
 ,category_(category)
 ,repo_(repo)
-,user_uid_(user_uid)
 ,path_(path)
 ,workspace_(".temp/" + user_uid_ + "/" + category_ )
 ,git_repositories_("ssh://eikei@192.168.0.140//Volumes/DataHD/BuildOnWeb/repositories")

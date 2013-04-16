@@ -136,6 +136,16 @@ void request_handler::handle_get(const request& req,const std::string &request_p
         results.pop_front();
         results.pop_front();
         std::string username;
+        
+// user id infomation.
+        string use_id(username);
+        if("guest"==username)
+        {
+            use_id += "_from_";
+            
+            use_id += boost::algorithm::replace_all_copy(remote_,".","_");
+        }
+
         if(results.empty())
         {
             rep = reply::stock_reply(reply::not_found);
@@ -150,7 +160,7 @@ void request_handler::handle_get(const request& req,const std::string &request_p
         if(results.empty())
         {
             // view all repositories.
-            BOW::NaviView navi(username);
+            BOW::NaviView navi(username,use_id);
             navi.response(doc_root_, rep);
             return;
         }
@@ -163,7 +173,7 @@ void request_handler::handle_get(const request& req,const std::string &request_p
         if(results.empty())
         {
             // view all language repositories.
-            BOW::NaviView navi(username,language);
+            BOW::NaviView navi(username,use_id,language);
             navi.response(doc_root_, rep);
             return;
         }
@@ -177,14 +187,7 @@ void request_handler::handle_get(const request& req,const std::string &request_p
         std::cout <<"language=" <<  language << endl;
         std::cout <<"repos=" <<  repos << endl;
 #endif
-        string use_id(username);
-        if("guest"==username)
-        {
-            use_id += "_from_";
-            
-            use_id += boost::algorithm::replace_all_copy(remote_,".","_");
-        }
-        BOW::SourceView source(username,language,repos,use_id,results);
+        BOW::SourceView source(username,use_id,language,repos,results);
         source.response(doc_root_, rep);
     }
     // deal with manual.

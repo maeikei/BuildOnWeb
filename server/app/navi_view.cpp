@@ -13,17 +13,18 @@ namespace fs = boost::filesystem;
 
 
 
-NaviView::NaviView(const string &username)
+NaviView::NaviView(const string &username,const string &user_uid)
 :user_(username)
+,user_uid_(user_uid)
 ,category_()
 {
 }
 
-NaviView::NaviView(const string &username,const string &category)
+NaviView::NaviView(const string &username,const string &user_uid,const string &category)
 :user_(username)
+,user_uid_(user_uid)
 ,category_(category)
 {
-    
 }
 NaviView::~NaviView()
 {

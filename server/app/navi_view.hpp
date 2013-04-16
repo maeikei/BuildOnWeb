@@ -17,12 +17,13 @@ namespace BOW {
     class NaviView: public http::server_threadpool::ReplyView
     {
     public:
-        NaviView(const string &username);
-        NaviView(const string &username,const string &category);
+        NaviView(const string &username,const string &user_uid);
+        NaviView(const string &username,const string &user_uid,const string &category);
         virtual ~NaviView();
         virtual bool getContent(const string &doc_root,string &contents);
     private:
         const string user_;
+        const std::string user_uid_;
         const string category_;
         static const unsigned int iConstColNum_ = 5;
         static const map<string,vector<string>> navi_items_;

@@ -18,14 +18,14 @@ namespace BOW {
     class SourceView: public http::server_threadpool::ReplyView
     {
     public:
-        SourceView(const string &username,const string &category,const string &repo,const string &user_uid,const list<string> &path );
+        SourceView(const string &username,const string &user_uid,const string &category,const string &repo,const list<string> &path );
         virtual ~SourceView();
         virtual bool getContent(const string &doc_root,string &contents);
     protected:
         const string user_;
+        const std::string user_uid_;
         const string category_;
         const string repo_;
-        const std::string user_uid_;
         const list<string> &path_;
         const string workspace_;
         const string git_repositories_;
