@@ -1,6 +1,7 @@
 project(BuildOnWeb)
 cmake_minimum_required(VERSION 2.8)
 include_directories(${PROJECT_SOURCE_DIR}/3rdpart_build/lua-5.2.1/src)
+include_directories(${PROJECT_SOURCE_DIR}/3rdpart_build/leveldb-1.9.0/include)
 
 if(WIN32)
   include_directories(${CMAKE_BINARY_DIR}/3rdpart/include/boost-1_53)
