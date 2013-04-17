@@ -11,6 +11,9 @@ namespace fs = boost::filesystem;
 #include <fstream>
 using namespace std;
 
+void text2html(string &txt);
+void html2text(string &txt);
+
 
 //#define DEBUG_PARAM
 
@@ -23,9 +26,9 @@ SoureUpdate::SoureUpdate(const string & source,const string & path,const string 
 ,_output(_wc + "/.bow_output/output.log")
 ,_env_build_commands
 {
-    "cd " + _wc + " && git diff -q ",
+//    "cd " + _wc + " && git diff -q ",
     "cd " + _wc + " && git commit -q -am \"web auto modify by user " + "" + "\" ",
-    "cd " + _wc + " && git push -q ",
+    "cd " + _wc + " && git push -q --force",
     "make exe -C "+ _wc ,
 }
 {
@@ -40,9 +43,11 @@ SoureUpdate::SoureUpdate(const string & source,const string & path,const string 
     }
     else
     {
+        string source_replaced(_source);
+        html2text(source_replaced);
         std::ofstream ofs;
         ofs.open( _path );
-        ofs << _source;
+        ofs << source_replaced;
         ofs.close();
     }
     for(auto it = _env_build_commands.begin(); it != _env_build_commands.end();it++)
@@ -50,16 +55,40 @@ SoureUpdate::SoureUpdate(const string & source,const string & path,const string 
         system(it->c_str());
     }
 }
+
+
 bool SoureUpdate::getContent(const string &doc_root,string &contents)
 {
     // read out file .
     std::ifstream ifs(_output.c_str(), std::ios::in | std::ios::binary);
     char buf[512];
-    string output;
     while (ifs.read(buf, sizeof(buf)).gcount() > 0)
     {
         contents.append(buf, ifs.gcount());
     }
     return true;
+}
+    
+    
+static const map<string,string> mapConstTextHtmlPair =
+{
+    {"\"","&quot;"},
+    {"<","&lt;"},
+    {">","&gt;"},
+};
+void text2html(string &txt)
+{
+    for(auto it = mapConstTextHtmlPair.begin();it != mapConstTextHtmlPair.end();it++)
+    {
+        boost::algorithm::replace_all(txt,it->first,it->second);
+    }
+}
+
+void html2text(string &txt)
+{
+    for(auto it = mapConstTextHtmlPair.begin();it != mapConstTextHtmlPair.end();it++)
+    {
+        boost::algorithm::replace_all(txt,it->second,it->first);
+    }
 }
 

@@ -39,6 +39,7 @@ namespace BOW {
     protected:
         void replace_source_path(string &contents);
         void replace_loginout(string &contents);
+    private:
     };
 }
 #endif // BOW_SOURCE_VIEW_HPP

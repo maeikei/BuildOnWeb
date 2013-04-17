@@ -18,6 +18,7 @@ const string strConstManualFormat = "<a href=\"/manual/$repo_$\">$repo_$</a>";
 
 
 
+void text2html(string &txt);
 
 SourceView::SourceView(const string &username,const string &user_uid,const string &category,const string &repo,const list<string> &path )
 :ReplyView()
@@ -156,6 +157,7 @@ bool SourceView::getContent(const string &doc_root,string &contents)
                 source.append(buf, isf.gcount());
             }            
         }
+        text2html(source);
         boost::algorithm::replace_all(contents,"$BOW_TMPL_SOURCE$",source);
         
         string mode("c_cpp");
@@ -286,3 +288,4 @@ void SourceView::replace_loginout(string &contents)
         boost::algorithm::replace_all(contents,"$BOW_TMPL_USER_LOGINOUT$",strConstLogout);
     }
 }
+
