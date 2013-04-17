@@ -28,8 +28,9 @@ namespace BOW {
         const std::string user_uid_;
         const string category_;
         shared_ptr<LastPostion> last_;        
+        
         static const unsigned int iConstColNum_ = 5;
-        static const map<string,vector<string>> navi_items_;
+        static const map<string,vector<string>> &navi_items_;
     private:
         void replace_source_path(string &contents);
         void replace_loginout(string &contents);
