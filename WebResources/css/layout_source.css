@@ -33,7 +33,8 @@
 {
     float :left; 
     height:9%;
-    width :96%;
+    width :100%;
+/*    border:1px solid blue;*/
 }
 
 #SourceView
@@ -50,17 +51,28 @@
 }
 
 /*
- top 2 in SourceInfo
+ top 3 in SourceInfo
 */
 #SourcePath 
 {
     float :left; 
-    height:95%;
-    width :70%;
+    height:90%;
+    width :50%;
+/*    border:1px solid red;*/
+}
+#SourceSosials
+{
+    float :right; 
+    height:90%;
+    width :20%;    
+    text-align: right;
+/*    border:1px solid red;*/
 }
 #SourceManual
 {
     float :right; 
-    height:95%;
+    height:90%;
     width :20%;
+    text-align: right;
+/*    border:1px solid red;*/
 }

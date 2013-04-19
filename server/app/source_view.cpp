@@ -14,7 +14,14 @@ namespace fs = boost::filesystem;
 //#define DEBUG_PARAM
 //#define DEBUG_CONTENT
 
-const string strConstManualFormat = "<a href=\"/manual/$repo_$\">$repo_$</a>";
+const string strConstManualFormat
+(
+ "<a href=\"/manual/$repo_$\">$repo_$</a>"
+ );
+const string strConstSocialsFormat
+(
+ "<a href=\"/users/$user_$/$category_$/$repo_$/**?socials?**\">Socials</a>"
+ );
 
 
 
@@ -206,6 +213,14 @@ bool SourceView::getContent(const string &doc_root,string &contents)
         path.append(">,ws=<");
         path.append(workspace_ + "/" + repo_ + ">");
         boost::algorithm::replace_all(contents,"$BOW_TMPL_PATH$",path);
+    }
+    // replace manual link $BOW_TMPL_SOURCE_SOSAILS$
+    {
+        std::string socials(strConstSocialsFormat);
+        boost::algorithm::replace_all(socials,"$user_$",user_);
+        boost::algorithm::replace_all(socials,"$category_$",category_);
+        boost::algorithm::replace_all(socials,"$repo_$",repo_);
+        boost::algorithm::replace_all(contents,"$BOW_TMPL_SOURCE_SOSAILS$",socials);
     }
     // replace manual link $BOW_TMPL_SOURCE_MANUAL$
     {
