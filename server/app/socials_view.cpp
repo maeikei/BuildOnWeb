@@ -17,9 +17,10 @@ namespace fs = boost::filesystem;
 
 SosialView::SosialView(const SourceView &src)
 :SourceView(src)
+,wc_temp_cmd_output_(".bow_output/branch.list")
 ,env_show_commands_
 {
-    "cd " + workspace_ + "/" + repo_ + "&& git branch ",
+    "cd " + workspace_ + "/" + repo_ + "&& git show-branch -r > " + wc_temp_cmd_output_,
 }
 {
     for(auto it = env_show_commands_.begin(); it != env_show_commands_.end();it++)

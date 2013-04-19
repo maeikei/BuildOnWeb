@@ -22,7 +22,9 @@ namespace BOW {
         virtual ~SosialView();
         virtual bool getContent(const string &doc_root,string &contents);
     private:
+        const string wc_temp_cmd_output_;
         const list<string> env_show_commands_;
+        const list<string> branches_;
     };
 }
 #endif // BOW_SOSIALS_VIEW_HPP
