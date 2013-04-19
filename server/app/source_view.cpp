@@ -1,6 +1,7 @@
 #include "reply_view.hpp"
 #include "source_view.hpp"
 #include "directory_view.hpp"
+#include "socials_view.hpp"
 #include "last_position.hpp"
 using namespace BOW;
 
@@ -91,7 +92,9 @@ SourceView::SourceView(const string &username,const string &user_uid,const strin
     {
         for(auto it = env_build_commands_.begin(); it != env_build_commands_.end();it++)
         {
+#ifdef DEBUG_PARAM
             std::cout << __func__ <<"system:it=<" <<  *it << ">" << endl;
+#endif
             system(it->c_str());
         }        
     }
@@ -124,8 +127,14 @@ bool SourceView::getContent(const string &doc_root,string &contents)
 #ifdef DEBUG_CONTENT
     std::cout << "source_path=" << source_path << std::endl;
 #endif
-    // if is a direcotry 
     fs::path src_path(source_path);
+    // if show all sosials
+    if( "**?socials?**" == src_path.leaf().string())
+    {
+        SosialView social(*this);
+        return social.getContent(doc_root, contents);
+    }
+    // if is a direcotry
     if(fs::is_directory(src_path))
     {
         DirecoryView dir(*this);

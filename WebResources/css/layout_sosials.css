@@ -1,0 +1,26 @@
+#SourcePath 
+{
+    float :top; 
+    height:6%;
+    width :96%;
+}
+#HistoryViewFrame
+{
+    float :top; 
+    height:35%;
+    width :96%;
+}
+#DiffViewFrame
+{
+    float :top; 
+    height:60%;
+    width :96%;
+    border:2px solid gray;
+}
+
+#HistoryViewSVG
+{
+    height:100%;
+    width :100%;    
+    border:2px solid gray;
+}
