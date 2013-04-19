@@ -19,10 +19,11 @@ namespace BOW {
         SoureUpdate(const string & source,const string & path,const string & ws);
         virtual bool getContent(const string &doc_root,string &contents);
     private:
-        const string & _source;
-        const string & _path;
-        const string & _wc;
-        const string _output;
+        const string & source_;
+        const string & path_;
+        const string & wc_;
+        const string output_;
+        const string build_output_;
         const list<string> _env_build_commands;
     };
 }

@@ -24,7 +24,7 @@ DirecoryView::~DirecoryView()
 
 bool DirecoryView::getContent(const string &doc_root,string &contents)
 {
-    std::string dir_path(workspace_ + "/" + repo_);
+    std::string dir_path(workspace_);
     std::string relative;
     for(auto it = path_.begin();it != path_.end();it++)
     {

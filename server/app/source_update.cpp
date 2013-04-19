@@ -20,33 +20,35 @@ void html2text(string &txt);
 
 SoureUpdate::SoureUpdate(const string & source,const string & path,const string & ws)
 :ReplyView()
-,_source(source)
-,_path(path)
-,_wc(ws)
-,_output(_wc + "/.bow_output/output.log")
+,source_(source)
+,path_(path)
+,wc_(ws)
+,output_(wc_ + "/.bow_output/output.log")
+,build_output_(wc_ + "/.bow_output/build.log")
 ,_env_build_commands
 {
+    "rm -f " + output_ + "  " + build_output_,
 //    "cd " + _wc + " && git diff -q ",
-    "cd " + _wc + " && git commit -q -am \"web auto modify by user " + "" + "\" ",
-    "cd " + _wc + " && git push -q --force",
-    "make exe -C "+ _wc ,
+    "cd " + wc_ + " && git commit -q -am \"web auto modify by user " + "" + "\" ",
+    "cd " + wc_ + " && git push -q --force",
+    "make exe -C "+ wc_ +" 2>&1 | tee > " + build_output_,
 }
 {
 #ifdef DEBUG_PARAM
     cout << "_source=<" << _source<< ">" << endl;
     cout << "_path=<" << _path<< ">" << endl;
 #endif
-    fs::path sourefile(_path);
+    fs::path sourefile(path_);
     if( not fs::exists(sourefile) )
     {
         // new files.
     }
     else
     {
-        string source_replaced(_source);
+        string source_replaced(source_);
         html2text(source_replaced);
         std::ofstream ofs;
-        ofs.open( _path );
+        ofs.open( path_ );
         ofs << source_replaced;
         ofs.close();
     }
@@ -59,13 +61,34 @@ SoureUpdate::SoureUpdate(const string & source,const string & path,const string 
 
 bool SoureUpdate::getContent(const string &doc_root,string &contents)
 {
-    // read out file .
-    std::ifstream ifs(_output.c_str(), std::ios::in | std::ios::binary);
-    char buf[512];
-    while (ifs.read(buf, sizeof(buf)).gcount() > 0)
+    // program run result
     {
-        contents.append(buf, ifs.gcount());
+        std::ifstream isf(output_.c_str(), std::ios::in | std::ios::binary);
+        if (isf)
+        {
+            // Fill out the reply to be sent to the client.
+            char buf[512];
+            while (isf.read(buf, sizeof(buf)).gcount() > 0) {
+                contents.append(buf, isf.gcount());
+            }
+            isf.close();
+        }
     }
+    contents += "---------build log start---------\n";
+    // build result
+    {
+        std::ifstream isf(build_output_.c_str(), std::ios::in | std::ios::binary);
+        if (isf)
+        {
+            // Fill out the reply to be sent to the client.
+            char buf[512];
+            while (isf.read(buf, sizeof(buf)).gcount() > 0) {
+                contents.append(buf, isf.gcount());
+            }
+            isf.close();
+        }
+    }
+    contents += "---------build log end----------\n";
     return true;
 }
     

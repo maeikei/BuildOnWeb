@@ -35,25 +35,26 @@ SourceView::SourceView(const string &username,const string &user_uid,const strin
 ,category_(category)
 ,repo_(repo)
 ,path_(path)
-,workspace_(".temp/" + user_uid_ + "/" + category_ )
+,workspace_(".temp/" + user_uid_ + "/" + category_ + "/" + repo_)
 ,git_repositories_("ssh://eikei@192.168.0.140//Volumes/DataHD/BuildOnWeb/repositories")
+,output_(workspace_ + "/.bow_output/output.log")
+,build_output_(workspace_ + "/.bow_output/build.log")
 ,last_(new LastPostion(user_uid_))
 ,env_build_commands_
 {
-    "mkdir -p .temp/" + workspace_,
-    "git clone -q " + git_repositories_+ "/" + category + "/" + repo_ + ".git " + workspace_ + "/" + repo_,
-    "cd " + workspace_ + "/" + repo_ + "&& git branch " + user_uid,
-    "cd " + workspace_ + "/" + repo_ + "&& git push --set-upstream origin " + user_uid,
-    "cd " + workspace_ + "/" + repo_ + "&& git branch ",
-    "cd " + workspace_ + "/" + repo_ + "&& git checkout " + user_uid,
-    "cd " + workspace_ + "/" + repo_ + "&& git branch  ",
-    "make exe -C " + workspace_ + "/" + repo_,
+    "mkdir -p " + workspace_,
+    "git clone -q " + git_repositories_+ "/" + category + "/" + repo_ + ".git " + workspace_,
+    "cd " + workspace_ + "&& git branch " + user_uid,
+    "cd " + workspace_ + "&& git push --set-upstream origin " + user_uid,
+    "cd " + workspace_ + "&& git branch ",
+    "cd " + workspace_ + "&& git checkout " + user_uid,
+    "cd " + workspace_ + "&& git branch  ",
+//    "cd " + workspace_ + "&& git pull  ",
+    "mkdir -p " + workspace_ + "/.bow_output",
+    "make exe -C " + workspace_ + " 2>&1 | tee > " + build_output_,
 }
 ,env_build_commands_debug_
 {
-    "mkdir -p .temp/" + workspace_,
-    "git -q clone " + git_repositories_+ "/" + category + "/" + repo_ + ".git " + workspace_ + "/" + repo_,
-    "make exe -C " + workspace_ + "/" + repo_,
 }
 ,extensions_
 {
@@ -119,7 +120,7 @@ SourceView::~SourceView()
     
 bool SourceView::getContent(const string &doc_root,string &contents)
 {
-    std::string source_path(workspace_ + "/" + repo_);
+    std::string source_path(workspace_);
     for(auto it = path_.begin();it != path_.end();it++)
     {
         source_path.append( "/" + *it);
@@ -196,31 +197,47 @@ bool SourceView::getContent(const string &doc_root,string &contents)
     }
     // replace output
     {
-        std::string output_path(workspace_ + "/" + repo_ +"/.bow_output/output.log");
-#ifdef DEBUG_CONTENT
-        std::cout << "output_path=" << output_path << std::endl;
-#endif
         string output;
-        std::ifstream isf(output_path.c_str(), std::ios::in | std::ios::binary);
-        if (isf)
+        // program run result
         {
-            // Fill out the reply to be sent to the client.
-            char buf[512];
-            while (isf.read(buf, sizeof(buf)).gcount() > 0) {
-                output.append(buf, isf.gcount());
+            std::ifstream isf(output_.c_str(), std::ios::in | std::ios::binary);
+            if (isf)
+            {
+                // Fill out the reply to be sent to the client.
+                char buf[512];
+                while (isf.read(buf, sizeof(buf)).gcount() > 0) {
+                    output.append(buf, isf.gcount());
+                }
+                isf.close();
             }
         }
+        output += "---------build log start---------\n";
+        // build result
+        {
+            std::ifstream isf(build_output_.c_str(), std::ios::in | std::ios::binary);
+            if (isf)
+            {
+                // Fill out the reply to be sent to the client.
+                char buf[512];
+                while (isf.read(buf, sizeof(buf)).gcount() > 0) {
+                    output.append(buf, isf.gcount());
+                }
+                isf.close();
+            }
+        }
+        output += "---------build log end----------\n";
+        
         boost::algorithm::replace_all(contents,"$BOW_TMPL_OUTPUT$",output);
     }
     // replace javascript $BOW_TMPL_PATH$
     {
-        std::string path("source=<" + workspace_ + "/" + repo_);
+        std::string path("source=<" + workspace_);
         for(auto it = path_.begin();it != path_.end();it++)
         {
             path.append( "/" + *it);
         }
         path.append(">,ws=<");
-        path.append(workspace_ + "/" + repo_ + ">");
+        path.append(workspace_ + ">");
         boost::algorithm::replace_all(contents,"$BOW_TMPL_PATH$",path);
     }
     // replace manual link $BOW_TMPL_SOURCE_SOSAILS$

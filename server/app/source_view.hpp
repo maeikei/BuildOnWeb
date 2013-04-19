@@ -31,6 +31,8 @@ namespace BOW {
         const list<string> &path_;
         const string workspace_;
         const string git_repositories_;
+        const string output_;
+        const string build_output_;        
         shared_ptr<LastPostion> last_;
         const list<string> env_build_commands_;
         const list<string> env_build_commands_debug_;
