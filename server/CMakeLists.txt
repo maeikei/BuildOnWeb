@@ -1,6 +1,7 @@
 include_directories(app)
 include_directories(framework)
-link_directories(${CMAKE_BINARY_DIR}/3rdpart/lib)
+link_directories(${CMAKE_BINARY_DIR}/3rdpart/boost/lib)
+link_directories(${CMAKE_BINARY_DIR}/3rdpart/uri/lib)
 
 aux_source_directory(framework framework_SRCS)
 aux_source_directory(app app_SRCS)
