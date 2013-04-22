@@ -1,26 +1,26 @@
-#SourcePath 
-{
-    float :top; 
-    height:6%;
-    width :96%;
-}
 #HistoryViewFrame
 {
-    float :top; 
-    height:35%;
-    width :96%;
+    float :left; 
+    height:100%;
+    width :30%;
+}
+#BranchMenuFrame
+{
+    float :left;
+    height:100%;
+    width :13%;
 }
 #DiffViewFrame
 {
-    float :top; 
-    height:60%;
-    width :96%;
+    float :right;
+    height:100%;
+    width :55%;
     border:2px solid gray;
 }
 
 #HistoryViewSVG
 {
     height:100%;
-    width :100%;    
+    width :100%;
     border:2px solid gray;
 }

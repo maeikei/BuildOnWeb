@@ -20,9 +20,16 @@ SosialView::SosialView(const SourceView &src)
 ,wc_temp_cmd_output_(".bow_output/branch.list")
 ,env_show_commands_
 {
-    "cd " + workspace_ + "/" + repo_ + "&& git show-branch -r > " + wc_temp_cmd_output_,
+ //   "cd " + workspace_ + "/" + repo_ + "&& git branch -r > " + wc_temp_cmd_output_,
 }
 {
+    // read all remote branches.
+    {
+        string cmd("cd " + workspace_ + "/" + repo_ + "&& git branch -r > " + wc_temp_cmd_output_);
+        system(cmd.c_str());
+        
+    }
+#if 0
     for(auto it = env_show_commands_.begin(); it != env_show_commands_.end();it++)
     {
 #ifdef DEBUG_PARAM
@@ -30,6 +37,7 @@ SosialView::SosialView(const SourceView &src)
 #endif
         system(it->c_str());
     }
+#endif
 }
 SosialView::~SosialView()
 {
@@ -53,6 +61,7 @@ bool SosialView::getContent(const string &doc_root,string &contents)
         while (is.read(buf, sizeof(buf)).gcount() > 0) {
             contents.append(buf, is.gcount());
         }
+        is.close();
     }
     // replace users
     {

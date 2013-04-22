@@ -16,7 +16,7 @@
 #include "thread"
 
 //#define DEBUG_IP
-//#define DEBUG_READ
+#define DEBUG_READ
 //#define DEBUG
 
 namespace http {
