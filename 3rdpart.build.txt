@@ -6,5 +6,5 @@
 
 cmake ../uri -DBOOST_ROOT=/Users/maeikei/workspace/BuildOnWeb-dev/obj/3rdpart/boost  -DCMAKE_INSTALL_PREFIX:PATH=//Users/maeikei/workspace/BuildOnWeb-dev/obj/3rdpart/uri
 
-
+cmake ../uri -DBOOST_ROOT=/usr  -DCMAKE_INSTALL_PREFIX:PATH=/home/ma/workspace/BuildOnWeb-dev/obj/3rdpart/uri
 
