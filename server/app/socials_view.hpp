@@ -43,6 +43,7 @@ namespace BOW {
         void reduceLogMesh(void);
         bool isParentOfAny(const string &branch,const GitLogMeshNote & note);
         void dumpLogMesh(void);
+        void createBranchSVG(string &svg);
     };
 }
 

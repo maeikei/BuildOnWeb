@@ -103,9 +103,31 @@ bool SosialView::getContent(const string &doc_root,string &contents)
     {
         boost::algorithm::replace_all(contents,"$BOW_TMPL_USER$",user_);
     }
+    // replace svg
+    {
+        string svg;
+        createBranchSVG(svg);
+        boost::algorithm::replace_all(contents,"$BOW_TMPL_HISTORY_SVG$",svg);
+    }
     this->replace_source_path(contents);
     this->replace_loginout(contents);
     return true;
+}
+
+void SosialView::createBranchSVG(string &svg)
+{
+    auto it = git_log_mesh_.find("origin/master");
+    if(it != git_log_mesh_.end())
+    {
+        for_each(it->second.begin(), it->second.end(),
+                 [](const GitLogMeshList &note){
+                     
+                 });
+    }
+    else
+    {
+        return;
+    }
 }
 
 void SosialView::createBranchMesh(const string &branch)
