@@ -16,6 +16,7 @@
 {
     height:100%;
     width :100%;
+    overflow:scroll;
     border:2px solid gray;
 }
 
