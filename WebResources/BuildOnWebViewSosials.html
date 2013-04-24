@@ -35,13 +35,28 @@
                     $BOW_TMPL_HISTORY_SVG$
                 </svg>
             </div>
-            <div id="BranchMenuFrame"></div>
-            <div id="DiffViewFrame"></div>
+            <div id="DiffViewFrame">
+                <div id="BranchInfoFrame">
+                    Diff between $BOW_TMPL_SOSIAL_LEFT$ and $BOW_TMPL_SOSIAL_RIGHT$.
+                </div>
+                <div id="DiffViewACE">
+                    $BOW_TMPL_GIT_DIFF$
+                </div>
+            </div>
 	</div>   
         <div id="Footer">
             This site is created by Ma Eikei. All sources is hosted on <a href="https://github.com/maeikei/BuildOnWeb">github</a><br>
             Any question please contract me. <a href="mailto:maeikei@gmail.com">maeikei@gmail.com</a>
         </div>
     </div>
+    <script src="ace/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+    <!--script src="js/ace_wrap.js" type="text/javascript" charset="utf-8"></script-->    
+    <script type="text/javascript">
+        var output = ace.edit("DiffViewACE");
+        output.setTheme("ace/theme/terminal");
+        output.getSession().setMode("ace/mode/text");
+        output.setReadOnly(true);
+        output.gotoLine(1);
+    </script> 
 </body>
 </html>

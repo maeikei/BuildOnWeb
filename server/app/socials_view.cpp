@@ -12,19 +12,19 @@ namespace fs = boost::filesystem;
 #include <iostream>
 
 
-//#define DEBUG_PARAM
+#define DEBUG_PARAM
+//#define DEBUG_BRANCH_LOG
 //#define DEBUG_LOGMESH
 //#define DEBUG_LOGMESH_DUMP
 //#define DEBUG_LOGMESH_POSITION
 //#define DEBUG_CONTENT
 
+void text2html(string &txt);
 
 
 string BOW::system_result(const string cmd)
 {
-#ifdef DEBUG_PARAM
-    std::cout << __func__ <<":cmd=<" <<  cmd << ">" << endl;
-#endif
+//    std::cout << __func__ <<":cmd=<" <<  cmd << ">" << endl;
     FILE *pipe = popen(cmd.c_str(), "r");
     std::string result;
     char buf[256] = {0};
@@ -42,6 +42,8 @@ string BOW::system_result(const string cmd)
 SosialView::SosialView(const SourceView &src)
 :SourceView(src)
 ,wc_temp_cmd_output_(".bow_output/branch.list")
+,left_("master")
+,right_(user_uid_)
 ,env_show_commands_
 {
  //   "cd " + workspace_ + "/" + repo_ + "&& git branch -r > " + wc_temp_cmd_output_,
@@ -51,7 +53,7 @@ SosialView::SosialView(const SourceView &src)
     {
         string cmd("cd " + workspace_ + "&& git branch -r ");
         string branchs_txt = system_result(cmd.c_str());
-#ifdef DEBUG_PARAM
+#ifdef DEBUG_BRANCH_LOG
         std::cout << __func__ <<":branchs_txt=<" <<  branchs_txt << ">" << endl;
 #endif
         list<string> branches_temp;
@@ -72,6 +74,12 @@ SosialView::SosialView(const SourceView &src)
                 branches_.push_back(*it);
             }
         }
+    }
+    {
+        diff_ = system_result("cd " + workspace_ + "&& git diff origin/master ");
+#ifdef DEBUG_PARAM
+        std::cout << __func__ <<":diff_=<" <<  diff_ << ">" << endl;
+#endif
     }
 }
 SosialView::~SosialView()
@@ -108,6 +116,14 @@ bool SosialView::getContent(const string &doc_root,string &contents)
         string svg;
         createAllBranchSVG(svg);
         boost::algorithm::replace_all(contents,"$BOW_TMPL_HISTORY_SVG$",svg);
+    }
+    // replace diff
+    {
+        boost::algorithm::replace_all(contents,"$BOW_TMPL_SOSIAL_LEFT$",left_);
+        boost::algorithm::replace_all(contents,"$BOW_TMPL_SOSIAL_RIGHT$",right_);
+        string diff_html(diff_);
+        text2html(diff_html);
+        boost::algorithm::replace_all(contents,"$BOW_TMPL_GIT_DIFF$",diff_html);
     }
     this->replace_source_path(contents);
     this->replace_loginout(contents);
@@ -333,7 +349,7 @@ void SosialView::createBranchMesh(const string &branch)
     git_log_mesh_.insert(pair<string,GitLogMeshList>(branch,branch_list));
     string cmd("cd " + workspace_ + "&& git log --oneline --reverse --pretty=format:\"%h,%p,%cd\" " + branch);
     string branch_log = system_result(cmd.c_str());
-#ifdef DEBUG_PARAM
+#ifdef DEBUG_LOGMESH
     std::cout << __func__ <<":branch_log=<" <<  branch_log << ">" << endl;
 #endif
     list<string> log_in_lines;

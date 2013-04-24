@@ -73,6 +73,7 @@
                        && xmlHttpRequest.status == HTTP_STATUS_OK )
                {
                    output.setValue(xmlHttpRequest.responseText,1);
+                   output.gotoLine(1);
                }
            }
            xmlHttpRequest.open('POST','/EventAceOnChange/$BOW_TMPL_PATH$');

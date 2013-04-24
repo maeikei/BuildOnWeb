@@ -12,7 +12,7 @@ namespace fs = boost::filesystem;
 #include <fstream>
 #include <iostream>
 
-//#define DEBUG_PARAM
+#define DEBUG_PARAM
 //#define DEBUG_CONTENT
 
 const string strConstManualFormat
@@ -43,11 +43,11 @@ SourceView::SourceView(const string &username,const string &user_uid,const strin
 ,env_build_commands_
 {
     "mkdir -p " + workspace_,
-    "git clone -q " + git_repositories_+ "/" + category + "/" + repo_ + ".git " + workspace_,
-    "cd " + workspace_ + "&& git branch " + user_uid,
-    "cd " + workspace_ + "&& git push --set-upstream origin " + user_uid,
+    "git clone -q " + git_repositories_+ "/" + category_ + "/" + repo_ + ".git " + workspace_,
+    "cd " + workspace_ + "&& git branch " + user_uid_,
+    "cd " + workspace_ + "&& git push --set-upstream origin " + user_uid_,
     "cd " + workspace_ + "&& git branch ",
-    "cd " + workspace_ + "&& git checkout " + user_uid,
+    "cd " + workspace_ + "&& git checkout " + user_uid_,
     "cd " + workspace_ + "&& git branch  ",
 //    "cd " + workspace_ + "&& git pull  ",
     "mkdir -p " + workspace_ + "/.bow_output",
@@ -87,36 +87,42 @@ SourceView::SourceView(const string &username,const string &user_uid,const strin
     std::cout << __func__ <<":username=" <<  username << endl;
     std::cout << __func__ <<":category=" <<  category << endl;
     std::cout << __func__ <<":repo=" <<  repo << endl;
-#endif    
-    const fs::path localrepo(workspace_ + "/" + repo + "/.git/");
-    if( not fs::exists(localrepo) )
-    {
-        for(auto it = env_build_commands_.begin(); it != env_build_commands_.end();it++)
-        {
-#ifdef DEBUG_PARAM
-            std::cout << __func__ <<"system:it=<" <<  *it << ">" << endl;
 #endif
-            system(it->c_str());
-        }        
-    }
-    else if ( not fs::is_directory(localrepo) )
-    {
-        for(auto it = env_build_commands_.begin(); it != env_build_commands_.end();it++)
-        {
-            system(it->c_str());
-        }
-    }
-    else
-    {
-        
-    }
+    createWorkSpace();
 }
 SourceView::~SourceView()
 {
 }
 
     
-    
+void SourceView::createWorkSpace(void)
+{
+    const fs::path localrepo(workspace_ + "/" + repo_ + "/.git/");
+    if( not fs::exists(localrepo) )
+    {
+        system_result("mkdir -p " + workspace_);
+        string cmd("git clone -q -b " + user_uid_ + " " + git_repositories_+ "/" + category_ + "/" + repo_ + ".git " + workspace_);
+        string result = system_result(cmd);
+        if(result.empty())
+        {
+            return;
+        }
+#ifdef DEBUG_PARAM
+        std::cout << __func__ <<":result=<" <<  result << ">" << endl;
+#endif
+        for(auto it = env_build_commands_.begin(); it != env_build_commands_.end();it++)
+        {
+#ifdef DEBUG_PARAM
+            std::cout << __func__ <<"system:it=<" <<  *it << ">" << endl;
+#endif
+            system(it->c_str());
+        }
+    }
+    else
+    {
+        
+    }    
+}
     
 bool SourceView::getContent(const string &doc_root,string &contents)
 {

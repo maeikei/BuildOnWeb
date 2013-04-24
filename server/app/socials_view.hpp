@@ -48,6 +48,9 @@ namespace BOW {
         virtual bool getContent(const string &doc_root,string &contents);
     private:
         const string wc_temp_cmd_output_;
+        string left_;
+        string right_;
+        string diff_;
         const list<string> env_show_commands_;
         list<string> branches_;
         map<string,bool> log_check_;

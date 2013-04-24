@@ -16,6 +16,7 @@ namespace http
 
 
 namespace BOW {
+    string system_result(const string cmd);
     class LastPostion;
     class SourceView: public http::server_threadpool::ReplyView
     {
@@ -41,6 +42,7 @@ namespace BOW {
     protected:
         void replace_source_path(string &contents);
         void replace_loginout(string &contents);
+        void createWorkSpace(void);
     private:
     };
 }
