@@ -43,7 +43,6 @@ SourceView::SourceView(const string &username,const string &user_uid,const strin
 ,env_build_commands_
 {
     "mkdir -p " + workspace_,
-    "git clone -q " + git_repositories_+ "/" + category_ + "/" + repo_ + ".git " + workspace_,
     "cd " + workspace_ + "&& git branch " + user_uid_,
     "cd " + workspace_ + "&& git push --set-upstream origin " + user_uid_,
     "cd " + workspace_ + "&& git branch ",
@@ -103,7 +102,8 @@ void SourceView::createWorkSpace(void)
         system_result("mkdir -p " + workspace_);
         string cmd("git clone -q -b " + user_uid_ + " " + git_repositories_+ "/" + category_ + "/" + repo_ + ".git " + workspace_);
         string result = system_result(cmd);
-        if(result.empty())
+        result = system_result("cd " + workspace_ + "&& git branch | grep " + user_uid_);
+        if(false == result.empty())
         {
             return;
         }
