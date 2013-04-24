@@ -420,6 +420,7 @@ void SosialView::reduceLogMesh(void)
 {
     for(auto it = git_log_mesh_.begin();it != git_log_mesh_.end();it++)
     {
+#if 0
         for(auto it2 = it->second.begin();it2 != it->second.end();it2++)
         {
             if( it2 == it->second.begin())
@@ -429,6 +430,20 @@ void SosialView::reduceLogMesh(void)
             if(false == isParentOfAny( it->first,*it2))
             {
                 it2 = it->second.erase(it2);
+            }
+        }
+#endif
+        auto it2 = it->second.begin();
+        it2++;
+        while(it2 != it->second.end())
+        {
+            if(false == isParentOfAny( it->first,*it2))
+            {
+                it2 = it->second.erase(it2);
+            }
+            else
+            {
+                it2++;
             }
         }
     }
