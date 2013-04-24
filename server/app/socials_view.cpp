@@ -8,6 +8,7 @@ using namespace BOW;
 namespace fs = boost::filesystem;
 #include <boost/algorithm/string.hpp>
 #include <fstream>
+#include <sstream>
 #include <iostream>
 
 
@@ -37,7 +38,13 @@ namespace BOW {
     }
     struct number
     {
-        int i;
+        int i_;
+        number(int i):i_(i){}
+        operator string() const {
+            stringstream ss;
+            ss << i_;
+            return ss.str();
+        }
     };
 };
 
@@ -118,28 +125,48 @@ bool SosialView::getContent(const string &doc_root,string &contents)
     return true;
 }
 
-static const string strConstStartNode("<circle cx=\"$cx$\" cy=\"$cy$\" r=\"10\" stroke=\"black\" stroke-width=\"2\"/>\
-                                      <text x=\"$x$\" y=\"$y$\" font-size=\"10\" fill=\"blue\" > $txt$ </text>\
+static const string strConstStartNode("<circle cx=\"$cx$\" cy=\"$cy$\" r=\"5\" stroke=\"black\" stroke-width=\"2\"/>\n\
+                                      <text x=\"$x$\" y=\"$y$\" font-size=\"10\" fill=\"blue\" > $txt$ </text>\n\
                                       ");
-static const string strConstNormalNode("<circle cx=\"$cx$\" cy=\"$cy$\" r=\"10\" stroke=\"black\" stroke-width=\"2\"/>");
+static const string strConstNormalNode("<circle cx=\"$cx$\" cy=\"$cy$\" r=\"10\" stroke=\"black\" stroke-width=\"2\"/>\n");
 
+static const int iConstSeperateOfY = 100;
+static const int iConstStringOffsetX = 10;
+static const int iConstStringOffsetY = 4;
 void SosialView::createBranchSVG(string &svg)
 {
     auto it = git_log_mesh_.find("origin/master");
     if(it != git_log_mesh_.end())
     {
-        int startX = 5,startY =5;
+        int startX = 20,startY =20;
+        int i = 1;
         for(auto  it2 =it->second.begin();it2 != it->second.end();it2++)
         {
             if(it2 == it->second.begin())
             {
                 string nodesvn(strConstStartNode);
-                boost::algorithm::replace_all(nodesvn,"$cx$",);
+                string cx = number(startX);
+                boost::algorithm::replace_all(nodesvn,"$cx$",cx);
+                string cy = number(startY);
+                boost::algorithm::replace_all(nodesvn,"$cy$",cy);
+                string x = number(startX + iConstStringOffsetX);
+                boost::algorithm::replace_all(nodesvn,"$x$",x);
+                string y = number(startY + iConstStringOffsetY);
+                boost::algorithm::replace_all(nodesvn,"$y$",y);
+                string txt("master");
+                boost::algorithm::replace_all(nodesvn,"$txt$",txt);
+                svg += nodesvn;
             }
             else
             {
-                
+                string nodesvn(strConstStartNode);
+                string cx = number(startX);
+                boost::algorithm::replace_all(nodesvn,"$cx$",cx);
+                string cy = number(startY + i* iConstSeperateOfY);
+                boost::algorithm::replace_all(nodesvn,"$cy$",cy);
+                svg += nodesvn;                
             }
+            i++;
         }
     }
     else
