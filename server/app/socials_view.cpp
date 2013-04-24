@@ -115,11 +115,17 @@ bool SosialView::getContent(const string &doc_root,string &contents)
 }
 
 
-static const string strConstStartNode("<circle cx=\"$cx$\" cy=\"$cy$\" r=\"5\" stroke=\"black\" stroke-width=\"2\"/>\n\
+static const string strConstMasterStartNode("<circle cx=\"$cx$\" cy=\"$cy$\" r=\"5\" stroke=\"black\" stroke-width=\"2\"/>\n\
                                       <text x=\"$x$\" y=\"$y$\" font-size=\"10\" fill=\"blue\" > $txt$ </text>\n\
                                       ");
 static const string strConstNormalNode("<circle cx=\"$cx$\" cy=\"$cy$\" r=\"5\" stroke=\"black\" stroke-width=\"2\"/>\n");
 static const string strConstLine("<line x1=\"$x1$\" y1=\"$y1$\" x2=\"$x2$\" y2=\"$y2$\" style=\"stroke:rgb(0,0,0);stroke-width:2\"/>");
+static const string strConstBranchStartNode("<a xlink:href=\"$href$\">\n\
+                                            <circle cx=\"$cx$\" cy=\"$cy$\" r=\"5\" stroke=\"black\" stroke-width=\"2\"/>\n\
+                                              <text x=\"$x$\" y=\"$y$\" font-size=\"10\" fill=\"blue\">$txt$</text>\n\
+                                            </a>\n\
+                                              ");
+
 static const int iConstSeperateOfY = 50;
 static const int iConstSeperateOfX = 80;
 static const int iConstStringOffsetX = 10;
@@ -137,7 +143,7 @@ void SosialView::createMasterSVG(string &svg)
                 int startX = 20,startY =20;
                 it2->x_ = startX;
                 it2->y_ = startY;
-                string nodesvn(strConstStartNode);
+                string nodesvn(strConstMasterStartNode);
                 string cx = number(it2->x_);
                 boost::algorithm::replace_all(nodesvn,"$cx$",cx);
                 string cy = number(it2->y_);
@@ -229,7 +235,7 @@ void SosialView::createBranchSVG(string &svg)
 #endif
                     mesh_positions_.insert(pair<int,int>(key,value));
                 }
-                string nodesvn(strConstStartNode);
+                string nodesvn(strConstBranchStartNode);
                 string cx = number(it2->x_);
                 boost::algorithm::replace_all(nodesvn,"$cx$",cx);
                 string cy = number(it2->y_);
@@ -241,6 +247,8 @@ void SosialView::createBranchSVG(string &svg)
                 string txt(it->first);
                 boost::algorithm::replace_all(txt,"origin/","");
                 boost::algorithm::replace_all(nodesvn,"$txt$",txt);
+                string href(txt);
+                boost::algorithm::replace_all(nodesvn,"$href$",href);
                 svg += nodesvn;
 
                 string line(strConstLine);
