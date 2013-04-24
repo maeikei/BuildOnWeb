@@ -12,7 +12,7 @@ namespace fs = boost::filesystem;
 #include <iostream>
 
 
-#define DEBUG_PARAM
+//#define DEBUG_PARAM
 //#define DEBUG_BRANCH_LOG
 //#define DEBUG_LOGMESH
 //#define DEBUG_LOGMESH_DUMP
@@ -428,7 +428,7 @@ void SosialView::reduceLogMesh(void)
             }
             if(false == isParentOfAny( it->first,*it2))
             {
-                it->second.erase(it2);
+                it2 = it->second.erase(it2);
             }
         }
     }
