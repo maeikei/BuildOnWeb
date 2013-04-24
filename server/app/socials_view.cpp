@@ -35,6 +35,10 @@ namespace BOW {
         pclose(pipe);
         return result;
     }
+    struct number
+    {
+        int i;
+    };
 };
 
 
@@ -114,15 +118,29 @@ bool SosialView::getContent(const string &doc_root,string &contents)
     return true;
 }
 
+static const string strConstStartNode("<circle cx=\"$cx$\" cy=\"$cy$\" r=\"10\" stroke=\"black\" stroke-width=\"2\"/>\
+                                      <text x=\"$x$\" y=\"$y$\" font-size=\"10\" fill=\"blue\" > $txt$ </text>\
+                                      ");
+static const string strConstNormalNode("<circle cx=\"$cx$\" cy=\"$cy$\" r=\"10\" stroke=\"black\" stroke-width=\"2\"/>");
+
 void SosialView::createBranchSVG(string &svg)
 {
     auto it = git_log_mesh_.find("origin/master");
     if(it != git_log_mesh_.end())
     {
-        for_each(it->second.begin(), it->second.end(),
-                 [](const GitLogMeshList &note){
-                     
-                 });
+        int startX = 5,startY =5;
+        for(auto  it2 =it->second.begin();it2 != it->second.end();it2++)
+        {
+            if(it2 == it->second.begin())
+            {
+                string nodesvn(strConstStartNode);
+                boost::algorithm::replace_all(nodesvn,"$cx$",);
+            }
+            else
+            {
+                
+            }
+        }
     }
     else
     {
