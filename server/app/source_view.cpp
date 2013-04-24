@@ -43,6 +43,7 @@ SourceView::SourceView(const string &username,const string &user_uid,const strin
 ,env_build_commands_
 {
     "mkdir -p " + workspace_,
+    "git clone -q " + git_repositories_+ "/" + category_ + "/" + repo_ + ".git " + workspace_,
     "cd " + workspace_ + "&& git branch " + user_uid_,
     "cd " + workspace_ + "&& git push --set-upstream origin " + user_uid_,
     "cd " + workspace_ + "&& git branch ",
