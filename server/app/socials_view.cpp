@@ -130,6 +130,7 @@ static const string strConstStartNode("<circle cx=\"$cx$\" cy=\"$cy$\" r=\"5\" s
                                       <text x=\"$x$\" y=\"$y$\" font-size=\"10\" fill=\"blue\" > $txt$ </text>\n\
                                       ");
 static const string strConstNormalNode("<circle cx=\"$cx$\" cy=\"$cy$\" r=\"5\" stroke=\"black\" stroke-width=\"2\"/>\n");
+static const string strConstLine("<line x1=\"$x1$\" y1=\"$y1$\" x2=\"$x2$\" y2=\"$y2$\" style=\"stroke:rgb(0,0,0);stroke-width:3\"/>");
 static const int iConstSeperateOfY = 100;
 static const int iConstStringOffsetX = 10;
 static const int iConstStringOffsetY = 4;
@@ -139,7 +140,8 @@ void SosialView::createBranchSVG(string &svg)
     if(it != git_log_mesh_.end())
     {
         int startX = 20,startY =20;
-        int i = 1;
+        int i = 0;
+        int lastY = startY;
         for(auto  it2 =it->second.begin();it2 != it->second.end();it2++)
         {
             if(it2 == it->second.begin())
@@ -162,10 +164,23 @@ void SosialView::createBranchSVG(string &svg)
                 string nodesvn(strConstNormalNode);
                 string cx = number(startX);
                 boost::algorithm::replace_all(nodesvn,"$cx$",cx);
-                string cy = number(startY + (i++)* iConstSeperateOfY);
+                string cy = number(startY + (i)* iConstSeperateOfY);
                 boost::algorithm::replace_all(nodesvn,"$cy$",cy);
-                svg += nodesvn;                
+                svg += nodesvn;
+                
+                string line(strConstLine);
+                string x1 = number(startX);
+                boost::algorithm::replace_all(line,"$x1$",x1);
+                string y1 = number(lastY);
+                boost::algorithm::replace_all(line,"$y1$",y1);
+                string x2 = number(startX);
+                boost::algorithm::replace_all(line,"$x2$",x2);
+                string y2 = number(startY + (i)* iConstSeperateOfY);
+                boost::algorithm::replace_all(line,"$y2$",y2);
+                svg += line;
             }
+            lastY = startY + (i)* iConstSeperateOfY;
+            i++;
         }
     }
     else
