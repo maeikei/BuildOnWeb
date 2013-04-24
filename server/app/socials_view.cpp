@@ -125,11 +125,11 @@ bool SosialView::getContent(const string &doc_root,string &contents)
     return true;
 }
 
+
 static const string strConstStartNode("<circle cx=\"$cx$\" cy=\"$cy$\" r=\"5\" stroke=\"black\" stroke-width=\"2\"/>\n\
                                       <text x=\"$x$\" y=\"$y$\" font-size=\"10\" fill=\"blue\" > $txt$ </text>\n\
                                       ");
-static const string strConstNormalNode("<circle cx=\"$cx$\" cy=\"$cy$\" r=\"10\" stroke=\"black\" stroke-width=\"2\"/>\n");
-
+static const string strConstNormalNode("<circle cx=\"$cx$\" cy=\"$cy$\" r=\"5\" stroke=\"black\" stroke-width=\"2\"/>\n");
 static const int iConstSeperateOfY = 100;
 static const int iConstStringOffsetX = 10;
 static const int iConstStringOffsetY = 4;
@@ -159,14 +159,13 @@ void SosialView::createBranchSVG(string &svg)
             }
             else
             {
-                string nodesvn(strConstStartNode);
+                string nodesvn(strConstNormalNode);
                 string cx = number(startX);
                 boost::algorithm::replace_all(nodesvn,"$cx$",cx);
-                string cy = number(startY + i* iConstSeperateOfY);
+                string cy = number(startY + (i++)* iConstSeperateOfY);
                 boost::algorithm::replace_all(nodesvn,"$cy$",cy);
                 svg += nodesvn;                
             }
-            i++;
         }
     }
     else
