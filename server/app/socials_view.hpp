@@ -15,12 +15,26 @@ namespace http
 
 
 namespace BOW {
+    
+    string system_result(const string cmd);
+    struct number
+    {
+        int i_;
+        number(int i):i_(i){}
+        operator string() const {
+            stringstream ss;
+            ss << i_;
+            return ss.str();
+        }
+    };
+
     class SourceView;
     struct GitLogMeshNote
     {
         string hash_;
         string hash_p_;
         string date_;
+        int x,y;
         bool operator() (const GitLogMeshNote &left) const;
     };
     typedef list<GitLogMeshNote> GitLogMeshList;
@@ -44,6 +58,7 @@ namespace BOW {
         bool isParentOfAny(const string &branch,const GitLogMeshNote & note);
         void dumpLogMesh(void);
         void createBranchSVG(string &svg);
+        void createMasterSVG(string &svg);
     };
 }
 

@@ -18,36 +18,24 @@ namespace fs = boost::filesystem;
 //#define DEBUG_CONTENT
 
 
-namespace BOW {
-    string system_result(const string cmd)
-    {
-#ifdef DEBUG_PARAM
-        std::cout << __func__ <<":cmd=<" <<  cmd << ">" << endl;
-#endif
-        FILE *pipe = popen(cmd.c_str(), "r");
-        std::string result;
-        char buf[256] = {0};
-        while(!feof(pipe)) {
-            if(fgets(buf, sizeof(buf), pipe) != NULL)
-            {
-                result += buf;
-            }
-        }
-        pclose(pipe);
-        return result;
-    }
-    struct number
-    {
-        int i_;
-        number(int i):i_(i){}
-        operator string() const {
-            stringstream ss;
-            ss << i_;
-            return ss.str();
-        }
-    };
-};
 
+string BOW::system_result(const string cmd)
+{
+#ifdef DEBUG_PARAM
+    std::cout << __func__ <<":cmd=<" <<  cmd << ">" << endl;
+#endif
+    FILE *pipe = popen(cmd.c_str(), "r");
+    std::string result;
+    char buf[256] = {0};
+    while(!feof(pipe)) {
+        if(fgets(buf, sizeof(buf), pipe) != NULL)
+        {
+            result += buf;
+        }
+    }
+    pclose(pipe);
+    return result;
+}
 
 
 SosialView::SosialView(const SourceView &src)
@@ -134,22 +122,23 @@ static const string strConstLine("<line x1=\"$x1$\" y1=\"$y1$\" x2=\"$x2$\" y2=\
 static const int iConstSeperateOfY = 100;
 static const int iConstStringOffsetX = 10;
 static const int iConstStringOffsetY = 4;
-void SosialView::createBranchSVG(string &svg)
+void SosialView::createMasterSVG(string &svg)
 {
     auto it = git_log_mesh_.find("origin/master");
     if(it != git_log_mesh_.end())
     {
         int startX = 20,startY =20;
         int i = 0;
-        int lastY = startY;
-        for(auto  it2 =it->second.begin();it2 != it->second.end();it2++)
+        for(auto  it2 =it->second.begin(),it2_pre = it->second.end();it2 != it->second.end();it2++)
         {
-            if(it2 == it->second.begin())
+            if(it2_pre == it->second.end())
             {
+                it2->x = startX;
+                it2->y = startY;
                 string nodesvn(strConstStartNode);
-                string cx = number(startX);
+                string cx = number(it2->x);
                 boost::algorithm::replace_all(nodesvn,"$cx$",cx);
-                string cy = number(startY);
+                string cy = number(it2->y);
                 boost::algorithm::replace_all(nodesvn,"$cy$",cy);
                 string x = number(startX + iConstStringOffsetX);
                 boost::algorithm::replace_all(nodesvn,"$x$",x);
@@ -161,25 +150,28 @@ void SosialView::createBranchSVG(string &svg)
             }
             else
             {
+                it2->x = startX;
+                it2->y = startY + (i)* iConstSeperateOfY;
+
                 string nodesvn(strConstNormalNode);
-                string cx = number(startX);
+                string cx = number(it2->x);
                 boost::algorithm::replace_all(nodesvn,"$cx$",cx);
-                string cy = number(startY + (i)* iConstSeperateOfY);
+                string cy = number(it2->y);
                 boost::algorithm::replace_all(nodesvn,"$cy$",cy);
                 svg += nodesvn;
                 
                 string line(strConstLine);
-                string x1 = number(startX);
+                string x1 = number(it2_pre->x);
                 boost::algorithm::replace_all(line,"$x1$",x1);
-                string y1 = number(lastY);
+                string y1 = number(it2_pre->y);
                 boost::algorithm::replace_all(line,"$y1$",y1);
-                string x2 = number(startX);
+                string x2 = number(it2->x);
                 boost::algorithm::replace_all(line,"$x2$",x2);
-                string y2 = number(startY + (i)* iConstSeperateOfY);
+                string y2 = number(it2->y);
                 boost::algorithm::replace_all(line,"$y2$",y2);
                 svg += line;
             }
-            lastY = startY + (i)* iConstSeperateOfY;
+            it2_pre = it2;
             i++;
         }
     }
@@ -187,6 +179,12 @@ void SosialView::createBranchSVG(string &svg)
     {
         return;
     }
+}
+
+        
+void SosialView::createBranchSVG(string &svg)
+{
+    createMasterSVG(svg);
 }
 
 void SosialView::createBranchMesh(const string &branch)
