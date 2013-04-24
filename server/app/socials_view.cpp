@@ -14,7 +14,8 @@ namespace fs = boost::filesystem;
 
 //#define DEBUG_PARAM
 //#define DEBUG_LOGMESH
-#define DEBUG_LOGMESH_DUMP
+//#define DEBUG_LOGMESH_DUMP
+//#define DEBUG_LOGMESH_POSITION
 //#define DEBUG_CONTENT
 
 
@@ -105,7 +106,7 @@ bool SosialView::getContent(const string &doc_root,string &contents)
     // replace svg
     {
         string svg;
-        createBranchSVG(svg);
+        createAllBranchSVG(svg);
         boost::algorithm::replace_all(contents,"$BOW_TMPL_HISTORY_SVG$",svg);
     }
     this->replace_source_path(contents);
@@ -118,31 +119,32 @@ static const string strConstStartNode("<circle cx=\"$cx$\" cy=\"$cy$\" r=\"5\" s
                                       <text x=\"$x$\" y=\"$y$\" font-size=\"10\" fill=\"blue\" > $txt$ </text>\n\
                                       ");
 static const string strConstNormalNode("<circle cx=\"$cx$\" cy=\"$cy$\" r=\"5\" stroke=\"black\" stroke-width=\"2\"/>\n");
-static const string strConstLine("<line x1=\"$x1$\" y1=\"$y1$\" x2=\"$x2$\" y2=\"$y2$\" style=\"stroke:rgb(0,0,0);stroke-width:3\"/>");
-static const int iConstSeperateOfY = 100;
+static const string strConstLine("<line x1=\"$x1$\" y1=\"$y1$\" x2=\"$x2$\" y2=\"$y2$\" style=\"stroke:rgb(0,0,0);stroke-width:2\"/>");
+static const int iConstSeperateOfY = 50;
+static const int iConstSeperateOfX = 80;
 static const int iConstStringOffsetX = 10;
 static const int iConstStringOffsetY = 4;
+
 void SosialView::createMasterSVG(string &svg)
 {
     auto it = git_log_mesh_.find("origin/master");
     if(it != git_log_mesh_.end())
     {
-        int startX = 20,startY =20;
-        int i = 0;
         for(auto  it2 =it->second.begin(),it2_pre = it->second.end();it2 != it->second.end();it2++)
         {
             if(it2_pre == it->second.end())
             {
-                it2->x = startX;
-                it2->y = startY;
+                int startX = 20,startY =20;
+                it2->x_ = startX;
+                it2->y_ = startY;
                 string nodesvn(strConstStartNode);
-                string cx = number(it2->x);
+                string cx = number(it2->x_);
                 boost::algorithm::replace_all(nodesvn,"$cx$",cx);
-                string cy = number(it2->y);
+                string cy = number(it2->y_);
                 boost::algorithm::replace_all(nodesvn,"$cy$",cy);
-                string x = number(startX + iConstStringOffsetX);
+                string x = number(it2->x_ + iConstStringOffsetX);
                 boost::algorithm::replace_all(nodesvn,"$x$",x);
-                string y = number(startY + iConstStringOffsetY);
+                string y = number(it2->y_ + iConstStringOffsetY);
                 boost::algorithm::replace_all(nodesvn,"$y$",y);
                 string txt("master");
                 boost::algorithm::replace_all(nodesvn,"$txt$",txt);
@@ -150,41 +152,171 @@ void SosialView::createMasterSVG(string &svg)
             }
             else
             {
-                it2->x = startX;
-                it2->y = startY + (i)* iConstSeperateOfY;
+                it2->x_ = it2_pre->x_;
+                it2->y_ = it2_pre->y_ + iConstSeperateOfY;
 
                 string nodesvn(strConstNormalNode);
-                string cx = number(it2->x);
+                string cx = number(it2->x_);
                 boost::algorithm::replace_all(nodesvn,"$cx$",cx);
-                string cy = number(it2->y);
+                string cy = number(it2->y_);
                 boost::algorithm::replace_all(nodesvn,"$cy$",cy);
                 svg += nodesvn;
                 
                 string line(strConstLine);
-                string x1 = number(it2_pre->x);
+                string x1 = number(it2_pre->x_);
                 boost::algorithm::replace_all(line,"$x1$",x1);
-                string y1 = number(it2_pre->y);
+                string y1 = number(it2_pre->y_);
                 boost::algorithm::replace_all(line,"$y1$",y1);
-                string x2 = number(it2->x);
+                string x2 = number(it2->x_);
                 boost::algorithm::replace_all(line,"$x2$",x2);
-                string y2 = number(it2->y);
+                string y2 = number(it2->y_);
                 boost::algorithm::replace_all(line,"$y2$",y2);
                 svg += line;
             }
             it2_pre = it2;
-            i++;
         }
-    }
-    else
-    {
-        return;
     }
 }
 
-        
 void SosialView::createBranchSVG(string &svg)
 {
+    int colum = 1;
+    for(auto it = git_log_mesh_.begin();it != git_log_mesh_.end();it++)
+    {
+        if( "origin/master" == it->first)
+        {
+            continue;
+        }
+        for(auto  it2 =it->second.begin(),it2_pre = it->second.end();it2 != it->second.end();it2++)
+        {
+            if(it2_pre == it->second.end())
+            {
+                int startX = -1,startY = -1;
+                this->getParentPosition(*it2,startX,startY);
+#ifdef DEBUG_LOGMESH_POSITION
+                std::cout << __func__ <<":startX=<" <<  startX << ">" << endl;
+                std::cout << __func__ <<":startY=<" <<  startY << ">" << endl;
+#endif
+                int32_t key = (((int32_t)startX) << 16) + (int32_t)startY;
+#ifdef DEBUG_LOGMESH_POSITION
+                std::cout << __func__ <<":startX << 16=<" <<  (((int32_t)startX) << 16) << ">" << endl;
+                std::cout << __func__ <<":key=<" <<  key << ">" << endl;
+#endif
+                auto it_pos = mesh_positions_.find(key);
+                if(it_pos != mesh_positions_.end())
+                {
+#ifdef DEBUG_LOGMESH_POSITION
+                    std::cout << __func__ <<":it_pos->second=<" <<  it_pos->second << ">" << endl;
+                    std::cout << __func__ <<":(it_pos->second >> 16)=<" <<  (it_pos->second >> 16) << ">" << endl;
+                    std::cout << __func__ <<":it_pos->second & 0xffff=<" <<  (it_pos->second & 0xffff) << ">" << endl;
+#endif
+                    it2->x_ = (it_pos->second >> 16);
+                    it2->y_ = (it_pos->second & 0xffff) + iConstSeperateOfY/2;
+                    int32_t value = (int32_t)(it2->x_ << 16) + (int32_t)it2->y_;
+#ifdef DEBUG_LOGMESH_POSITION
+                    std::cout << __func__ <<":value=<" <<  value << ">" << endl;
+#endif
+                    mesh_positions_.erase(it_pos);
+                    mesh_positions_.insert(pair<int,int>(key,value));
+                }
+                else
+                {
+                    it2->x_ = startX + iConstSeperateOfX;
+                    it2->y_ = startY + iConstSeperateOfY/2;
+                    int32_t value = (int32_t)(it2->x_ << 16) + (int32_t)it2->y_;
+#ifdef DEBUG_LOGMESH_POSITION
+                    std::cout << __func__ <<":value=<" <<  value << ">" << endl;
+#endif
+                    mesh_positions_.insert(pair<int,int>(key,value));
+                }
+                string nodesvn(strConstStartNode);
+                string cx = number(it2->x_);
+                boost::algorithm::replace_all(nodesvn,"$cx$",cx);
+                string cy = number(it2->y_);
+                boost::algorithm::replace_all(nodesvn,"$cy$",cy);
+                string x = number(it2->x_ + iConstStringOffsetX);
+                boost::algorithm::replace_all(nodesvn,"$x$",x);
+                string y = number(it2->y_ + iConstStringOffsetY);
+                boost::algorithm::replace_all(nodesvn,"$y$",y);
+                string txt(it->first);
+                boost::algorithm::replace_all(txt,"origin/","");
+                boost::algorithm::replace_all(nodesvn,"$txt$",txt);
+                svg += nodesvn;
+
+                string line(strConstLine);
+                string x1 = number(startX);
+                boost::algorithm::replace_all(line,"$x1$",x1);
+                string y1 = number(startY);
+                boost::algorithm::replace_all(line,"$y1$",y1);
+                string x2 = number(it2->x_);
+                boost::algorithm::replace_all(line,"$x2$",x2);
+                string y2 = number(it2->y_);
+                boost::algorithm::replace_all(line,"$y2$",y2);
+                svg += line;
+
+            }
+            else
+            {
+                it2->x_ = it2_pre->x_;
+                it2->y_ = it2_pre->y_ + iConstSeperateOfY;
+                
+                string nodesvn(strConstNormalNode);
+                string cx = number(it2->x_);
+                boost::algorithm::replace_all(nodesvn,"$cx$",cx);
+                string cy = number(it2->y_);
+                boost::algorithm::replace_all(nodesvn,"$cy$",cy);
+                svg += nodesvn;
+                
+                string line(strConstLine);
+                string x1 = number(it2_pre->x_);
+                boost::algorithm::replace_all(line,"$x1$",x1);
+                string y1 = number(it2_pre->y_);
+                boost::algorithm::replace_all(line,"$y1$",y1);
+                string x2 = number(it2->x_);
+                boost::algorithm::replace_all(line,"$x2$",x2);
+                string y2 = number(it2->y_);
+                boost::algorithm::replace_all(line,"$y2$",y2);
+                svg += line;
+            }
+            it2_pre = it2;
+        }
+        colum++;
+    }
+}
+
+void SosialView::createAllBranchSVG(string &svg)
+{
     createMasterSVG(svg);
+    createBranchSVG(svg);
+}
+
+        
+void SosialView::getParentPosition(const GitLogMeshNote & note,int&x ,int &y)
+{
+    for(auto it = git_log_mesh_.begin();it != git_log_mesh_.end();it++)
+    {
+        for(auto  it2 =it->second.begin();it2 != it->second.end();it2++)
+        {
+            if( it2->hash_ == note.hash_p_)
+            {
+                if( -1 != it2->x_ && -1 != it2->y_)
+                {
+                    x = it2->x_;
+                    y = it2->y_;
+                    return ;
+                }
+                else
+                {
+#if 0
+                    getParentPosition(*it2,x,y);
+                    it2->x_ = x;
+                    it2->y_ = y;
+#endif
+                    return;
+                }
+            }
+        }
+    }
 }
 
 void SosialView::createBranchMesh(const string &branch)

@@ -34,7 +34,9 @@ namespace BOW {
         string hash_;
         string hash_p_;
         string date_;
-        int x,y;
+        int x_,y_;
+        
+        GitLogMeshNote():hash_(""),hash_p_(""),date_(""),x_(-1),y_(-1){}
         bool operator() (const GitLogMeshNote &left) const;
     };
     typedef list<GitLogMeshNote> GitLogMeshList;
@@ -51,14 +53,17 @@ namespace BOW {
         map<string,bool> log_check_;
         map<string,GitLogMeshList> git_log_mesh_;
         map<string,GitLogMeshList> git_log_mesh_pretty_;
+        map<int32_t,int32_t> mesh_positions_;
     private:
         void createAllLogMesh(void);
         void createBranchMesh(const string &branch);
         void reduceLogMesh(void);
         bool isParentOfAny(const string &branch,const GitLogMeshNote & note);
         void dumpLogMesh(void);
-        void createBranchSVG(string &svg);
+        void createAllBranchSVG(string &svg);
         void createMasterSVG(string &svg);
+        void createBranchSVG(string &svg);
+        void getParentPosition(const GitLogMeshNote & note,int&x ,int &y);
     };
 }
 
