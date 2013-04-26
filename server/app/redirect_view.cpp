@@ -11,10 +11,30 @@ namespace fs = boost::filesystem;
 #include <fstream>
 
 
+
+RedirectApp::RedirectApp(void)
+{
+}
+RedirectApp::~ RedirectApp()
+{
+}
+void RedirectApp::create(const std::string &uri)
+{
+}
+void RedirectApp::get(void)
+{
+}
+void RedirectApp::post(void)
+{
+}
+void RedirectApp::put(void)
+{
+}
+void RedirectApp::remove(void)
+{
+}
+
 //#define DEBUG_CONTENT
-
-
-
 RedirectView::RedirectView(const string &username,const string &user_uid)
 :user_(username)
 ,user_uid_(user_uid)

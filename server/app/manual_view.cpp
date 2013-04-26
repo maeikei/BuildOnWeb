@@ -14,6 +14,29 @@ namespace fs = boost::filesystem;
 //#define DEBUG_CONTENT
 
 
+ManualApp::ManualApp(void)
+{
+}
+ManualApp::~ ManualApp()
+{
+}
+void ManualApp::create(const std::string &uri)
+{
+}
+void ManualApp::get(void)
+{
+}
+void ManualApp::post(void)
+{
+}
+void ManualApp::put(void)
+{
+}
+void ManualApp::remove(void)
+{
+}
+
+
 ManualView::ManualView(const string &repo)
 :repo_(repo)
 ,workspace_(".temp/manual/" + repo_)

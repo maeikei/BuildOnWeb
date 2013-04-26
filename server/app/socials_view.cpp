@@ -13,6 +13,29 @@ namespace fs = boost::filesystem;
 #include <iostream>
 
 
+
+SosialApp::SosialApp(void)
+{
+}
+SosialApp::~ SosialApp()
+{
+}
+void SosialApp::create(const std::string &uri)
+{
+}
+void SosialApp::get(void)
+{
+}
+void SosialApp::post(void)
+{
+}
+void SosialApp::put(void)
+{
+}
+void SosialApp::remove(void)
+{
+}
+
 //#define DEBUG_PARAM
 //#define DEBUG_BRANCH_LOG
 //#define DEBUG_LOGMESH

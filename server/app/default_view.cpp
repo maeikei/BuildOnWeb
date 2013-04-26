@@ -27,3 +27,25 @@ bool DefaultView::getContent(const string &doc_root,string &contents)
 {
     return true;
 }
+
+DefaultApp::DefaultApp(void)
+{
+}
+DefaultApp::~ DefaultApp()
+{
+}
+void DefaultApp::create(const std::string &uri)
+{
+}
+void DefaultApp::get(void)
+{
+}
+void DefaultApp::post(void)
+{
+}
+void DefaultApp::put(void)
+{
+}
+void DefaultApp::remove(void)
+{
+}

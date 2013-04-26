@@ -13,6 +13,29 @@ namespace fs = boost::filesystem;
 
 
 
+DirecoryApp::DirecoryApp(void)
+{
+}
+DirecoryApp::~ DirecoryApp()
+{
+}
+void DirecoryApp::create(const std::string &uri)
+{
+}
+void DirecoryApp::get(void)
+{
+}
+void DirecoryApp::post(void)
+{
+}
+void DirecoryApp::put(void)
+{
+}
+void DirecoryApp::remove(void)
+{
+}
+
+
 //#define DEBUG_CONTENT
 
 DirecoryView::DirecoryView(const SourceView &src)

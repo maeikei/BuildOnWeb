@@ -13,6 +13,31 @@ namespace fs = boost::filesystem;
 #include <fstream>
 #include <iostream>
 
+
+
+
+SourceApp::SourceApp(void)
+{
+}
+SourceApp::~ SourceApp()
+{
+}
+void SourceApp::create(const std::string &uri)
+{
+}
+void SourceApp::get(void)
+{
+}
+void SourceApp::post(void)
+{
+}
+void SourceApp::put(void)
+{
+}
+void SourceApp::remove(void)
+{
+}
+
 //#define DEBUG_PARAM
 //#define DEBUG_CONTENT
 

@@ -12,6 +12,30 @@ namespace fs = boost::filesystem;
 #include <fstream>
 
 
+
+
+NaviApp::NaviApp(void)
+{
+}
+NaviApp::~ NaviApp()
+{
+}
+void NaviApp::create(const std::string &uri)
+{
+}
+void NaviApp::get(void)
+{
+}
+void NaviApp::post(void)
+{
+}
+void NaviApp::put(void)
+{
+}
+void NaviApp::remove(void)
+{
+}
+
 // #define DEBUG_CONTENT
 //#define DEBUG_NAVI_TREE
 
