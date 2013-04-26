@@ -1,3 +1,4 @@
+#include "resource.hpp"
 #include "reply_view.hpp"
 #include "source_view.hpp"
 #include "directory_view.hpp"

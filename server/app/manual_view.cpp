@@ -1,3 +1,4 @@
+#include "resource.hpp"
 #include "reply_view.hpp"
 #include "manual_view.hpp"
 using namespace BOW;

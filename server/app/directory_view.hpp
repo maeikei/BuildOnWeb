@@ -9,11 +9,15 @@ namespace http
     namespace server_threadpool
     {
         class ReplyView;
+        class resource;
     }
 }
 
 
 namespace BOW {
+    class DirecoryApp: public http::server_threadpool::resource
+    {
+    };
     class SourceView;
     class DirecoryView: public SourceView
     {

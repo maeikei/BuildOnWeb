@@ -7,8 +7,7 @@ aux_source_directory(framework framework_SRCS)
 aux_source_directory(app app_SRCS)
 
 
-
-add_executable(BuildOnWeb
+add_library(httpframework 
   framework/connection.hpp
   framework/header.hpp
   framework/mime_types.hpp
@@ -20,7 +19,9 @@ add_executable(BuildOnWeb
   framework/server.hpp
   framework/resource.hpp
   ${framework_SRCS}
+)
 
+add_executable(BuildOnWeb
   app/navi_view.hpp
   app/source_view.hpp
   app/directory_view.hpp
@@ -32,7 +33,7 @@ add_executable(BuildOnWeb
   ${app_SRCS}
 )
 
-target_link_libraries( BuildOnWeb lua leveldb cppnetlib-uri)
+target_link_libraries( BuildOnWeb httpframework lua leveldb cppnetlib-uri)
 
 if(NOT WIN32)
   target_link_libraries( BuildOnWeb

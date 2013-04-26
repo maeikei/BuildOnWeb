@@ -10,10 +10,15 @@ namespace http
     namespace server_threadpool
     {
         class ReplyView;
+        class resource;
     }
 }
 
 namespace BOW {
+    class ManualApp: public http::server_threadpool::resource
+    {
+    };
+
     class ManualView: public http::server_threadpool::ReplyView
     {
     public:

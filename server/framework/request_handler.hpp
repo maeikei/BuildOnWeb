@@ -40,7 +40,7 @@ private:
   /// The directory containing the files to be served.
   std::string doc_root_;
   std::string remote_;
-  const static std::map<std::string,resource*> route_;
+  static const std::map<std::string,resource *> route_;
 
   /// Perform URL-decoding on a string. Returns false if the encoding was
   /// invalid.

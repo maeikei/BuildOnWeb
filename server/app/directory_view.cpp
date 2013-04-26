@@ -1,4 +1,5 @@
 #include "reply_view.hpp"
+#include "resource.hpp"
 #include "source_view.hpp"
 #include "directory_view.hpp"
 #include "last_position.hpp"

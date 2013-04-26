@@ -1,3 +1,4 @@
+#include "resource.hpp"
 #include "reply_view.hpp"
 #include "navi_view.hpp"
 #include "last_position.hpp"

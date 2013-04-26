@@ -18,7 +18,7 @@
 #include "reply.hpp"
 #include "request.hpp"
 
-
+#include "resource.hpp"
 #include "reply_view.hpp"
 #include "navi_view.hpp"
 #include "source_view.hpp"
@@ -33,7 +33,6 @@ namespace fs = boost::filesystem;
 #include <boost/algorithm/string_regex.hpp>
 
 #include <network/uri.hpp>
-#include <resource.hpp>
 
 namespace http {
 namespace server_threadpool {

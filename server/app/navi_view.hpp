@@ -11,10 +11,15 @@ namespace http
     namespace server_threadpool
     {
         class ReplyView;
+        class resource;
     }
 }
 
 namespace BOW {
+    class NaviApp: public http::server_threadpool::resource
+    {
+    };
+
     class LastPostion;
     class NaviView: public http::server_threadpool::ReplyView
     {

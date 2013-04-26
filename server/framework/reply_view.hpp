@@ -20,6 +20,7 @@ namespace http {
 namespace server_threadpool {
 
 struct reply;
+
 /// A reply of view to be sent to a client.
 class ReplyView
 {

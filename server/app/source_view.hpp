@@ -11,11 +11,18 @@ namespace http
     namespace server_threadpool
     {
         class ReplyView;
+        class resource;
     }
 }
 
 
 namespace BOW {
+    class SourceApp: public http::server_threadpool::resource
+    {
+    };
+    
+    
+    
     string system_result(const string cmd);
     class LastPostion;
     class SourceView: public http::server_threadpool::ReplyView
