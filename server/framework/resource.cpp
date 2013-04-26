@@ -10,6 +10,8 @@
 
 namespace http {
 namespace server_threadpool {
-
+    resource::resource(const std::string &s)
+    {
+    }
 } // namespace server_threadpool
 } // namespace http

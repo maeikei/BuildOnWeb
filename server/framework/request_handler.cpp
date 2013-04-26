@@ -34,10 +34,11 @@ namespace fs = boost::filesystem;
 #include <boost/algorithm/string_regex.hpp>
 
 #include <network/uri.hpp>
-
+#include <resource.hpp>
 
 namespace http {
 namespace server_threadpool {
+
 
 request_handler::request_handler(const std::string& doc_root,const std::string& remote)
   : doc_root_(doc_root)
@@ -54,6 +55,7 @@ request_handler::request_handler(const std::string& doc_root,const std::string& 
 //#define DEBUG_REP_HEADER
 //#define DEBUG_RET
 //#define DEBUG_POST
+#define DEBUG_URI
     
 void request_handler::handle_request(const request& req, reply& rep)
 {
@@ -72,6 +74,13 @@ void request_handler::handle_request(const request& req, reply& rep)
 #ifdef DEBUG_DATA
 	std::cout << "data=" << req.data << std::endl;
 #endif
+    {
+#ifdef DEBUG_URI
+        std::cout << "this=" << this << std::endl;
+#endif
+//        decltype(*(route_.begin()->second)) b("");
+    }
+   
     for(auto it = req.headers.begin();it != req.headers.end();it++)
     {
         if("X-Real-IP" == it->name)

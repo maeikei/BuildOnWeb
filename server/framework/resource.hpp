@@ -20,7 +20,7 @@ class resource
   : private boost::noncopyable
 {
 public:
-    resource(network::uri &u);
+    resource(const std::string &s);
     void get(void);
     void post(void);
     void put(void);

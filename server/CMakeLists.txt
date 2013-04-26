@@ -21,8 +21,6 @@ add_executable(BuildOnWeb
   framework/resource.hpp
   ${framework_SRCS}
 
-  app/template.hpp
-  app/env.hpp
   app/navi_view.hpp
   app/source_view.hpp
   app/directory_view.hpp
@@ -34,7 +32,7 @@ add_executable(BuildOnWeb
   ${app_SRCS}
 )
 
-target_link_libraries( BuildOnWeb lua leveldb)
+target_link_libraries( BuildOnWeb lua leveldb cppnetlib-uri)
 
 if(NOT WIN32)
   target_link_libraries( BuildOnWeb
