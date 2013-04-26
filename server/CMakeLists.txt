@@ -18,6 +18,7 @@ add_executable(BuildOnWeb
   framework/request_handler.hpp
   framework/request_parser.hpp
   framework/server.hpp
+  framework/resource.hpp
   ${framework_SRCS}
 
   app/template.hpp
