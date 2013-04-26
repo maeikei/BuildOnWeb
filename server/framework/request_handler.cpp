@@ -53,7 +53,7 @@ request_handler::request_handler(const std::string& doc_root,const std::string& 
 //#define DEBUG_REP_HEADER
 //#define DEBUG_RET
 //#define DEBUG_POST
-#define DEBUG_ROUTE
+//#define DEBUG_ROUTE
     
 void request_handler::handle_request(const request& req, reply& rep)
 {
@@ -91,11 +91,13 @@ void request_handler::handle_request(const request& req, reply& rep)
     rep = reply::stock_reply(reply::bad_request);
     return;
   }
-#ifdef DEBUG_PATH
-	std::cout << "req.uri=" << req.uri << std::endl;
-	std::cout << "request_path=" << request_path << std::endl;
-#endif
-
+// Request path must be absolute and not contain "..".
+  if (request_path.empty() || request_path[0] != '/'
+        || request_path.find("..") != std::string::npos)
+  {
+      rep = reply::stock_reply(reply::bad_request);
+      return;
+  }
     for(auto it= route_.begin();it != route_.end();it++)
     {
         boost::regex ex(it->first);
@@ -104,33 +106,18 @@ void request_handler::handle_request(const request& req, reply& rep)
 #ifdef DEBUG_ROUTE
             std::cout << "match req.uri=<" << req.uri << ">" << std::endl;
 #endif
-            it->second.create(req.uri);
+            it->second.create(req.uri,remote_);
             if( "GET" == req.method || "get" == req.method )
             {
-                it->second.get();
+                it->second.get(doc_root_, rep);
             }
             if( "POST" == req.method || "post" == req.method )
             {
-                it->second.post();
+                it->second.post(doc_root_, rep);
             }
             break;
         }
     }
-  // Request path must be absolute and not contain "..".
-  if (request_path.empty() || request_path[0] != '/'
-      || request_path.find("..") != std::string::npos)
-  {
-    rep = reply::stock_reply(reply::bad_request);
-    return;
-  }
-  if( "GET" == req.method || "get" == req.method )
-  {
-      this->handle_get(req,request_path,rep);
-  }
-  if( "POST" == req.method || "post" == req.method )
-  {
-      this->handle_post(req,request_path,rep);
-  }
 #ifdef DEBUG_REP_DATA
     std::cout << "rep.content=" << rep.content << std::endl;
 #endif
@@ -142,7 +129,7 @@ void request_handler::handle_request(const request& req, reply& rep)
 #endif
 }
 
-
+#if 0
 void request_handler::handle_get(const request& req,const std::string &request_path, reply& rep)
 {
 #ifdef DEBUG_PATH
@@ -300,7 +287,7 @@ void request_handler::handle_post(const request& req, const std::string &request
         source.response(doc_root_, rep);
     }
 }
-    
+#endif
     
 bool request_handler::url_decode(const std::string& in, std::string& out)
 {

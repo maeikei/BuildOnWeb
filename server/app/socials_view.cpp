@@ -20,19 +20,19 @@ SosialApp::SosialApp(void)
 SosialApp::~ SosialApp()
 {
 }
-void SosialApp::create(const std::string &uri)
+void SosialApp::create(const std::string &uri,const std::string &user_uid)
 {
 }
-void SosialApp::get(void)
+void SosialApp::get(const std::string &doc_root, http::server_threadpool::reply& rep)
 {
 }
-void SosialApp::post(void)
+void SosialApp::post(const std::string &doc_root, http::server_threadpool::reply& rep)
 {
 }
-void SosialApp::put(void)
+void SosialApp::put(const std::string &doc_root, http::server_threadpool::reply& rep)
 {
 }
-void SosialApp::remove(void)
+void SosialApp::remove(const std::string &doc_root, http::server_threadpool::reply& rep)
 {
 }
 

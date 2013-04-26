@@ -24,7 +24,7 @@ static BOW::ManualApp man;
 static BOW::RedirectApp redirect;
 static BOW::SosialApp social;
 
-const std::map<std::string,resource&>
+const std::vector<routepair>
     request_handler::route_
     {
         {"^/users/\\w+/\\*\\*\\?\\*\\*",redirect},

@@ -13,7 +13,7 @@
 
 #include <string>
 #include <boost/noncopyable.hpp>
-#include <map>
+#include <vector>
 
 namespace http {
 namespace server_threadpool {
@@ -21,6 +21,12 @@ namespace server_threadpool {
 struct reply;
 struct request;
 class resource;
+
+struct routepair
+{
+    std::string first;
+    resource& second;
+};
 
 /// The common handler for all incoming requests.
 class request_handler
@@ -39,18 +45,14 @@ public:
 private:
   /// The directory containing the files to be served.
   std::string doc_root_;
+  /// client ip address 
   std::string remote_;
-  static const std::map<std::string,resource&> route_;
+  /// route map to apps.
+  static const std::vector<routepair> route_;
 
   /// Perform URL-decoding on a string. Returns false if the encoding was
   /// invalid.
   static bool url_decode(const std::string& in, std::string& out);
-
-  /// Handle a get and produce a reply.
-  void handle_get(const request& req,const std::string &request_path,reply& rep);
-  /// Handle a post and produce a reply.
-  void handle_post(const request& req,const std::string &request_path,reply& rep);
-
 };
 
 } // namespace server_threadpool

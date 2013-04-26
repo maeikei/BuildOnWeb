@@ -13,26 +13,29 @@ namespace fs = boost::filesystem;
 
 
 
-
+#define DEBUG_APP_PARAM
 NaviApp::NaviApp(void)
 {
 }
 NaviApp::~ NaviApp()
 {
 }
-void NaviApp::create(const std::string &uri)
+void NaviApp::create(const std::string &uri,const std::string &user_uid)
+{
+#ifdef DEBUG_APP_PARAM
+	std::cout << typeid(this).name() << ":" << __func__ << ":uri=<" << uri << ">" << std::endl;
+#endif
+}
+void NaviApp::get(const std::string &doc_root, http::server_threadpool::reply& rep)
 {
 }
-void NaviApp::get(void)
+void NaviApp::post(const std::string &doc_root, http::server_threadpool::reply& rep)
 {
 }
-void NaviApp::post(void)
+void NaviApp::put(const std::string &doc_root, http::server_threadpool::reply& rep)
 {
 }
-void NaviApp::put(void)
-{
-}
-void NaviApp::remove(void)
+void NaviApp::remove(const std::string &doc_root, http::server_threadpool::reply& rep)
 {
 }
 

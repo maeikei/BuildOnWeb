@@ -20,19 +20,19 @@ ManualApp::ManualApp(void)
 ManualApp::~ ManualApp()
 {
 }
-void ManualApp::create(const std::string &uri)
+void ManualApp::create(const std::string &uri,const std::string &user_uid)
 {
 }
-void ManualApp::get(void)
+void ManualApp::get(const std::string &doc_root, http::server_threadpool::reply& rep)
 {
 }
-void ManualApp::post(void)
+void ManualApp::post(const std::string &doc_root, http::server_threadpool::reply& rep)
 {
 }
-void ManualApp::put(void)
+void ManualApp::put(const std::string &doc_root, http::server_threadpool::reply& rep)
 {
 }
-void ManualApp::remove(void)
+void ManualApp::remove(const std::string &doc_root, http::server_threadpool::reply& rep)
 {
 }
 

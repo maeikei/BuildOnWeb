@@ -9,6 +9,7 @@ namespace http
 {
     namespace server_threadpool
     {
+        struct reply;
         class ReplyView;
         class resource;
     }
@@ -21,12 +22,12 @@ namespace BOW {
     public:
         SosialApp(void);
         virtual ~ SosialApp();
-        virtual void create(const std::string &uri);
+        virtual void create(const std::string &uri,const std::string &user_uid);
         //http method
-        virtual void get(void);
-        virtual void post(void);
-        virtual void put(void);
-        virtual void remove(void);
+        virtual void get(const std::string &doc_root, http::server_threadpool::reply& rep);
+        virtual void post(const std::string &doc_root, http::server_threadpool::reply& rep);
+        virtual void put(const std::string &doc_root, http::server_threadpool::reply& rep);
+        virtual void remove(const std::string &doc_root, http::server_threadpool::reply& rep);
     };
     
     string system_result(const string cmd);

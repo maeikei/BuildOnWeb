@@ -18,19 +18,19 @@ RedirectApp::RedirectApp(void)
 RedirectApp::~ RedirectApp()
 {
 }
-void RedirectApp::create(const std::string &uri)
+void RedirectApp::create(const std::string &uri,const std::string &user_uid)
 {
 }
-void RedirectApp::get(void)
+void RedirectApp::get(const std::string &doc_root, http::server_threadpool::reply& rep)
 {
 }
-void RedirectApp::post(void)
+void RedirectApp::post(const std::string &doc_root, http::server_threadpool::reply& rep)
 {
 }
-void RedirectApp::put(void)
+void RedirectApp::put(const std::string &doc_root, http::server_threadpool::reply& rep)
 {
 }
-void RedirectApp::remove(void)
+void RedirectApp::remove(const std::string &doc_root, http::server_threadpool::reply& rep)
 {
 }
 

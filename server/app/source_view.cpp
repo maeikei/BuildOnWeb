@@ -22,19 +22,19 @@ SourceApp::SourceApp(void)
 SourceApp::~ SourceApp()
 {
 }
-void SourceApp::create(const std::string &uri)
+void SourceApp::create(const std::string &uri,const std::string &user_uid)
 {
 }
-void SourceApp::get(void)
+void SourceApp::get(const std::string &doc_root, http::server_threadpool::reply& rep)
 {
 }
-void SourceApp::post(void)
+void SourceApp::post(const std::string &doc_root, http::server_threadpool::reply& rep)
 {
 }
-void SourceApp::put(void)
+void SourceApp::put(const std::string &doc_root, http::server_threadpool::reply& rep)
 {
 }
-void SourceApp::remove(void)
+void SourceApp::remove(const std::string &doc_root, http::server_threadpool::reply& rep)
 {
 }
 

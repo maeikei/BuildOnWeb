@@ -19,19 +19,19 @@ DirecoryApp::DirecoryApp(void)
 DirecoryApp::~ DirecoryApp()
 {
 }
-void DirecoryApp::create(const std::string &uri)
+void DirecoryApp::create(const std::string &uri,const std::string &user_uid)
 {
 }
-void DirecoryApp::get(void)
+void DirecoryApp::get(const std::string &doc_root, http::server_threadpool::reply& rep)
 {
 }
-void DirecoryApp::post(void)
+void DirecoryApp::post(const std::string &doc_root, http::server_threadpool::reply& rep)
 {
 }
-void DirecoryApp::put(void)
+void DirecoryApp::put(const std::string &doc_root, http::server_threadpool::reply& rep)
 {
 }
-void DirecoryApp::remove(void)
+void DirecoryApp::remove(const std::string &doc_root, http::server_threadpool::reply& rep)
 {
 }
 

@@ -18,19 +18,19 @@ RepositoryApp::RepositoryApp(void)
 RepositoryApp::~ RepositoryApp()
 {
 }
-void RepositoryApp::create(const std::string &uri)
+void RepositoryApp::create(const std::string &uri,const std::string &user_uid)
 {
 }
-void RepositoryApp::get(void)
+void RepositoryApp::get(const std::string &doc_root, http::server_threadpool::reply& rep)
 {
 }
-void RepositoryApp::post(void)
+void RepositoryApp::post(const std::string &doc_root, http::server_threadpool::reply& rep)
 {
 }
-void RepositoryApp::put(void)
+void RepositoryApp::put(const std::string &doc_root, http::server_threadpool::reply& rep)
 {
 }
-void RepositoryApp::remove(void)
+void RepositoryApp::remove(const std::string &doc_root, http::server_threadpool::reply& rep)
 {
 }
 
