@@ -17,7 +17,6 @@
 #include "mime_types.hpp"
 #include "reply.hpp"
 #include "request.hpp"
-#include "template.hpp"
 
 
 #include "reply_view.hpp"
@@ -241,9 +240,6 @@ void request_handler::handle_get(const request& req,const std::string &request_p
         while (is.read(buf, sizeof(buf)).gcount() > 0) {
             rep.content.append(buf, is.gcount());
         }
-        // replace BOW var in template.
-        BuildOnWeb::BOWTemplate temp(rep.content);
-        temp.replace();
         rep.headers.resize(2);
         rep.headers[0].name = "Content-Length";
         rep.headers[0].value = boost::lexical_cast<std::string>(rep.content.size());

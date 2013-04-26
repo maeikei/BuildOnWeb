@@ -14,7 +14,6 @@
 #include <boost/bind.hpp>
 #include <boost/lexical_cast.hpp>
 #include "server.hpp"
-#include "env.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -23,7 +22,7 @@ int main(int argc, char* argv[])
     // Check command line arguments.
     if (argc != 5)
     {
-      std::cerr << "Usage: http_server <"<< argv[0] <<"> <port> <threads> <doc_root>\n";
+      std::cerr << "Usage: <"<< argv[0] <<"> <port> <threads> <doc_root>\n";
       std::cerr << "  For IPv4, try:\n";
       std::cerr << "    receiver 0.0.0.0 80 1 .\n";
       std::cerr << "  For IPv6, try:\n";
