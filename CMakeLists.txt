@@ -10,6 +10,7 @@ else(WIN32)
   include_directories(${CMAKE_BINARY_DIR}/3rdpart/boost/include)
 endif(WIN32)
 include_directories(${CMAKE_BINARY_DIR}/3rdpart/uri/include)
+include_directories(${CMAKE_BINARY_DIR}/3rdpart/cpp-netlib/include)
 
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
@@ -32,3 +33,4 @@ endif(NOT WIN32)
 add_subdirectory(3rdpart_build)
 add_subdirectory(server)
 add_subdirectory(WebResources)
+#add_subdirectory(server-netlib)
