@@ -13,7 +13,7 @@ namespace fs = boost::filesystem;
 #include <fstream>
 #include <iostream>
 
-#define DEBUG_PARAM
+//#define DEBUG_PARAM
 //#define DEBUG_CONTENT
 
 const string strConstManualFormat

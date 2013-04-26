@@ -53,7 +53,7 @@ request_handler::request_handler(const std::string& doc_root,const std::string& 
 //#define DEBUG_REP_HEADER
 //#define DEBUG_RET
 //#define DEBUG_POST
-#define DEBUG_URI
+#define DEBUG_ROUTE
     
 void request_handler::handle_request(const request& req, reply& rep)
 {
@@ -72,11 +72,15 @@ void request_handler::handle_request(const request& req, reply& rep)
 #ifdef DEBUG_DATA
 	std::cout << "data=" << req.data << std::endl;
 #endif
+    for(auto it= route_.begin();it != route_.end();it++)
     {
-#ifdef DEBUG_URI
-        std::cout << "this=" << this << std::endl;
-#endif
-//        decltype(*(route_.begin()->second)) b("");
+        boost::regex ex(it->first);
+        if(boost::regex_match(req.uri, ex))
+        {
+#ifdef DEBUG_ROUTE
+            std::cout << "match req.uri=<" << req.uri << ">" << std::endl;
+#endif            
+        }
     }
    
     for(auto it = req.headers.begin();it != req.headers.end();it++)

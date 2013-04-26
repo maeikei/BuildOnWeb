@@ -17,19 +17,22 @@ namespace server_threadpool {
 static BOW::NaviApp navi;
 static BOW::SourceApp source;
     
-const std::map<std::string,resource*>
+const std::map<std::string,resource&>
     request_handler::route_
     {
-        {"^/users/\\w+",&navi},
-        {"^/users/\\w+/",&navi},
-        {"^/users/\\w+/\\w+",&navi},
-        {"^/users/\\w+/\\w+/",&navi},
+        {"^/users/\\w+",navi},
+        {"^/users/\\w+/",navi},
+        {"^/users/\\w+/\\w+",navi},
+        {"^/users/\\w+/\\w+/",navi},
         
-        {"^/users/\\w+/\\w+/\\w+",&source},
-        {"^/users/\\w+/\\w+/\\w+/",&source},
+        {"^/users/\\w+/\\w+/\\w+",source},
+        {"^/users/\\w+/\\w+/\\w+/",source},
 
-        {"^/users/\\w+/\\w+/\\w+",&source},
-        {"^/users/\\w+/\\w+/\\w+/",&source},
+        {"^/users/\\w+/\\w+/\\w+",source},
+        {"^/users/\\w+/\\w+/\\w+/",source},
+
+        {"^/users/\\w+/\\w+/\\w+/.*",source},
+
     };
 } // namespace server_threadpool
 } // namespace http
