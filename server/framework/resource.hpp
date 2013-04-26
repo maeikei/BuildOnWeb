@@ -16,12 +16,13 @@ class resource
 {
 public:
     resource(void);
-    void create(const std::string &uri);
+    virtual ~resource(){}
+    virtual void create(const std::string &uri) = 0;
 //http method
-    void get(void);
-    void post(void);
-    void put(void);
-    void remove(void);
+    virtual void get(void) = 0;
+    virtual void post(void) = 0;
+    virtual void put(void) = 0;
+    virtual void remove(void) = 0;
 };
 
 } // namespace server_threadpool

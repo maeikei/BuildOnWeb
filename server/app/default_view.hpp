@@ -1,8 +1,9 @@
-#ifndef BOW_MANUAL_VIEW_HPP
-#define BOW_MANUAL_VIEW_HPP
+#ifndef BOW_DEFAULT_VIEW_HPP
+#define BOW_DEFAULT_VIEW_HPP
 #include <string>
 #include <list>
 #include <map>
+#include <memory>
 using namespace std;
 
 namespace http
@@ -14,12 +15,13 @@ namespace http
     }
 }
 
+
 namespace BOW {
-    class ManualApp: public http::server_threadpool::resource
+    class DefaultApp: public http::server_threadpool::resource
     {
     public:
-        ManualApp(void);
-        virtual ~ ManualApp();
+        DefaultApp(void);
+        virtual ~ DefaultApp();
         virtual void create(const std::string &uri);
         //http method
         virtual void get(void);
@@ -27,20 +29,13 @@ namespace BOW {
         virtual void put(void);
         virtual void remove(void);
     };
-
-    class ManualView: public http::server_threadpool::ReplyView
+    class DefaultView: public http::server_threadpool::ReplyView
     {
     public:
-        ManualView(const string &repo);
-        virtual ~ManualView();
+        DefaultView(const string &uri);
+        virtual ~DefaultView();
         virtual bool getContent(const string &doc_root,string &contents);
-    private:
-        const string repo_;
-        const string workspace_;
-        const string output_;
-        const list<string> env_build_commands_;
-        const list<string> env_build_commands_step_;
     private:
     };
 }
-#endif // BOW_MANUAL_VIEW_HPP
+#endif // BOW_DEFAULT_VIEW_HPP

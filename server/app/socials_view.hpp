@@ -18,6 +18,15 @@ namespace http
 namespace BOW {
     class SosialApp: public http::server_threadpool::resource
     {
+    public:
+        SosialApp(void);
+        virtual ~ SosialApp();
+        virtual void create(const std::string &uri);
+        //http method
+        virtual void get(void);
+        virtual void post(void);
+        virtual void put(void);
+        virtual void remove(void);
     };
     
     string system_result(const string cmd);

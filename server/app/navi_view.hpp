@@ -18,6 +18,15 @@ namespace http
 namespace BOW {
     class NaviApp: public http::server_threadpool::resource
     {
+    public:
+        NaviApp(void);
+        virtual ~ NaviApp();
+        virtual void create(const std::string &uri);
+        //http method
+        virtual void get(void);
+        virtual void post(void);
+        virtual void put(void);
+        virtual void remove(void);
     };
 
     class LastPostion;

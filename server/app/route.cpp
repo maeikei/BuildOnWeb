@@ -7,6 +7,7 @@
 #include "navi_view.hpp"
 #include "socials_view.hpp"
 #include "redirect_view.hpp"
+#include "default_view.hpp"
 
 #include <string>
 
@@ -16,7 +17,7 @@ namespace server_threadpool {
 // route table;
 static BOW::NaviApp navi;
 static BOW::SourceApp source;
-static BOW::SourceApp default_app;
+static BOW::DefaultApp default_app;
 
 const std::map<std::string,resource&>
     request_handler::route_

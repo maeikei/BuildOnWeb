@@ -19,6 +19,15 @@ namespace http
 namespace BOW {
     class SourceApp: public http::server_threadpool::resource
     {
+    public:
+       SourceApp(void);
+        virtual ~ SourceApp();
+        virtual void create(const std::string &uri);
+        //http method
+        virtual void get(void);
+        virtual void post(void);
+        virtual void put(void);
+        virtual void remove(void);
     };
     
     

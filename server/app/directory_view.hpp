@@ -17,6 +17,15 @@ namespace http
 namespace BOW {
     class DirecoryApp: public http::server_threadpool::resource
     {
+    public:
+        DirecoryApp(void);
+        virtual ~ DirecoryApp();
+        virtual void create(const std::string &uri);
+        //http method
+        virtual void get(void);
+        virtual void post(void);
+        virtual void put(void);
+        virtual void remove(void);
     };
     class SourceView;
     class DirecoryView: public SourceView

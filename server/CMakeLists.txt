@@ -30,6 +30,7 @@ add_executable(BuildOnWeb
   app/last_position.hpp
   app/redirect_view.hpp
   app/socials_view.hpp
+  app/default_view.hpp
   ${app_SRCS}
 )
 

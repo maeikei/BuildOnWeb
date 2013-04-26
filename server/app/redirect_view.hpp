@@ -18,6 +18,15 @@ namespace http
 namespace BOW {
     class RedirectApp: public http::server_threadpool::resource
     {
+    public:
+        RedirectApp(void);
+        virtual ~ RedirectApp();
+        virtual void create(const std::string &uri);
+        //http method
+        virtual void get(void);
+        virtual void post(void);
+        virtual void put(void);
+        virtual void remove(void);
     };
     class LastPostion;
     class NaviView;
