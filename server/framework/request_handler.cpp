@@ -72,17 +72,6 @@ void request_handler::handle_request(const request& req, reply& rep)
 #ifdef DEBUG_DATA
 	std::cout << "data=" << req.data << std::endl;
 #endif
-    for(auto it= route_.begin();it != route_.end();it++)
-    {
-        boost::regex ex(it->first);
-        if(boost::regex_match(req.uri, ex))
-        {
-#ifdef DEBUG_ROUTE
-            std::cout << "match req.uri=<" << req.uri << ">" << std::endl;
-#endif            
-        }
-    }
-   
     for(auto it = req.headers.begin();it != req.headers.end();it++)
     {
         if("X-Real-IP" == it->name)
@@ -107,6 +96,26 @@ void request_handler::handle_request(const request& req, reply& rep)
 	std::cout << "request_path=" << request_path << std::endl;
 #endif
 
+    for(auto it= route_.begin();it != route_.end();it++)
+    {
+        boost::regex ex(it->first);
+        if(boost::regex_match(req.uri, ex))
+        {
+#ifdef DEBUG_ROUTE
+            std::cout << "match req.uri=<" << req.uri << ">" << std::endl;
+#endif
+            it->second.create(req.uri);
+            if( "GET" == req.method || "get" == req.method )
+            {
+                it->second.get();
+            }
+            if( "POST" == req.method || "post" == req.method )
+            {
+                it->second.post();
+            }
+            break;
+        }
+    }
   // Request path must be absolute and not contain "..".
   if (request_path.empty() || request_path[0] != '/'
       || request_path.find("..") != std::string::npos)

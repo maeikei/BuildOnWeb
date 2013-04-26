@@ -16,7 +16,8 @@ namespace server_threadpool {
 // route table;
 static BOW::NaviApp navi;
 static BOW::SourceApp source;
-    
+static BOW::SourceApp default_app;
+
 const std::map<std::string,resource&>
     request_handler::route_
     {
@@ -32,6 +33,8 @@ const std::map<std::string,resource&>
         {"^/users/\\w+/\\w+/\\w+/",source},
 
         {"^/users/\\w+/\\w+/\\w+/.*",source},
+
+        {".*",default_app},
 
     };
 } // namespace server_threadpool
