@@ -7,6 +7,8 @@ using namespace std;
 
 namespace BOW {
     string system_result(const string cmd);
+    void text2html(string &txt);
+    void html2text(string &txt);
     struct number
     {
         int i_;

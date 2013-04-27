@@ -7,6 +7,7 @@ namespace fs = boost::filesystem;
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <map>
 
 string BOW::system_result(const string cmd)
 {
@@ -23,3 +24,26 @@ string BOW::system_result(const string cmd)
     pclose(pipe);
     return result;
 }
+
+static const map<string,string> mapConstTextHtmlPair =
+{
+    {"\"","&quot;"},
+    {"<","&lt;"},
+    {">","&gt;"},
+};
+void BOW::text2html(string &txt)
+{
+    for(auto it = mapConstTextHtmlPair.begin();it != mapConstTextHtmlPair.end();it++)
+    {
+        boost::algorithm::replace_all(txt,it->first,it->second);
+    }
+}
+
+void BOW::html2text(string &txt)
+{
+    for(auto it = mapConstTextHtmlPair.begin();it != mapConstTextHtmlPair.end();it++)
+    {
+        boost::algorithm::replace_all(txt,it->second,it->first);
+    }
+}
+

@@ -1,5 +1,6 @@
 #include "reply_view.hpp"
 #include "source_update.hpp"
+#include "utilities.hpp"
 using namespace BOW;
 #include <boost/filesystem.hpp>
 namespace fs = boost::filesystem;
@@ -11,8 +12,6 @@ namespace fs = boost::filesystem;
 #include <fstream>
 using namespace std;
 
-void text2html(string &txt);
-void html2text(string &txt);
 
 
 //#define DEBUG_PARAM
@@ -93,25 +92,3 @@ bool SoureUpdate::getContent(const string &doc_root,string &contents)
 }
     
     
-static const map<string,string> mapConstTextHtmlPair =
-{
-    {"\"","&quot;"},
-    {"<","&lt;"},
-    {">","&gt;"},
-};
-void text2html(string &txt)
-{
-    for(auto it = mapConstTextHtmlPair.begin();it != mapConstTextHtmlPair.end();it++)
-    {
-        boost::algorithm::replace_all(txt,it->first,it->second);
-    }
-}
-
-void html2text(string &txt)
-{
-    for(auto it = mapConstTextHtmlPair.begin();it != mapConstTextHtmlPair.end();it++)
-    {
-        boost::algorithm::replace_all(txt,it->second,it->first);
-    }
-}
-

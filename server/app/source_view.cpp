@@ -53,7 +53,6 @@ const string strConstSocialsFormat
 
 
 
-void text2html(string &txt);
 
 SourceView::SourceView(const string &username,const string &user_uid,const string &category,const string &repo,const list<string> &path )
 :ReplyView()
