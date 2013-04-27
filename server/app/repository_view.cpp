@@ -2,6 +2,7 @@
 #include "reply_view.hpp"
 #include "repository_view.hpp"
 #include "last_position.hpp"
+#include "utilities.hpp"
 using namespace BOW;
 
 
@@ -11,6 +12,7 @@ namespace fs = boost::filesystem;
 #include <fstream>
 
 
+#define DEBUG_APP_PARAM
 
 RepositoryApp::RepositoryApp(void)
 {
@@ -18,20 +20,26 @@ RepositoryApp::RepositoryApp(void)
 RepositoryApp::~ RepositoryApp()
 {
 }
-void RepositoryApp::create(const std::string &uri,const std::string &user_uid)
+void RepositoryApp::create(const std::string &uri,const std::string &remote)
 {
+#ifdef DEBUG_APP_PARAM
+	std::cout << typeid(this).name() << ":" << __func__ << ":uri=<" << uri << ">" << std::endl;
+#endif
+    std::string username;
+    std::string category;
+    std::string repo;
+    parseUri(uri,username,category,repo);
+    string use_id(username);
+    if("guest"==username)
+    {
+        use_id += "_from_";
+        use_id += boost::algorithm::replace_all_copy(remote,".","_");
+    }
+    reply_ = std::shared_ptr<http::server_threadpool::ReplyView>(new RepositoryView(username,use_id));
 }
 void RepositoryApp::get(const std::string &doc_root, http::server_threadpool::reply& rep)
 {
-}
-void RepositoryApp::post(const std::string &doc_root, http::server_threadpool::reply& rep)
-{
-}
-void RepositoryApp::put(const std::string &doc_root, http::server_threadpool::reply& rep)
-{
-}
-void RepositoryApp::remove(const std::string &doc_root, http::server_threadpool::reply& rep)
-{
+    reply_->responseGet(doc_root,rep);
 }
 
 //#define DEBUG_CONTENT
@@ -44,10 +52,4 @@ RepositoryView::RepositoryView(const string &username,const string &user_uid)
 
 RepositoryView::~ RepositoryView()
 {
-}
-
-void RepositoryView::getDist(string &dist)
-{
-    dist = "/users/" + user_ + "/";
-    dist += last_->get();
 }
