@@ -91,9 +91,6 @@ bool DirecoryView::readBody(const string &doc_root,string &contents)
         }
         is.close();
     }
-    this->replace_source_path(contents);
-    this->replace_loginout(contents);
-    last_->set(category_ + "/" +repo_ + relative);
     return true;
 }
 
@@ -162,6 +159,10 @@ void DirecoryView::create_table(std::map<std::string,std::string> &replace)
         tr +=  "/" + user_;
         tr +=  "/" + category_;
         tr +=  "/" + repo_;
+        if(fs::is_regular_file(sub))
+        {
+            tr +=  "/edit";
+        }
         if(false == relative.empty())
         {
             tr +=  "/" + relative;
@@ -178,4 +179,67 @@ void DirecoryView::create_table(std::map<std::string,std::string> &replace)
         table_trs += tr;
     }
     replace.insert(pair<string,string>("$BOW_TMPL_DIRECTORY_TABLE$",table_trs));
+}
+static const string strConstSourcePath =
+"<a href=\"/users/$user_$\">$user_$</a><span>/</span><a href=\"/users/$user_$/$category_$\">$category_$</a>";
+
+
+void DirecoryView::create_source_path(std::map<std::string,std::string> &replace)
+{
+    string href("/users");
+    std::string path;
+    // user_
+    href += "/" + user_;
+    path += "<a href=\"";
+    path += href;
+    path += "\">";
+    path += user_;
+    path += "</a>";
+    // category_
+    path += "<span>/</span>";
+    href += "/" + category_;
+    path += "<a href=\"";
+    path += href;
+    path += "\">";
+    path += category_;
+    path += "</a>";
+    // repo_
+    path += "<span>/</span>";
+    href += "/" + repo_;
+    path += "<a href=\"";
+    path += href;
+    path += "\">";
+    path += repo_;
+    path += "</a>";
+    
+    // add remain paths.
+    for(auto it = path_.begin();it != path_.end();it++)
+    {
+        path += "<span>/</span>";
+        // path
+        href += "/" + *it;
+        path += "<a href=\"";
+        path += href;
+        path += "\">";
+        path += *it;
+        path += "</a>";
+    }
+    replace.insert(pair<string,string>("$BOW_TMPL_SOURCE_PATH$",path));
+}
+
+static const string strConstLogin =
+"<a href=\"/login.php\" data-method=\"post\" id=\"login\">login</a>";
+static const string strConstLogout =
+"<a href=\"/logout.php\" data-method=\"post\" id=\"logout\">logout</a>";
+
+void DirecoryView::create_loginout(std::map<std::string,std::string> &replace)
+{
+    if( "guest" == user_ || user_.empty())
+    {
+        replace.insert(pair<string,string>("$BOW_TMPL_USER_LOGINOUT$",strConstLogin));
+    }
+    else
+    {
+        replace.insert(pair<string,string>("$BOW_TMPL_USER_LOGINOUT$",strConstLogout));
+    }
 }
