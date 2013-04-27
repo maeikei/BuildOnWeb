@@ -2,6 +2,7 @@
 #define BOW_DIRECTORY_VIEW_HPP
 #include <string>
 #include <list>
+#include <memory>
 using namespace std;
 
 namespace http
@@ -25,7 +26,7 @@ namespace BOW {
         //http method
         virtual void get(const std::string &doc_root, http::server_threadpool::reply& rep);
     };
-    class SourceView;
+    class GitWorker;
     class DirecoryView: public http::server_threadpool::ReplyView
     {
     public:
@@ -33,7 +34,7 @@ namespace BOW {
                      const string &category,const string &repo);
         DirecoryView(const string &username,const string &user_uid,
                      const string &category,const string &repo,const list<string> &path);
-        virtual ~DirecoryView();
+        virtual ~ DirecoryView();
     protected:
         virtual bool readBody(const std::string &doc_root,std::string &contents);
         virtual std::map<std::string,std::string> bodyVars(void);
@@ -48,6 +49,7 @@ namespace BOW {
         const string repo_;
         const list<string> path_;
         const string workspace_;
+        shared_ptr<GitWorker> git_;
     };
 }
 #endif // BOW_DIRECTORY_VIEW_HPP

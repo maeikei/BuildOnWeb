@@ -1,6 +1,6 @@
 #include "reply_view.hpp"
 #include "resource.hpp"
-#include "source_view.hpp"
+#include "git_worker.hpp"
 #include "directory_view.hpp"
 #include "last_position.hpp"
 using namespace BOW;
@@ -37,6 +37,7 @@ DirecoryView::DirecoryView(const string &username,const string &user_uid,
 ,repo_(repo)
 ,path_()
 ,workspace_(".temp/" + user_uid_ + "/" + category_ + "/" + repo_)
+,git_(new GitWorker(workspace_,user_uid_,category_+ "/" + repo_))
 {
 }
 
@@ -49,9 +50,10 @@ DirecoryView::DirecoryView(const string &username,const string &user_uid,
 ,repo_(repo)
 ,path_(path)
 ,workspace_(".temp/" + user_uid_ + "/" + category_ + "/" + repo_)
+,git_(new GitWorker(workspace_,user_uid_,category_+ "/" + repo_))
 {
 }
-DirecoryView::~DirecoryView()
+DirecoryView::~ DirecoryView()
 {
 }
 
@@ -180,8 +182,6 @@ void DirecoryView::create_table(std::map<std::string,std::string> &replace)
     }
     replace.insert(pair<string,string>("$BOW_TMPL_DIRECTORY_TABLE$",table_trs));
 }
-static const string strConstSourcePath =
-"<a href=\"/users/$user_$\">$user_$</a><span>/</span><a href=\"/users/$user_$/$category_$\">$category_$</a>";
 
 
 void DirecoryView::create_source_path(std::map<std::string,std::string> &replace)

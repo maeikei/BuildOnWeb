@@ -33,6 +33,7 @@ add_executable(BuildOnWeb
   app/default_view.hpp
   app/repository_view.hpp
   app/utilities.hpp
+  app/git_worker.hpp
   ${app_SRCS}
 )
 
