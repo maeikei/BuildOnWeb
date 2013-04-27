@@ -26,7 +26,7 @@ DefaultView::~DefaultView()
 {
 }
 
-bool DefaultView::readTemplate(const string &doc_root,string &contents)
+bool DefaultView::readBody(const string &doc_root,string &contents)
 {
     // Open the file to send back.
     std::string full_path = doc_root + uri_;
@@ -47,7 +47,7 @@ bool DefaultView::readTemplate(const string &doc_root,string &contents)
     return true;
 }
 
-std::map<std::string,std::string> DefaultView::fillheader(void)
+std::map<std::string,std::string> DefaultView::fillHeader(void)
 {
  
     fs::path rq_path(uri_);

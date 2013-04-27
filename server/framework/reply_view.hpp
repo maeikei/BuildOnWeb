@@ -31,14 +31,11 @@ public:
     virtual ~ReplyView(){}
 
     void responseGet(const std::string &doc_root, reply& rep);
-    void redirect(reply& rep);
-
-    
 protected:
-    virtual bool readTemplate(const std::string &doc_root,std::string &contents){return true;}
-    virtual std::map<std::string,std::string> readReplaceContents(void);
-    virtual void getDist(std::string &dist){};
-    virtual std::map<std::string,std::string> fillheader(void);
+    virtual bool readBody(const std::string &doc_root,std::string &contents);
+    virtual std::map<std::string,std::string> bodyVars(void);
+    virtual std::map<std::string,std::string> fillHeader(void);
+    virtual int status(void);
 private:
     // replace commont of reply.
     void replace_basic(reply& rep);

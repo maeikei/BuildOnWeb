@@ -72,7 +72,7 @@ NaviView::~NaviView()
 {
 }
 
-bool NaviView::readTemplate(const string &doc_root,string &contents)
+bool NaviView::readBody(const string &doc_root,string &contents)
 {
     // Open the template file to add to contents.
     {
@@ -104,7 +104,7 @@ bool NaviView::readTemplate(const string &doc_root,string &contents)
     return true;
 }
 
-std::map<std::string,std::string> NaviView::readReplaceContents(void)
+std::map<std::string,std::string> NaviView::bodyVars(void)
 {
     std::map<std::string,std::string> ret;
     // replace users

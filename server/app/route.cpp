@@ -24,10 +24,13 @@ static BOW::ManualApp man;
 static BOW::RedirectApp redirect;
 static BOW::SosialApp social;
 
+
+/// pay atention about the order.
+/// loop will break at first match.
 const std::vector<routepair>
     request_handler::route_
     {
-        {"^/users/\\w+/\\*\\*\\?\\*\\*",redirect},
+        {"^/users/\\w+/\\?last",redirect},
 
         {"^/users/\\w+",navi},
         {"^/users/\\w+/",navi},

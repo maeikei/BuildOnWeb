@@ -34,8 +34,8 @@ namespace BOW {
         NaviView(const string &username,const string &user_uid,const string &category);
         virtual ~NaviView();
     protected:
-        virtual bool readTemplate(const std::string &doc_root,std::string &contents);
-        virtual std::map<std::string,std::string> readReplaceContents(void);
+        virtual bool readBody(const std::string &doc_root,std::string &contents);
+        virtual std::map<std::string,std::string> bodyVars(void);
     private:
         const string user_;
         const std::string user_uid_;

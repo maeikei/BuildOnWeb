@@ -80,11 +80,11 @@
     $_SESSION['user_md5'] = $user_md5;
 	if($_SERVER['HTTP_X_REAL_IP'])
 	{
-		$redirect_url= "Location: http://" . $_SERVER['HTTP_HOST'] . "/users/".$userid . "/**?**";
+		$redirect_url= "Location: http://" . $_SERVER['HTTP_HOST'] . "/users/".$userid . "/?last";
 	}
 	else
 	{
-		$redirect_url= "Location: http://" . $_SERVER['SERVER_ADDR']  . "/users/".$userid . "/**?**";
+		$redirect_url= "Location: http://" . $_SERVER['SERVER_ADDR']  . "/users/".$userid . "/?last";
 	}
 //	echo $redirect_url . "\n";
 	header($redirect_url)

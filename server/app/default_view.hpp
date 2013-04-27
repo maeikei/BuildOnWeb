@@ -33,8 +33,8 @@ namespace BOW {
         DefaultView(const string &uri);
         virtual ~DefaultView();
     protected:
-        virtual bool readTemplate(const std::string &doc_root,std::string &contents);
-        virtual std::map<std::string,std::string> fillheader(void);
+        virtual bool readBody(const std::string &doc_root,std::string &contents);
+        virtual std::map<std::string,std::string> fillHeader(void);
    private:
         const string uri_;
     };

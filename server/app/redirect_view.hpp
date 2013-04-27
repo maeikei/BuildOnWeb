@@ -25,22 +25,20 @@ namespace BOW {
         virtual void create(const std::string &uri,const std::string &user_uid);
         //http method
         virtual void get(const std::string &doc_root, http::server_threadpool::reply& rep);
-        virtual void post(const std::string &doc_root, http::server_threadpool::reply& rep);
-        virtual void put(const std::string &doc_root, http::server_threadpool::reply& rep);
-        virtual void remove(const std::string &doc_root, http::server_threadpool::reply& rep);
     };
-    class LastPostion;
     class NaviView;
     class RedirectView: public http::server_threadpool::ReplyView
     {
     public:
         RedirectView(const string &username,const string &user_uid);
         virtual ~RedirectView();
-        virtual void getDist(string &dist);
+    protected:
+        virtual std::map<std::string,std::string> fillHeader(void);
+        virtual int status(void);
     private:
+        const string uri_;
         const string user_;
         const std::string user_uid_;
-        shared_ptr<LastPostion> last_;
     private:
     };
 }
