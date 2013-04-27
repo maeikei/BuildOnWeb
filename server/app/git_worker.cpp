@@ -76,4 +76,8 @@ void GitWorker::createWorkSpace(void)
 
 void GitWorker::updateWorkSpace(void)
 {
+    string pull = system_result("cd " + workspace_ + "&& git pull -q  ");
+#ifdef DEBUG_PARAM
+    std::cout << __func__ <<"pull=<" <<  pull << ">" << endl;
+#endif
 }
