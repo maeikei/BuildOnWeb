@@ -38,7 +38,7 @@ namespace BOW {
         virtual std::map<std::string,std::string> bodyVars(void);
     private:
         const string user_;
-        const std::string user_uid_;
+        const string user_uid_;
         const string category_;
         
         static const unsigned int iConstColNum_ = 5;

@@ -27,15 +27,17 @@ namespace BOW {
         virtual void get(const std::string &doc_root, http::server_threadpool::reply& rep);
     };
     class LastPostion;
-    class RepositoryView: public http::server_threadpool::ReplyView
+    class DirecoryView;
+    class RepositoryView: public DirecoryView
     {
     public:
-        RepositoryView(const string &username,const string &user_uid);
+        RepositoryView(const string &username,const string &user_uid,const string &category,const string &repo);
         virtual ~ RepositoryView();
     private:
         const string user_;
-        const std::string user_uid_;
-        shared_ptr<LastPostion> last_;
+        const string user_uid_;
+        const string category_;
+        const string repo_;
     private:
     };
 }

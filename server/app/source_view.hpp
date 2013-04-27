@@ -42,7 +42,7 @@ namespace BOW {
         virtual bool getContent(const string &doc_root,string &contents);
     protected:
         const string user_;
-        const std::string user_uid_;
+        const string user_uid_;
         const string category_;
         const string repo_;
         const list<string> &path_;

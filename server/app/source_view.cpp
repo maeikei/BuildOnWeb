@@ -168,12 +168,6 @@ bool SourceView::getContent(const string &doc_root,string &contents)
         SosialView social(*this);
         return social.getContent(doc_root, contents);
     }
-    // if is a direcotry
-    if(fs::is_directory(src_path))
-    {
-        DirecoryView dir(*this);
-        return dir.getContent(doc_root, contents);
-    }
     // Open the template file to add to contents.
     {
         std::string full_path = doc_root + "/BuildOnWebViewSource.html";

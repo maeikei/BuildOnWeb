@@ -1,5 +1,7 @@
 #include "resource.hpp"
 #include "reply_view.hpp"
+#include "source_view.hpp"
+#include "directory_view.hpp"
 #include "repository_view.hpp"
 #include "last_position.hpp"
 #include "utilities.hpp"
@@ -35,7 +37,7 @@ void RepositoryApp::create(const std::string &uri,const std::string &remote)
         use_id += "_from_";
         use_id += boost::algorithm::replace_all_copy(remote,".","_");
     }
-    reply_ = std::shared_ptr<http::server_threadpool::ReplyView>(new RepositoryView(username,use_id));
+    reply_ = std::shared_ptr<http::server_threadpool::ReplyView>(new RepositoryView(username,use_id,category,repo));
 }
 void RepositoryApp::get(const std::string &doc_root, http::server_threadpool::reply& rep)
 {
@@ -43,13 +45,21 @@ void RepositoryApp::get(const std::string &doc_root, http::server_threadpool::re
 }
 
 //#define DEBUG_CONTENT
-RepositoryView::RepositoryView(const string &username,const string &user_uid)
-:user_(username)
-,user_uid_(user_uid)
-,last_(new LastPostion(user_uid_))
+RepositoryView::RepositoryView(const string &username,const string &user_uid,const string &category,const string &repo)
+:DirecoryView(username,user_uid,category,repo)
 {
 }
-
 RepositoryView::~ RepositoryView()
 {
 }
+
+#if 0
+bool readBody(const std::string &doc_root,std::string &contents)
+{
+    return DirecoryView::readBody(doc_root,contents);
+}
+std::map<std::string,std::string> bodyVars(void)
+{
+    return 
+}
+#endif
