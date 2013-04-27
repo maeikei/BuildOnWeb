@@ -9,6 +9,12 @@ namespace BOW {
     string system_result(const string cmd);
     void text2html(string &txt);
     void html2text(string &txt);
+    
+    void parseUri(const string &uri,string &user );
+    void parseUri(const string &uri,string &user,string &cate);
+    void parseUri(const string &uri,string &user,string &cate,string & repo);
+    void parseUri(const string &uri,string &user,string &cate,string & repo,string &type);
+    void parseUri(const string &uri,string &user,string &cate,string & repo,string &type,list<string> &path );
     struct number
     {
         int i_;

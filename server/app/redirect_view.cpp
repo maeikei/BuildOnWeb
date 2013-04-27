@@ -3,6 +3,7 @@
 #include "reply_view.hpp"
 #include "redirect_view.hpp"
 #include "last_position.hpp"
+#include "utilities.hpp"
 using namespace BOW;
 
 
@@ -25,11 +26,8 @@ void RedirectApp::create(const std::string &uri,const std::string &remote)
 #ifdef DEBUG_APP_PARAM
 	std::cout << typeid(this).name() << ":" << __func__ << ":uri=<" << uri << ">" << std::endl;
 #endif
-    std::list<std::string> results;
-    boost::split(results, uri, boost::is_any_of("/"));
-    results.pop_front();
-    results.pop_front();
-    std::string username(results.front());
+    std::string username;
+    parseUri(uri,username);
     string user_uid(username);
     if("guest"==username)
     {

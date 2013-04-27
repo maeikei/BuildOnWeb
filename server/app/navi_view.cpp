@@ -3,6 +3,7 @@
 #include "navi_view.hpp"
 #include "last_position.hpp"
 #include "redirect_view.hpp"
+#include "utilities.hpp"
 using namespace BOW;
 
 
@@ -25,25 +26,21 @@ void NaviApp::create(const std::string &uri,const std::string &remote)
 #ifdef DEBUG_APP_PARAM
 	std::cout << typeid(this).name() << ":" << __func__ << ":uri=<" << uri << ">" << std::endl;
 #endif
-    std::list<std::string> results;
-    boost::split(results, uri, boost::is_any_of("/"));
-    results.pop_front();
-    results.pop_front();
-    std::string username(results.front());
-    results.pop_front();
+    std::string username;
+    std::string category;
+    parseUri(uri,username,category);
     string use_id(username);
     if("guest"==username)
     {
         use_id += "_from_";
         use_id += boost::algorithm::replace_all_copy(remote,".","_");
     }
-    if(results.empty())
+    if(category.empty())
     {
         reply_ = std::shared_ptr<http::server_threadpool::ReplyView>(new NaviView(username,use_id));
     }
     else
     {
-        std::string category(results.front());
         reply_ = std::shared_ptr<http::server_threadpool::ReplyView>(new NaviView(username,use_id,category));
     }
 }
