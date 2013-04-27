@@ -24,9 +24,6 @@ namespace BOW {
         virtual void create(const std::string &uri,const std::string &user_uid);
         //http method
         virtual void get(const std::string &doc_root, http::server_threadpool::reply& rep);
-        virtual void post(const std::string &doc_root, http::server_threadpool::reply& rep);
-        virtual void put(const std::string &doc_root, http::server_threadpool::reply& rep);
-        virtual void remove(const std::string &doc_root, http::server_threadpool::reply& rep);
     };
 
     class LastPostion;

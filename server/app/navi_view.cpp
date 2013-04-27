@@ -51,15 +51,6 @@ void NaviApp::get(const std::string &doc_root, http::server_threadpool::reply& r
 {
     reply_->responseGet(doc_root,rep);
 }
-void NaviApp::post(const std::string &doc_root, http::server_threadpool::reply& rep)
-{
-}
-void NaviApp::put(const std::string &doc_root, http::server_threadpool::reply& rep)
-{
-}
-void NaviApp::remove(const std::string &doc_root, http::server_threadpool::reply& rep)
-{
-}
 
 // #define DEBUG_CONTENT
 //#define DEBUG_NAVI_TREE
