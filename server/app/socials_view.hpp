@@ -30,18 +30,6 @@ namespace BOW {
         virtual void remove(const std::string &doc_root, http::server_threadpool::reply& rep);
     };
     
-    string system_result(const string cmd);
-    struct number
-    {
-        int i_;
-        number(int i):i_(i){}
-        operator string() const {
-            stringstream ss;
-            ss << i_;
-            return ss.str();
-        }
-    };
-
     class SourceView;
     struct GitLogMeshNote
     {

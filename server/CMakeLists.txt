@@ -32,6 +32,7 @@ add_executable(BuildOnWeb
   app/socials_view.hpp
   app/default_view.hpp
   app/repository_view.hpp
+  app/utilities.hpp
   ${app_SRCS}
 )
 

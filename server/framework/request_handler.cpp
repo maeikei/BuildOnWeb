@@ -108,6 +108,7 @@ void request_handler::handle_request(const request& req, reply& rep)
         {
 #ifdef DEBUG_ROUTE
             std::cout << "match req.uri=<" << req.uri << ">" << std::endl;
+            std::cout << "match app name =<" << typeid(it->second).name() << ">" << std::endl;
 #endif
             it->second.create(req.uri,remote_);
             if( "GET" == req.method || "get" == req.method )

@@ -3,6 +3,7 @@
 #include "source_view.hpp"
 #include "socials_view.hpp"
 #include "last_position.hpp"
+#include "utilities.hpp"
 using namespace BOW;
 
 #include <boost/filesystem.hpp>
@@ -44,24 +45,6 @@ void SosialApp::remove(const std::string &doc_root, http::server_threadpool::rep
 //#define DEBUG_CONTENT
 
 void text2html(string &txt);
-
-
-string BOW::system_result(const string cmd)
-{
-//    std::cout << __func__ <<":cmd=<" <<  cmd << ">" << endl;
-    FILE *pipe = popen(cmd.c_str(), "r");
-    std::string result;
-    char buf[256] = {0};
-    while(!feof(pipe)) {
-        if(fgets(buf, sizeof(buf), pipe) != NULL)
-        {
-            result += buf;
-        }
-    }
-    pclose(pipe);
-    return result;
-}
-
 
 SosialView::SosialView(const SourceView &src)
 :SourceView(src)

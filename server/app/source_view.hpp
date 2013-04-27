@@ -33,7 +33,6 @@ namespace BOW {
     
     
     
-    string system_result(const string cmd);
     class LastPostion;
     class SourceView: public http::server_threadpool::ReplyView
     {

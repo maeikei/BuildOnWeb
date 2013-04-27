@@ -4,6 +4,7 @@
 #include "directory_view.hpp"
 #include "socials_view.hpp"
 #include "last_position.hpp"
+#include "utilities.hpp"
 using namespace BOW;
 
 #include <boost/filesystem.hpp>
