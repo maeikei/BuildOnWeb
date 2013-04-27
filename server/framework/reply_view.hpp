@@ -13,6 +13,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 #include <boost/asio.hpp>
 #include "header.hpp"
 
@@ -24,18 +25,23 @@ struct reply;
 /// A reply of view to be sent to a client.
 class ReplyView
 {
+    typedef void replace_ptr(const std::string &,std::string &);
 public:
     ReplyView(void);
     virtual ~ReplyView(){}
 
-    void response(const std::string &doc_root, reply& rep);
-    virtual bool getContent(const std::string &doc_root,std::string &contents){ return true;};
+    void responseGet(const std::string &doc_root, reply& rep);
     void redirect(reply& rep);
-    virtual void getDist(std::string &dist){};
+
+    
 protected:
+    virtual bool readTemplate(const std::string &doc_root,std::string &contents){return true;}
+    virtual std::map<std::string,std::string> readReplaceContents(void);
+    virtual void getDist(std::string &dist){};
+    virtual std::map<std::string,std::string> fillheader(void);
 private:
     // replace commont of reply.
-    void replace(reply& rep);    
+    void replace_basic(reply& rep);
 };
 
 } // namespace server_threadpool

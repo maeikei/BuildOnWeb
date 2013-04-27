@@ -3,7 +3,6 @@
 #include <string>
 #include <vector>
 #include <map>
-#include <memory>
 using namespace std;
 
 namespace http
@@ -37,18 +36,20 @@ namespace BOW {
         NaviView(const string &username,const string &user_uid);
         NaviView(const string &username,const string &user_uid,const string &category);
         virtual ~NaviView();
-        virtual bool getContent(const string &doc_root,string &contents);
+    protected:
+        virtual bool readTemplate(const std::string &doc_root,std::string &contents);
+        virtual std::map<std::string,std::string> readReplaceContents(void);
     private:
         const string user_;
         const std::string user_uid_;
         const string category_;
-        shared_ptr<LastPostion> last_;        
         
         static const unsigned int iConstColNum_ = 5;
         static const map<string,vector<string>> &navi_items_;
     private:
-        void replace_source_path(string &contents);
-        void replace_loginout(string &contents);
+        void create_table(std::map<std::string,std::string> &replace);
+        void create_source_path(std::map<std::string,std::string> &replace);
+        void create_loginout(std::map<std::string,std::string> &replace);
     };
 }
 #endif // BOW_NAVI_VIEW_HPP

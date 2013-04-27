@@ -12,7 +12,7 @@ namespace fs = boost::filesystem;
 #include <cassert>
 #include "leveldb/db.h"
 
-//#define DEBUG_PARAM
+#define DEBUG_PARAM
 //#define DEBUG_GET
 //#define DEBUG_SET
 
@@ -32,6 +32,9 @@ LastPostion::LastPostion(const string &userid)
     leveldb::Options options;
     options.create_if_missing = true;
     leveldb::Status status = leveldb::DB::Open(options, db_home_ + "/last_position.db", &db);
+#ifdef DEBUG_PARAM
+    std::cout << __func__ <<":status=" <<  status.ToString() << endl;
+#endif
     assert(status.ok());
     db_ = shared_ptr<leveldb::DB>(db);
 }

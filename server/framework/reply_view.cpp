@@ -11,22 +11,41 @@ ReplyView::ReplyView(void)
 {
     
 }
-void ReplyView::response(const std::string &doc_root, reply& rep)
+void ReplyView::responseGet(const std::string &doc_root, reply& rep)
 {
-    if( not this->getContent(doc_root,rep.content) )
+    if( not this->readTemplate(doc_root,rep.content) )
     {
         rep.content.clear();
         rep = reply::stock_reply(reply::not_found);
         return;
     }
-    this->replace(rep);
+    auto replace = this->readReplaceContents();
+    for(auto it = replace.begin(); it !=  replace.end();it++)
+    {
+        boost::algorithm::replace_all(rep.content,it->first,it->second);
+    }
+    this->replace_basic(rep);
     rep.status = reply::ok;
-    rep.headers.resize(2);
+    
+    auto header = fillheader();
+    rep.headers.resize(1 + header.size());
     rep.headers[0].name = "Content-Length";
     rep.headers[0].value = boost::lexical_cast<std::string>(rep.content.size());
+    int i = 1;
+    for(auto it = header.begin(); it !=  header.end();it++)
+    {
+        rep.headers[i].name  = it->first;
+        rep.headers[i].value = it->second;
+        i++;
+    }
     
-    rep.headers[1].name = "Content-Type";
-    rep.headers[1].value = "text/html";
+}
+
+std::map<std::string,std::string> ReplyView::fillheader(void)
+{
+    std::map<std::string,std::string>  ret;
+    ret.insert(std::pair<std::string,std::string>("Content-Type","text/html"));
+    return ret;
 }
 
 
@@ -47,7 +66,7 @@ void ReplyView::redirect(reply& rep)
 }
 
 // replace commont of reply.
-void ReplyView::replace(reply& rep)
+void ReplyView::replace_basic(reply& rep)
 {
     // replace css paht & javascript to root path.
     {
@@ -61,4 +80,10 @@ void ReplyView::replace(reply& rep)
                                       "<script src=\"ace/",
                                       "<script src=\"/ace/");
     }    
+}
+
+std::map<std::string,std::string> ReplyView::readReplaceContents(void)
+{
+    std::map<std::string,std::string> ret;
+    return ret;
 }

@@ -26,17 +26,17 @@ namespace BOW {
         virtual void create(const std::string &uri,const std::string &user_uid);
         //http method
         virtual void get(const std::string &doc_root, http::server_threadpool::reply& rep);
-        virtual void post(const std::string &doc_root, http::server_threadpool::reply& rep);
-        virtual void put(const std::string &doc_root, http::server_threadpool::reply& rep);
-        virtual void remove(const std::string &doc_root, http::server_threadpool::reply& rep);
     };
     class DefaultView: public http::server_threadpool::ReplyView
     {
     public:
         DefaultView(const string &uri);
         virtual ~DefaultView();
-        virtual bool getContent(const string &doc_root,string &contents);
-    private:
+    protected:
+        virtual bool readTemplate(const std::string &doc_root,std::string &contents);
+        virtual std::map<std::string,std::string> fillheader(void);
+   private:
+        const string uri_;
     };
 }
 #endif // BOW_DEFAULT_VIEW_HPP

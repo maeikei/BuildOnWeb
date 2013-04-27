@@ -20,14 +20,36 @@ NaviApp::NaviApp(void)
 NaviApp::~ NaviApp()
 {
 }
-void NaviApp::create(const std::string &uri,const std::string &user_uid)
+void NaviApp::create(const std::string &uri,const std::string &remote)
 {
 #ifdef DEBUG_APP_PARAM
 	std::cout << typeid(this).name() << ":" << __func__ << ":uri=<" << uri << ">" << std::endl;
 #endif
+    std::list<std::string> results;
+    boost::split(results, uri, boost::is_any_of("/"));
+    results.pop_front();
+    results.pop_front();
+    std::string username(results.front());
+    results.pop_front();
+    string use_id(username);
+    if("guest"==username)
+    {
+        use_id += "_from_";
+        use_id += boost::algorithm::replace_all_copy(remote,".","_");
+    }
+    if(results.empty())
+    {
+        reply_ = std::shared_ptr<http::server_threadpool::ReplyView>(new NaviView(username,use_id));
+    }
+    else
+    {
+        std::string category(results.front());
+        reply_ = std::shared_ptr<http::server_threadpool::ReplyView>(new NaviView(username,use_id,category));
+    }
 }
 void NaviApp::get(const std::string &doc_root, http::server_threadpool::reply& rep)
 {
+    reply_->responseGet(doc_root,rep);
 }
 void NaviApp::post(const std::string &doc_root, http::server_threadpool::reply& rep)
 {
@@ -46,7 +68,6 @@ NaviView::NaviView(const string &username,const string &user_uid)
 :user_(username)
 ,user_uid_(user_uid)
 ,category_()
-,last_(new LastPostion(user_uid_))
 {
 }
 
@@ -54,14 +75,13 @@ NaviView::NaviView(const string &username,const string &user_uid,const string &c
 :user_(username)
 ,user_uid_(user_uid)
 ,category_(category)
-,last_(new LastPostion(user_uid_))
 {
 }
 NaviView::~NaviView()
 {
 }
 
-bool NaviView::getContent(const string &doc_root,string &contents)
+bool NaviView::readTemplate(const string &doc_root,string &contents)
 {
     // Open the template file to add to contents.
     {
@@ -79,26 +99,72 @@ bool NaviView::getContent(const string &doc_root,string &contents)
         while (is.read(buf, sizeof(buf)).gcount() > 0) {
             contents.append(buf, is.gcount());
         }
+        is.close();
     }
+    LastPostion last(user_uid_);
+    if(category_.empty())
+    {
+        last.set("");
+    }
+    else
+    {
+        last.set(category_);
+    }
+    return true;
+}
+
+std::map<std::string,std::string> NaviView::readReplaceContents(void)
+{
+    std::map<std::string,std::string> ret;
     // replace users
-    {
-        boost::algorithm::replace_all(contents,"$BOW_TMPL_USER$",user_);
-    }
+    ret.insert(pair<string,string>("$BOW_TMPL_USER$",user_));
     // replace navi path
-    {
-        this->replace_source_path(contents);
-    }
+    this->create_source_path(ret);
+    // table
+    this->create_table(ret);
+    // replace login/out.
+    this->create_loginout(ret);
+    return ret;
+}
+
+void NaviView::create_table(std::map<std::string,std::string> &replace)
+{
     // search all navi items and create a table.
+    std::string table_navi;
+    unsigned int counter = iConstColNum_;
+    for(auto it = navi_items_.begin();it != navi_items_.end();it++ )
     {
-        std::string table_navi;
-        unsigned int counter = iConstColNum_;
-        for(auto it = navi_items_.begin();it != navi_items_.end();it++ )
-        {
 #ifdef DEBUG_CONTENT
-            std::cout << "it->first=<" << it->first << ">" << std::endl;
+        std::cout << "it->first=<" << it->first << ">" << std::endl;
 #endif
-            // if no category is speciled,list all categories
-            if(true == category_.empty())
+        // if no category is speciled,list all categories
+        if(true == category_.empty())
+        {
+            string tr("");
+            if(iConstColNum_ == counter)
+            {
+                tr += "<tr>\n";
+            }
+            tr +=  "<td class=\"content\">";
+            tr +=  "<a href=\"/users";
+            tr +=  "/" + user_;
+            tr +=  "/" + it->first;
+            tr +=  "\">";
+            tr +=  it->first;
+            tr += "</a></td>\n";
+            if(0 == --counter )
+            {
+                tr += "</tr>\n";
+                counter = iConstColNum_;
+            }
+            table_navi += tr;
+            continue;
+        }
+        // category is speciled,list all in the category
+        if(category_ == it->first)
+        {
+            unsigned int counter = iConstColNum_;
+            for(auto subit = it->second.begin();subit != it->second.end();subit++)
             {
                 string tr("");
                 if(iConstColNum_ == counter)
@@ -109,108 +175,69 @@ bool NaviView::getContent(const string &doc_root,string &contents)
                 tr +=  "<a href=\"/users";
                 tr +=  "/" + user_;
                 tr +=  "/" + it->first;
+                tr +=  "/" + *subit;
                 tr +=  "\">";
-                tr +=  it->first;
+                tr +=  *subit;
                 tr += "</a></td>\n";
-                if(0 == --counter )
+                if(0 == --counter)
                 {
                     tr += "</tr>\n";
                     counter = iConstColNum_;
                 }
                 table_navi += tr;
-                continue;
             }
-            // category is speciled,list all in the category
-            if(category_ == it->first)
+            if(iConstColNum_ != counter)
             {
-                unsigned int counter = iConstColNum_;
-                for(auto subit = it->second.begin();subit != it->second.end();subit++)
-                {
-                    string tr("");
-                    if(iConstColNum_ == counter)
-                    {
-                        tr += "<tr>\n";
-                    }
-                    tr +=  "<td class=\"content\">";
-                    tr +=  "<a href=\"/users";
-                    tr +=  "/" + user_;
-                    tr +=  "/" + it->first;
-                    tr +=  "/" + *subit;
-                    tr +=  "\">";
-                    tr +=  *subit;
-                    tr += "</a></td>\n";
-                    if(0 == --counter)
-                    {
-                        tr += "</tr>\n";
-                        counter = iConstColNum_;
-                    }
-                    table_navi += tr;
-                }
-                if(iConstColNum_ != counter)
-                {
-                    table_navi += "</tr>\n";
-                }
-                break;
+                table_navi += "</tr>\n";
             }
+            break;
         }
-        if(true == category_.empty() && iConstColNum_ != counter)
-        {
-            table_navi += "</tr>\n";
-        }
-        boost::algorithm::replace_all(contents,"$BOW_TMPL_NAVI_TABLE$",table_navi);
     }
-    this->replace_loginout(contents);
+    if(true == category_.empty() && iConstColNum_ != counter)
+    {
+        table_navi += "</tr>\n";
+    }
+    replace.insert(pair<string,string>("$BOW_TMPL_NAVI_TABLE$",table_navi));
+}
+
+static const string strConstSourcePath =
+"<a href=\"/users/$user_$\">$user_$</a>";
+static const string strConstSourcePathCategory =
+"<a href=\"/users/$user_$\">$user_$</a><span>/</span><a href=\"/users/$user_$/$category_$\">$category_$</a>";
+
+void NaviView::create_source_path(std::map<std::string,std::string> &replace)
+{
+    std::string path(strConstSourcePath);
+    // category_
     if(category_.empty())
     {
-        last_->set("");
+        boost::algorithm::replace_all(path,"$user_$",user_);
     }
     else
     {
-        last_->set(category_);
+        path = strConstSourcePathCategory;
+        boost::algorithm::replace_all(path,"$user_$",user_);
+        boost::algorithm::replace_all(path,"$category_$",category_);
+        
     }
-    return true;
-}
-
-void NaviView::replace_source_path(string &contents)
-{
-    string href("/users");
-    std::string path;
-    // user_
-    href += "/" + user_;
-    path += "<a href=\"";
-    path += href;
-    path += "\">";
-    path += user_;
-    path += "</a>";
-    // category_
-    if(false == category_.empty())
-    {
-        path += "<span>/</span>";
-        href += "/" + category_;
-        path += "<a href=\"";
-        path += href;
-        path += "\">";
-        path += category_;
-        path += "</a>";
-    }
-    boost::algorithm::replace_all(contents,"$BOW_TMPL_NAVI_PATH$",path);
+    replace.insert(pair<string,string>("$BOW_TMPL_NAVI_PATH$",path));
 }
 
 
-static string strConstLogin =
+static const string strConstLogin =
 "<a href=\"/login.php\" data-method=\"post\" id=\"login\">login</a>";
-static string strConstLogout =
+static const string strConstLogout =
 "<a href=\"/logout.php\" data-method=\"post\" id=\"logout\">logout</a>";
 
-void NaviView::replace_loginout(string &contents)
+void NaviView::create_loginout(std::map<std::string,std::string> &replace)
 {
     if( "guest" == user_ || user_.empty())
     {
-        boost::algorithm::replace_all(contents,"$BOW_TMPL_USER_LOGINOUT$",strConstLogin);
+        replace.insert(pair<string,string>("$BOW_TMPL_USER_LOGINOUT$",strConstLogin));
     }
     else
     {
-        boost::algorithm::replace_all(contents,"$BOW_TMPL_USER_LOGINOUT$",strConstLogout);
+        replace.insert(pair<string,string>("$BOW_TMPL_USER_LOGINOUT$",strConstLogout));
     }
 }
 
