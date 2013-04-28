@@ -31,7 +31,7 @@ namespace fs = boost::filesystem;
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string_regex.hpp>
 
-#include <network/uri.hpp>
+//#include <network/uri.hpp>
 
 namespace http {
 namespace server_threadpool {
