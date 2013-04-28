@@ -36,7 +36,7 @@ add_executable(BuildOnWeb
   ${app_SRCS}
 )
 
-target_link_libraries( BuildOnWeb httpframework lua leveldb cppnetlib-uri)
+target_link_libraries( BuildOnWeb httpframework lua leveldb)
 
 if(NOT WIN32)
   target_link_libraries( BuildOnWeb
