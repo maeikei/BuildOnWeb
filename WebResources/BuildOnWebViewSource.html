@@ -76,7 +76,7 @@
                    output.gotoLine(1);
                }
            }
-           xmlHttpRequest.open('POST','/EventAceOnChange/$BOW_TMPL_PATH$');
+           xmlHttpRequest.open('POST','$BOW_TMPL_PATH$');
            xmlHttpRequest.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded');
            xmlHttpRequest.send( editor.getValue() );
         });        

@@ -30,7 +30,6 @@ namespace BOW {
         virtual void remove(const std::string &doc_root, http::server_threadpool::reply& rep);
     };
     
-    class SourceView;
     struct GitLogMeshNote
     {
         string hash_;
@@ -42,13 +41,20 @@ namespace BOW {
         bool operator() (const GitLogMeshNote &left) const;
     };
     typedef list<GitLogMeshNote> GitLogMeshList;
-    class SosialView: public SourceView
+    class SosialView: public http::server_threadpool::ReplyView
     {
     public:
-        SosialView(const SourceView &src);
+        SosialView();
         virtual ~SosialView();
         virtual bool getContent(const string &doc_root,string &contents);
     private:
+        const string uri_;
+        const string user_;
+        const string user_uid_;
+        const string category_;
+        const string repo_;
+        const string workspace_;
+        
         const string wc_temp_cmd_output_;
         string left_;
         string right_;

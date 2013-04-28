@@ -27,39 +27,37 @@ namespace BOW {
         //http method
         virtual void get(const std::string &doc_root, http::server_threadpool::reply& rep);
         virtual void post(const std::string &doc_root, http::server_threadpool::reply& rep);
-        virtual void put(const std::string &doc_root, http::server_threadpool::reply& rep);
-        virtual void remove(const std::string &doc_root, http::server_threadpool::reply& rep);
     };
     
-    
-    
-    class LastPostion;
+    class GitWorker;
     class SourceView: public http::server_threadpool::ReplyView
     {
     public:
-        SourceView(const string &username,const string &user_uid,const string &category,const string &repo,const list<string> &path );
+        SourceView(const string &uri_,const string &username,const string &user_uid,
+                   const string &category,const string &repo,const list<string> &path );
         virtual ~SourceView();
-        virtual bool getContent(const string &doc_root,string &contents);
     protected:
+        virtual bool readBody(const std::string &doc_root,std::string &contents);
+        virtual std::map<std::string,std::string> bodyVars(void);
+    private:
+        void create_source(std::map<std::string,std::string> &replace);
+        void create_output(std::map<std::string,std::string> &replace);
+        void create_source_path(std::map<std::string,std::string> &replace);
+        void create_loginout(std::map<std::string,std::string> &replace);
+    private:
+        const string uri_;
         const string user_;
         const string user_uid_;
         const string category_;
         const string repo_;
-        const list<string> &path_;
+        const list<string> path_;
         const string workspace_;
-        const string git_repositories_;
         const string output_;
-        const string build_output_;        
-        shared_ptr<LastPostion> last_;
+        const string build_output_;
+        shared_ptr<GitWorker> git_;
         const list<string> env_build_commands_;
-        const list<string> env_build_commands_debug_;
         const map<string,string> extensions_;
         const map<string,string> names_;
-    protected:
-        void replace_source_path(string &contents);
-        void replace_loginout(string &contents);
-        void createWorkSpace(void);
-    private:
     };
 }
 #endif // BOW_SOURCE_VIEW_HPP

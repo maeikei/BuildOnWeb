@@ -93,6 +93,13 @@ bool DirecoryView::readBody(const string &doc_root,string &contents)
         }
         is.close();
     }
+    string lastpath(category_ + "/" +repo_);
+    for(auto it = path_.begin();it != path_.end();it++)
+    {
+        lastpath.append( "/" + *it);
+    }
+    LastPostion last(user_uid_);
+    last.set(lastpath);
     return true;
 }
 

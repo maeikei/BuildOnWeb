@@ -46,8 +46,8 @@ void SosialApp::remove(const std::string &doc_root, http::server_threadpool::rep
 
 void text2html(string &txt);
 
-SosialView::SosialView(const SourceView &src)
-:SourceView(src)
+SosialView::SosialView()
+:ReplyView()
 ,wc_temp_cmd_output_(".bow_output/branch.list")
 ,left_("master")
 ,right_(user_uid_)
@@ -132,8 +132,8 @@ bool SosialView::getContent(const string &doc_root,string &contents)
         text2html(diff_html);
         boost::algorithm::replace_all(contents,"$BOW_TMPL_GIT_DIFF$",diff_html);
     }
-    this->replace_source_path(contents);
-    this->replace_loginout(contents);
+//    this->replace_source_path(contents);
+//    this->replace_loginout(contents);
     return true;
 }
 

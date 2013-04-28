@@ -31,6 +31,7 @@ public:
     virtual ~ReplyView(){}
 
     void responseGet(const std::string &doc_root, reply& rep);
+    void responsePost(const std::string &doc_root, reply& rep);
 protected:
     virtual bool readBody(const std::string &doc_root,std::string &contents);
     virtual std::map<std::string,std::string> bodyVars(void);

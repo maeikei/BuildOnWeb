@@ -182,6 +182,11 @@ void BOW::parseUri(const string &uri,string &user,string &cate,string & repo,str
         return;
     }
     type = results.front();
+    results.pop_front();
+    if(results.empty())
+    {
+        return;
+    }
     path = results;
 }
 
