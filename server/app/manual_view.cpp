@@ -13,6 +13,7 @@ namespace fs = boost::filesystem;
 //#define DEBUG_PARAM
 //#define DEBUG_CONTENT
 
+#define DEBUG_APP_PARAM
 
 ManualApp::ManualApp(void)
 {
@@ -20,57 +21,48 @@ ManualApp::ManualApp(void)
 ManualApp::~ ManualApp()
 {
 }
-void ManualApp::create(const std::string &uri,const std::string &user_uid)
+void ManualApp::create(const std::string &uri,const std::string &remote)
 {
+#ifdef DEBUG_APP_PARAM
+	std::cout << typeid(this).name() << ":" << __func__ << ":uri=<" << uri << ">" << std::endl;
+#endif
+    std::list<std::string> results;
+    boost::split(results, uri, boost::is_any_of("/"));
+    results.pop_front();
+    if(results.empty())
+    {
+        return;
+    }
+    std::string manual(results.front());
+    results.pop_front();
+    if(results.empty())
+    {
+        return;
+    }
+    std::string repo(results.front());
+#ifdef DEBUG_APP_PARAM
+	std::cout << typeid(this).name() << ":" << __func__ << ":manual=<" << manual << ">" << std::endl;
+	std::cout << typeid(this).name() << ":" << __func__ << ":repo=<" << repo << ">" << std::endl;
+#endif
+    reply_ = std::shared_ptr<http::server_threadpool::ReplyView>(new ManualView(repo));
 }
 void ManualApp::get(const std::string &doc_root, http::server_threadpool::reply& rep)
 {
-}
-void ManualApp::post(const std::string &doc_root, http::server_threadpool::reply& rep)
-{
-}
-void ManualApp::put(const std::string &doc_root, http::server_threadpool::reply& rep)
-{
-}
-void ManualApp::remove(const std::string &doc_root, http::server_threadpool::reply& rep)
-{
+    reply_->responseGet(doc_root,rep);
 }
 
 
 ManualView::ManualView(const string &repo)
-:repo_(repo)
-,workspace_(".temp/manual/" + repo_)
-,output_(workspace_ +"/" + repo_ + ".man")
-,env_build_commands_
+:ReplyView()
+,repo_(repo)
 {
-    "mkdir -p " + workspace_,
-}
-,env_build_commands_step_
-{
-    "man " + repo_ + " > " + output_,
-}
-{
-#ifdef DEBUG_PARAM
-    std::cout << __func__ <<":repo_=" <<  repo_ << endl;
-#endif
-    for(auto it = env_build_commands_.begin(); it != env_build_commands_.end();it++)
-    {
-        system(it->c_str());
-    }
-    for(auto it = env_build_commands_step_.begin(); it != env_build_commands_step_.end();it++)
-    {
-        if (0 != system(it->c_str()))
-        {
-            break;
-        }
-    }
 }
 
 ManualView::~ManualView()
 {
 }
 
-bool ManualView::getContent(const string &doc_root,string &contents)
+bool ManualView::readBody(const string &doc_root,string &contents)
 {
     // Open the template file to add to contents.
     {
@@ -88,10 +80,16 @@ bool ManualView::getContent(const string &doc_root,string &contents)
         while (is.read(buf, sizeof(buf)).gcount() > 0) {
             contents.append(buf, is.gcount());
         }
-    }
-    // replace manual link $BOW_TMPL_SOURCE_MANUAL$
-    {
-        boost::algorithm::replace_all(contents,"$BOW_TMPL_REAL_MAN$","/man/"+repo_+".html");
+        is.close();
     }
     return true;
 }
+
+std::map<std::string,std::string> ManualView::bodyVars(void)
+{
+    std::map<std::string,std::string> ret;
+    // replace real manual
+    ret.insert(pair<string,string>("$BOW_TMPL_REAL_MAN$","/man/" + repo_));
+    return ret;
+}
+

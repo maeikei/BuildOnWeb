@@ -23,7 +23,6 @@
 #include "navi_view.hpp"
 #include "source_view.hpp"
 #include "directory_view.hpp"
-#include "source_update.hpp"
 #include "manual_view.hpp"
 #include "redirect_view.hpp"
 

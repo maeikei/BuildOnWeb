@@ -24,9 +24,6 @@ namespace BOW {
         virtual void create(const std::string &uri,const std::string &user_uid);
         //http method
         virtual void get(const std::string &doc_root, http::server_threadpool::reply& rep);
-        virtual void post(const std::string &doc_root, http::server_threadpool::reply& rep);
-        virtual void put(const std::string &doc_root, http::server_threadpool::reply& rep);
-        virtual void remove(const std::string &doc_root, http::server_threadpool::reply& rep);
     };
 
     class ManualView: public http::server_threadpool::ReplyView
@@ -34,14 +31,11 @@ namespace BOW {
     public:
         ManualView(const string &repo);
         virtual ~ManualView();
-        virtual bool getContent(const string &doc_root,string &contents);
+    protected:
+        virtual bool readBody(const std::string &doc_root,std::string &contents);
+        virtual std::map<std::string,std::string> bodyVars(void);
     private:
         const string repo_;
-        const string workspace_;
-        const string output_;
-        const list<string> env_build_commands_;
-        const list<string> env_build_commands_step_;
-    private:
     };
 }
 #endif // BOW_MANUAL_VIEW_HPP
