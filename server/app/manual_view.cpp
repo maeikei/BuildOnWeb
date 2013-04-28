@@ -89,7 +89,7 @@ std::map<std::string,std::string> ManualView::bodyVars(void)
 {
     std::map<std::string,std::string> ret;
     // replace real manual
-    ret.insert(pair<string,string>("$BOW_TMPL_REAL_MAN$","/man/" + repo_));
+    ret.insert(pair<string,string>("$BOW_TMPL_REAL_MAN$","/man/" + repo_ + ".html"));
     return ret;
 }
 
