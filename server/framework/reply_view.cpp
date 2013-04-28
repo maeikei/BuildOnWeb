@@ -80,3 +80,58 @@ std::map<std::string,std::string> ReplyView::bodyVars(void)
     std::map<std::string,std::string> ret;
     return ret;
 }
+
+
+
+void ReplyView::responsePost(reply& rep)
+{
+    if( not this->readPostReply(rep.content) )
+    {
+        rep.content.clear();
+        rep = reply::stock_reply(reply::not_found);
+        return;
+    }
+    auto replace = this->bodyVarsPost();
+    for(auto it = replace.begin(); it !=  replace.end();it++)
+    {
+        boost::algorithm::replace_all(rep.content,it->first,it->second);
+    }
+    this->replace_basic(rep);
+    rep.status = static_cast<reply::status_type>(this->statusPost());
+    
+    auto header = fillHeaderPost();
+    rep.headers.resize(1 + header.size());
+    rep.headers[0].name = "Content-Length";
+    rep.headers[0].value = boost::lexical_cast<std::string>(rep.content.size());
+    int i = 1;
+    for(auto it = header.begin(); it !=  header.end();it++)
+    {
+        rep.headers[i].name  = it->first;
+        rep.headers[i].value = it->second;
+        i++;
+    }
+    
+}
+
+
+
+bool ReplyView::readPostReply(std::string &contents)
+{
+    contents.clear();
+    return true;
+}
+std::map<std::string,std::string> ReplyView::fillHeaderPost(void)
+{
+    std::map<std::string,std::string>  ret;
+    ret.insert(std::pair<std::string,std::string>("Content-Type","text/html"));
+    return ret;
+}
+std::map<std::string,std::string> ReplyView::bodyVarsPost(void)
+{
+    std::map<std::string,std::string> ret;
+    return ret;
+}
+int ReplyView::statusPost(void)
+{
+    return reply::ok;
+}

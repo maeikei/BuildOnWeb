@@ -117,7 +117,7 @@ void request_handler::handle_request(const request& req, reply& rep)
             }
             if( "POST" == req.method || "post" == req.method )
             {
-                it->second.post(doc_root_, rep);
+                it->second.post(req.data, rep);
             }
             break;
         }

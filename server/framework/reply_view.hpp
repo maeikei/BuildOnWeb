@@ -29,14 +29,21 @@ class ReplyView
 public:
     ReplyView(void);
     virtual ~ReplyView(){}
-
     void responseGet(const std::string &doc_root, reply& rep);
-    void responsePost(const std::string &doc_root, reply& rep);
+    
+    virtual void post(const std::string &data){}
+    void responsePost(reply& rep);
 protected:
+    /// for get method
     virtual bool readBody(const std::string &doc_root,std::string &contents);
-    virtual std::map<std::string,std::string> bodyVars(void);
     virtual std::map<std::string,std::string> fillHeader(void);
+    virtual std::map<std::string,std::string> bodyVars(void);
     virtual int status(void);
+    /// for post method
+    virtual bool readPostReply(std::string &contents);
+    virtual std::map<std::string,std::string> fillHeaderPost(void);
+    virtual std::map<std::string,std::string> bodyVarsPost(void);
+    virtual int statusPost(void);
 private:
     // replace commont of reply.
     void replace_basic(reply& rep);

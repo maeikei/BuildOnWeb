@@ -53,9 +53,10 @@ void SourceApp::get(const std::string &doc_root, http::server_threadpool::reply&
 {
     reply_->responseGet(doc_root,rep);
 }
-void SourceApp::post(const std::string &doc_root, http::server_threadpool::reply& rep)
+void SourceApp::post(const std::string &data, http::server_threadpool::reply& rep)
 {
-    reply_->responsePost(doc_root,rep);
+    reply_->post(data);
+    reply_->responsePost(rep);
 }
 
 //#define DEBUG_PARAM
@@ -88,8 +89,14 @@ SourceView::SourceView(const string &uri,const string &username,const string &us
 ,git_(new GitWorker(workspace_,user_uid_,category_+ "/" + repo_))
 ,env_build_commands_
 {
+    "rm -f " + output_ + "  " + build_output_,
     "mkdir -p " + workspace_ + "/.bow_output",
     "make exe -C " + workspace_ + " 2>&1 | tee > " + build_output_,
+}
+,_env_commit_commands
+{
+    "cd " + workspace_ + " && git commit -q -am \"web auto modify by user " + "" + "\" ",
+    "cd " + workspace_ + " && git push -q --force",
 }
 ,extensions_
 {
@@ -258,6 +265,11 @@ void SourceView::create_output(std::map<std::string,std::string> &replace)
 {
     // replace output
     string output;
+    read_output(output);
+    replace.insert(pair<string,string>("$BOW_TMPL_OUTPUT$",output));
+}
+void SourceView::read_output(string &output)
+{
     // program run result
     {
         std::ifstream isf(output_.c_str(), std::ios::in | std::ios::binary);
@@ -286,9 +298,7 @@ void SourceView::create_output(std::map<std::string,std::string> &replace)
         }
     }
     output += "---------build log end----------\n";
-    replace.insert(pair<string,string>("$BOW_TMPL_OUTPUT$",output));
 }
-
     
 void SourceView::create_source_path(std::map<std::string,std::string> &replace)
 {
@@ -361,5 +371,46 @@ void SourceView::create_loginout(std::map<std::string,std::string> &replace)
     {
         replace.insert(pair<string,string>("$BOW_TMPL_USER_LOGINOUT$",strConstLogout));
     }
+}
+
+    
+void SourceView::post(const std::string &data)
+{
+    std::string source_path(workspace_);
+    for(auto it = path_.begin();it != path_.end();it++)
+    {
+        source_path.append( "/" + *it);
+    }
+    fs::path sourefile(source_path);
+    if( not fs::exists(sourefile) )
+    {
+        // new files.
+    }
+    else
+    {
+        string source_replaced(data);
+        html2text(source_replaced);
+        std::ofstream ofs;
+        ofs.open( source_path );
+        ofs << source_replaced;
+        ofs.close();
+    }
+    for_each(_env_commit_commands.begin(),  _env_commit_commands.end(),
+             [](const string &cmd)
+             {
+                 BOW::system_result(cmd);
+             }
+             );
+    for_each(env_build_commands_.begin(),  env_build_commands_.end(),
+             [](const string &cmd)
+             {
+                 BOW::system_result(cmd);
+             }
+             );
+}
+bool SourceView::readPostReply(std::string &contents)
+{
+    read_output(contents);
+    return true;
 }
 
