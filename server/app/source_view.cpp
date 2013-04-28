@@ -173,7 +173,7 @@ bool SourceView::readBody(const string &doc_root,string &contents)
         is.close();
     }
     
-    string lastpath(category_ + "/" +repo_);
+    string lastpath(category_ + "/" +repo_ + "/edit");
     for(auto it = path_.begin();it != path_.end();it++)
     {
         lastpath.append( "/" + *it);

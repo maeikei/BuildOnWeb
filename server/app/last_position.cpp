@@ -49,7 +49,7 @@ const string LastPostion::get(void) const
 #ifdef DEBUG_GET
         std::cout << __func__ <<":IsNotFound=" <<  path << endl;
 #endif
-        status = db_->Put(leveldb::WriteOptions(), userid_, "c_cxx/helloworld/main.c");
+        status = db_->Put(leveldb::WriteOptions(), userid_, "c_cxx/helloworld/edit/main.c");
         assert(status.ok());
         status = db_->Get(leveldb::ReadOptions(), userid_, &path);
     }

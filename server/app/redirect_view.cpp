@@ -59,6 +59,9 @@ std::map<std::string,std::string> RedirectView::fillHeader(void)
     string location("/users/" + user_ + "/");
     LastPostion last(user_uid_);
     location += last.get();
+#ifdef DEBUG_APP_PARAM
+	std::cout << typeid(this).name() << ":" << __func__ << ":location=<" << location << ">" << std::endl;
+#endif
     ret.insert(std::pair<std::string,std::string>("Location",location));
     return ret;
 }
@@ -67,4 +70,3 @@ int RedirectView::status(void)
 {
     return http::server_threadpool::reply::moved_temporarily;
 }
-
