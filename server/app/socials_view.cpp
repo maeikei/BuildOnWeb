@@ -146,6 +146,7 @@ std::map<std::string,std::string> SosialView::bodyVars(void)
     string diff_html(diff_);
     text2html(diff_html);
     ret.insert(pair<string,string>("$BOW_TMPL_GIT_DIFF$",diff_html));
+    create_loginout(ret);
     return ret;
 }
 
