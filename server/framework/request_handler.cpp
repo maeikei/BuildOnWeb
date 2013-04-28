@@ -52,7 +52,7 @@ request_handler::request_handler(const std::string& doc_root,const std::string& 
 //#define DEBUG_REP_HEADER
 //#define DEBUG_RET
 //#define DEBUG_POST
-#define DEBUG_ROUTE
+//#define DEBUG_ROUTE
     
 void request_handler::handle_request(const request& req, reply& rep)
 {

@@ -39,7 +39,7 @@ const std::vector<routepair>
 
         
         {"^/users/\\w+/\\w+/\\w+/edit/.*",source},
-        {"/\\*\\*\\?socials\\?\\*\\*?",social},
+        {"^/users/\\w+/\\w+/\\w+/\\?socials\\?",social},
         
         {"^/users/\\w+/\\w+/\\w+",repo},
         {"^/users/\\w+/\\w+/\\w+/",repo},

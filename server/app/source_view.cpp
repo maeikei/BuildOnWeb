@@ -68,7 +68,7 @@ const string strConstManualFormat
  );
 const string strConstSocialsFormat
 (
- "<a href=\"/users/$user_$/$category_$/$repo_$/**?socials?**\">Socials</a>"
+ "<a href=\"/users/$user_$/$category_$/$repo_$/?socials?\">Socials</a>"
  );
 
 

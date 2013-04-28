@@ -21,20 +21,26 @@ SosialApp::SosialApp(void)
 SosialApp::~ SosialApp()
 {
 }
-void SosialApp::create(const std::string &uri,const std::string &user_uid)
+void SosialApp::create(const std::string &uri,const std::string &remote)
 {
+#ifdef DEBUG_APP_PARAM
+	std::cout << typeid(this).name() << ":" << __func__ << ":uri=<" << uri << ">" << std::endl;
+#endif
+    std::string username;
+    std::string category;
+    std::string repo;
+    parseUri(uri,username,category,repo);
+    string use_id(username);
+    if("guest"==username)
+    {
+        use_id += "_from_";
+        use_id += boost::algorithm::replace_all_copy(remote,".","_");
+    }
+    reply_ = std::shared_ptr<http::server_threadpool::ReplyView>(new SosialView(uri,username,use_id,category,repo));
 }
 void SosialApp::get(const std::string &doc_root, http::server_threadpool::reply& rep)
 {
-}
-void SosialApp::post(const std::string &doc_root, http::server_threadpool::reply& rep)
-{
-}
-void SosialApp::put(const std::string &doc_root, http::server_threadpool::reply& rep)
-{
-}
-void SosialApp::remove(const std::string &doc_root, http::server_threadpool::reply& rep)
-{
+    reply_->responseGet(doc_root,rep);
 }
 
 //#define DEBUG_PARAM
@@ -44,11 +50,16 @@ void SosialApp::remove(const std::string &doc_root, http::server_threadpool::rep
 //#define DEBUG_LOGMESH_POSITION
 //#define DEBUG_CONTENT
 
-void text2html(string &txt);
 
-SosialView::SosialView()
+SosialView::SosialView(const string &uri,const string &username,const string &user_uid,
+                       const string &category,const string &repo)
 :ReplyView()
-,wc_temp_cmd_output_(".bow_output/branch.list")
+,uri_(uri)
+,user_(username)
+,user_uid_(user_uid)
+,category_(category)
+,repo_(repo)
+,workspace_(".temp/" + user_uid_ + "/" + category_ + "/" + repo_)
 ,left_("master")
 ,right_(user_uid_)
 ,env_show_commands_
@@ -93,7 +104,7 @@ SosialView::~SosialView()
 {
 }
 
-bool SosialView::getContent(const string &doc_root,string &contents)
+bool SosialView::readBody(const string &doc_root,string &contents)
 {
     createAllLogMesh();
     // Open the template file to add to contents.
@@ -114,29 +125,51 @@ bool SosialView::getContent(const string &doc_root,string &contents)
         }
         is.close();
     }
-    // replace users
-    {
-        boost::algorithm::replace_all(contents,"$BOW_TMPL_USER$",user_);
-    }
-    // replace svg
-    {
-        string svg;
-        createAllBranchSVG(svg);
-        boost::algorithm::replace_all(contents,"$BOW_TMPL_HISTORY_SVG$",svg);
-    }
-    // replace diff
-    {
-        boost::algorithm::replace_all(contents,"$BOW_TMPL_SOSIAL_LEFT$",left_);
-        boost::algorithm::replace_all(contents,"$BOW_TMPL_SOSIAL_RIGHT$",right_);
-        string diff_html(diff_);
-        text2html(diff_html);
-        boost::algorithm::replace_all(contents,"$BOW_TMPL_GIT_DIFF$",diff_html);
-    }
-//    this->replace_source_path(contents);
-//    this->replace_loginout(contents);
     return true;
 }
+        
+        
+std::map<std::string,std::string> SosialView::bodyVars(void)
+{
+    std::map<std::string,std::string> ret;
+    // replace users
+    ret.insert(pair<string,string>("$BOW_TMPL_USER$",user_));
+    
+    // replace svg
+    string svg;
+    createAllBranchSVG(svg);
+    ret.insert(pair<string,string>("$BOW_TMPL_HISTORY_SVG$",svg));
+    
+    ret.insert(pair<string,string>("$BOW_TMPL_SOSIAL_LEFT$",left_));
+    ret.insert(pair<string,string>("$BOW_TMPL_SOSIAL_RIGHT$",right_));
+    
+    string diff_html(diff_);
+    text2html(diff_html);
+    ret.insert(pair<string,string>("$BOW_TMPL_GIT_DIFF$",diff_html));
+    return ret;
+}
 
+static string strConstLogin =
+        "<a href=\"/login.php\" data-method=\"post\" id=\"login\">login</a>";
+static string strConstLogout =
+        "<a href=\"/logout.php\" data-method=\"post\" id=\"logout\">logout</a>";
+        
+        
+void SosialView::create_loginout(std::map<std::string,std::string> &replace)
+{
+    if( "guest" == user_ || user_.empty())
+    {
+        replace.insert(pair<string,string>("$BOW_TMPL_USER_LOGINOUT$",strConstLogin));
+    }
+    else
+    {
+        replace.insert(pair<string,string>("$BOW_TMPL_USER_LOGINOUT$",strConstLogout));
+    }
+}
+
+        
+        
+        
 
 static const string strConstMasterStartNode("<circle cx=\"$cx$\" cy=\"$cy$\" r=\"5\" stroke=\"black\" stroke-width=\"2\"/>\n\
                                       <text x=\"$x$\" y=\"$y$\" font-size=\"10\" fill=\"blue\" > $txt$ </text>\n\
