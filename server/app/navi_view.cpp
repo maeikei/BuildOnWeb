@@ -275,6 +275,8 @@ static const map<string,vector<string>> & buildNaviTree(void)
 {
     searchRepo("ruby");
     searchRepo("c_cxx");
+    searchRepo("c");
+    searchRepo("cxx");
     return mapNaviTree;
 }
 const map<string,vector<string>> &NaviView::navi_items_ = buildNaviTree();
