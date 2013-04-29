@@ -39,8 +39,8 @@ namespace BOW {
     protected:
         virtual bool readBody(const std::string &doc_root,std::string &contents);
         virtual std::map<std::string,std::string> bodyVars(void);
+
         virtual void post(const std::string &data);
-        
         virtual bool readPostReply(std::string &contents);
     private:
         void create_source(std::map<std::string,std::string> &replace);

@@ -43,6 +43,11 @@ void SosialApp::get(const std::string &doc_root, http::server_threadpool::reply&
 {
     reply_->responseGet(doc_root,rep);
 }
+void SosialApp::post(const std::string &data, http::server_threadpool::reply& rep)
+{
+    reply_->post(data);
+    reply_->responsePost(rep);
+}
 
 //#define DEBUG_PARAM
 //#define DEBUG_BRANCH_LOG
@@ -50,7 +55,7 @@ void SosialApp::get(const std::string &doc_root, http::server_threadpool::reply&
 //#define DEBUG_LOGMESH_DUMP
 //#define DEBUG_LOGMESH_POSITION
 //#define DEBUG_CONTENT
-
+#define DEBUG_POST
 
 SosialView::SosialView(const string &uri,const string &username,const string &user_uid,
                        const string &category,const string &repo)
@@ -96,7 +101,8 @@ SosialView::SosialView(const string &uri,const string &username,const string &us
         }
     }
     {
-        diff_ = system_result("cd " + workspace_ + "&& git diff origin/master ");
+        diff_ = "git diff origin/master\n";
+        diff_ += system_result("cd " + workspace_ + "&& git diff origin/master ");
 #ifdef DEBUG_PARAM
         std::cout << __func__ <<":diff_=<" <<  diff_ << ">" << endl;
 #endif
@@ -142,8 +148,6 @@ std::map<std::string,std::string> SosialView::bodyVars(void)
     createAllBranchSVG(svg);
     ret.insert(pair<string,string>("$BOW_TMPL_HISTORY_SVG$",svg));
     
-    ret.insert(pair<string,string>("$BOW_TMPL_SOSIAL_LEFT$",left_));
-    ret.insert(pair<string,string>("$BOW_TMPL_SOSIAL_RIGHT$",right_));
     
     string diff_html(diff_);
     text2html(diff_html);
@@ -182,7 +186,7 @@ static const string strConstMasterStartNode("<circle cx=\"$cx$\" cy=\"$cy$\" r=\
 static const string strConstNormalNode("<circle cx=\"$cx$\" cy=\"$cy$\" r=\"5\" stroke=\"black\" stroke-width=\"2\"/>\n");
 static const string strConstLine("<line x1=\"$x1$\" y1=\"$y1$\" x2=\"$x2$\" y2=\"$y2$\" style=\"stroke:rgb(0,0,0);stroke-width:2\"/>");
 static const string strConstBranchStartNode("<circle cx=\"$cx$\" cy=\"$cy$\" r=\"5\" stroke=\"black\" stroke-width=\"2\"/>\n\
-                                            <text x=\"$x$\" y=\"$y$\" font-size=\"10\" fill=\"blue\" onclick=\"clickBranch()\">\n\
+                                            <text x=\"$x$\" y=\"$y$\" font-size=\"10\" fill=\"blue\" onclick=\"clickBranch(this)\">\n\
                                             $txt$</text>\n\
                                             ");
 
@@ -528,3 +532,26 @@ bool GitLogMeshNote::operator() (const GitLogMeshNote &left) const
 {
     return left.hash_ == hash_;
 }
+
+
+
+void SosialView::post(const std::string &data)
+{
+    string branch(data);
+    boost::algorithm::replace_all(branch," ","");
+    boost::algorithm::replace_all(branch,"\n","");
+    boost::algorithm::replace_all(branch,"\r","");
+    diff_ = "git diff origin/master origin/" + branch + "\n";
+    diff_ += system_result("cd " + workspace_ + "&& git diff origin/master origin/" + branch);
+#ifdef DEBUG_POST
+    std::cout << __func__ <<":data=<" <<  data << ">" << endl;
+    std::cout << __func__ <<":branch=<" <<  branch << ">" << endl;
+    std::cout << __func__ <<":diff_=<" <<  diff_ << ">" << endl;
+#endif
+}
+bool SosialView::readPostReply(std::string &contents)
+{
+    contents = diff_;
+    return true;
+}
+

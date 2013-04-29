@@ -36,9 +36,6 @@
                 </svg>
             </div>
             <div id="DiffViewFrame">
-                <div id="BranchInfoFrame">
-                    Diff between $BOW_TMPL_SOSIAL_LEFT$ and $BOW_TMPL_SOSIAL_RIGHT$.
-                </div>
                 <div id="DiffViewACE">
                     $BOW_TMPL_GIT_DIFF$
                 </div>
@@ -57,7 +54,7 @@
         output.getSession().setMode("ace/mode/diff");
         output.setReadOnly(true);
         output.gotoLine(1);
-        function clickBranch() {
+        function clickBranch(object) {
              var xmlHttpRequest = new XMLHttpRequest();
              xmlHttpRequest.onreadystatechange = function()
              {
@@ -76,7 +73,7 @@
            }
            xmlHttpRequest.open('POST','$BOW_TMPL_PATH$');
            xmlHttpRequest.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded');
-           xmlHttpRequest.send('');
+           xmlHttpRequest.send(object.textContent);
         }
     </script> 
 </body>
