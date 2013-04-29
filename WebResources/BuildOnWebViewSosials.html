@@ -57,6 +57,27 @@
         output.getSession().setMode("ace/mode/diff");
         output.setReadOnly(true);
         output.gotoLine(1);
+        function clickBranch() {
+             var xmlHttpRequest = new XMLHttpRequest();
+             xmlHttpRequest.onreadystatechange = function()
+             {
+                 var READYSTATE_COMPLETED = 4;
+                 var HTTP_STATUS_OK = 200;
+        /*
+                 console.log(xmlHttpRequest.readyState);
+                 console.log(xmlHttpRequest.status);
+        */
+               if( xmlHttpRequest.readyState == READYSTATE_COMPLETED
+                       && xmlHttpRequest.status == HTTP_STATUS_OK )
+               {
+                   output.setValue(xmlHttpRequest.responseText,1);
+                   output.gotoLine(1);
+               }
+           }
+           xmlHttpRequest.open('POST','$BOW_TMPL_PATH$');
+           xmlHttpRequest.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded');
+           xmlHttpRequest.send('');
+        }
     </script> 
 </body>
 </html>

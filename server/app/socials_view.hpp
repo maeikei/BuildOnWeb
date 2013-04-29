@@ -38,6 +38,7 @@ namespace BOW {
         bool operator() (const GitLogMeshNote &left) const;
     };
     typedef list<GitLogMeshNote> GitLogMeshList;
+    class GitWorker;
     class SosialView: public http::server_threadpool::ReplyView
     {
     public:
@@ -53,6 +54,7 @@ namespace BOW {
         const string category_;
         const string repo_;
         const string workspace_;
+        shared_ptr<GitWorker> git_;
         
         string left_;
         string right_;

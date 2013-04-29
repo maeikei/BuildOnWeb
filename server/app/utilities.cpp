@@ -11,7 +11,7 @@ namespace fs = boost::filesystem;
 
 string BOW::system_result(const string cmd)
 {
-//    std::cout << __func__ <<":cmd=<" <<  cmd << ">" << endl;
+    std::cout << __func__ <<":cmd=<" <<  cmd << ">" << endl;
     FILE *pipe = popen(cmd.c_str(), "r");
     std::string result;
     char buf[256] = {0};
@@ -22,6 +22,7 @@ string BOW::system_result(const string cmd)
         }
     }
     pclose(pipe);
+    std::cout << __func__ <<":result=<" <<  result << ">" << endl;
     return result;
 }
 

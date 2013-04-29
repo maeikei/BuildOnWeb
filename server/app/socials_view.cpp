@@ -1,6 +1,7 @@
 #include "resource.hpp"
 #include "reply_view.hpp"
 #include "source_view.hpp"
+#include "git_worker.hpp"
 #include "socials_view.hpp"
 #include "last_position.hpp"
 #include "utilities.hpp"
@@ -60,6 +61,7 @@ SosialView::SosialView(const string &uri,const string &username,const string &us
 ,category_(category)
 ,repo_(repo)
 ,workspace_(".temp/" + user_uid_ + "/" + category_ + "/" + repo_)
+,git_(new GitWorker(workspace_,user_uid_,category_+ "/" + repo_))
 ,left_("master")
 ,right_(user_uid_)
 ,env_show_commands_
@@ -147,6 +149,8 @@ std::map<std::string,std::string> SosialView::bodyVars(void)
     text2html(diff_html);
     ret.insert(pair<string,string>("$BOW_TMPL_GIT_DIFF$",diff_html));
     create_loginout(ret);
+    // replace javascript $BOW_TMPL_PATH$
+    ret.insert(pair<string,string>("$BOW_TMPL_PATH$",uri_));
     return ret;
 }
 
@@ -177,11 +181,10 @@ static const string strConstMasterStartNode("<circle cx=\"$cx$\" cy=\"$cy$\" r=\
                                       ");
 static const string strConstNormalNode("<circle cx=\"$cx$\" cy=\"$cy$\" r=\"5\" stroke=\"black\" stroke-width=\"2\"/>\n");
 static const string strConstLine("<line x1=\"$x1$\" y1=\"$y1$\" x2=\"$x2$\" y2=\"$y2$\" style=\"stroke:rgb(0,0,0);stroke-width:2\"/>");
-static const string strConstBranchStartNode("<a xlink:href=\"$href$\">\n\
-                                            <circle cx=\"$cx$\" cy=\"$cy$\" r=\"5\" stroke=\"black\" stroke-width=\"2\"/>\n\
-                                              <text x=\"$x$\" y=\"$y$\" font-size=\"10\" fill=\"blue\">$txt$</text>\n\
-                                            </a>\n\
-                                              ");
+static const string strConstBranchStartNode("<circle cx=\"$cx$\" cy=\"$cy$\" r=\"5\" stroke=\"black\" stroke-width=\"2\"/>\n\
+                                            <text x=\"$x$\" y=\"$y$\" font-size=\"10\" fill=\"blue\" onclick=\"clickBranch()\">\n\
+                                            $txt$</text>\n\
+                                            ");
 
 static const int iConstSeperateOfY = 50;
 static const int iConstSeperateOfX = 80;
@@ -461,19 +464,6 @@ void SosialView::reduceLogMesh(void)
 {
     for(auto it = git_log_mesh_.begin();it != git_log_mesh_.end();it++)
     {
-#if 0
-        for(auto it2 = it->second.begin();it2 != it->second.end();it2++)
-        {
-            if( it2 == it->second.begin())
-            {
-                continue;
-            }
-            if(false == isParentOfAny( it->first,*it2))
-            {
-                it2 = it->second.erase(it2);
-            }
-        }
-#endif
         auto it2 = it->second.begin();
         it2++;
         while(it2 != it->second.end())
