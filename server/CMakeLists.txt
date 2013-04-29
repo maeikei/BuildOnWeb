@@ -16,23 +16,23 @@ add_library(httpframework
   framework/request.hpp
   framework/request_handler.hpp
   framework/request_parser.hpp
-  framework/server.hpp
   framework/resource.hpp
+  framework/server.hpp
   ${framework_SRCS}
 )
 
 add_executable(BuildOnWeb
-  app/navi_view.hpp
-  app/source_view.hpp
-  app/directory_view.hpp
-  app/manual_view.hpp
-  app/last_position.hpp
-  app/redirect_view.hpp
-  app/socials_view.hpp
   app/default_view.hpp
-  app/repository_view.hpp
-  app/utilities.hpp
+  app/directory_view.hpp
   app/git_worker.hpp
+  app/last_position.hpp
+  app/manual_view.hpp
+  app/navi_view.hpp
+  app/redirect_view.hpp
+  app/repository_view.hpp
+  app/socials_view.hpp
+  app/source_view.hpp
+  app/utilities.hpp
   ${app_SRCS}
 )
 
