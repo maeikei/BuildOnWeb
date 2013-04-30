@@ -64,7 +64,7 @@ void SourceApp::post(const std::string &data, http::server_threadpool::reply& re
 
 const string strConstManualFormat
 (
- "<a href=\"/manual/$repo_$\">$repo_$</a>"
+ "<a href=\"/manual/$category_$/$repo_$\">$repo_$</a>"
  );
 const string strConstSocialsFormat
 (
@@ -202,6 +202,7 @@ std::map<std::string,std::string> SourceView::bodyVars(void)
     // replace manual link $BOW_TMPL_SOURCE_MANUAL$
     {
         std::string manual(strConstManualFormat);
+        boost::algorithm::replace_all(manual,"$category_$",category_);
         boost::algorithm::replace_all(manual,"$repo_$",repo_);
         ret.insert(pair<string,string>("$BOW_TMPL_SOURCE_MANUAL$",manual));
     }

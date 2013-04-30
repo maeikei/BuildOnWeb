@@ -29,12 +29,13 @@ namespace BOW {
     class ManualView: public http::server_threadpool::ReplyView
     {
     public:
-        ManualView(const string &repo);
+        ManualView(const string &category,const string &repo);
         virtual ~ManualView();
     protected:
         virtual bool readBody(const std::string &doc_root,std::string &contents);
         virtual std::map<std::string,std::string> bodyVars(void);
     private:
+        const string category_;
         const string repo_;
     };
 }

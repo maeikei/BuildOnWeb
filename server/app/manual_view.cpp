@@ -39,12 +39,18 @@ void ManualApp::create(const std::string &uri,const std::string &remote)
     {
         return;
     }
+    std::string category(results.front());
+    results.pop_front();
+    if(results.empty())
+    {
+        return;
+    }
     std::string repo(results.front());
 #ifdef DEBUG_APP_PARAM
 	std::cout << typeid(this).name() << ":" << __func__ << ":manual=<" << manual << ">" << std::endl;
 	std::cout << typeid(this).name() << ":" << __func__ << ":repo=<" << repo << ">" << std::endl;
 #endif
-    reply_ = std::shared_ptr<http::server_threadpool::ReplyView>(new ManualView(repo));
+    reply_ = std::shared_ptr<http::server_threadpool::ReplyView>(new ManualView(category,repo));
 }
 void ManualApp::get(const std::string &doc_root, http::server_threadpool::reply& rep)
 {
@@ -52,8 +58,9 @@ void ManualApp::get(const std::string &doc_root, http::server_threadpool::reply&
 }
 
 
-ManualView::ManualView(const string &repo)
+ManualView::ManualView(const string &category,const string &repo)
 :ReplyView()
+,category_(category)
 ,repo_(repo)
 {
 }
@@ -89,7 +96,7 @@ std::map<std::string,std::string> ManualView::bodyVars(void)
 {
     std::map<std::string,std::string> ret;
     // replace real manual
-    ret.insert(pair<string,string>("$BOW_TMPL_REAL_MAN$","/man/" + repo_ + ".html"));
+    ret.insert(pair<string,string>("$BOW_TMPL_REAL_MAN$","/man/" + category_ + "/" + repo_ + ".html"));
     return ret;
 }
 
