@@ -13,6 +13,7 @@ namespace BOW {
     void parseUri(const string &uri,string &user );
     void parseUri(const string &uri,string &user,string &cate);
     void parseUri(const string &uri,string &user,string &cate,string & repo);
+    void parseUri(const string &uri,string &user,string &cate,string & repo,list<string> &path);
     void parseUri(const string &uri,string &user,string &cate,string & repo,string &type);
     void parseUri(const string &uri,string &user,string &cate,string & repo,string &type,list<string> &path );
     struct number

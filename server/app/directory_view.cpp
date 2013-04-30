@@ -3,6 +3,7 @@
 #include "git_worker.hpp"
 #include "directory_view.hpp"
 #include "last_position.hpp"
+#include "utilities.hpp"
 using namespace BOW;
 
 #include <boost/filesystem.hpp>
@@ -19,11 +20,32 @@ DirecoryApp::DirecoryApp(void)
 DirecoryApp::~ DirecoryApp()
 {
 }
-void DirecoryApp::create(const std::string &uri,const std::string &user_uid)
+void DirecoryApp::create(const std::string &uri,const std::string &remote)
 {
+#ifdef DEBUG_APP_PARAM
+	std::cout << typeid(this).name() << ":" << __func__ << ":uri=<" << uri << ">" << std::endl;
+#endif
+    std::string username;
+    std::string category;
+    std::string repo;
+    list<string> path;
+    parseUri(uri,username,category,repo,path);
+    string use_id(username);
+    if("guest"==username)
+    {
+        use_id += "_from_";
+        use_id += boost::algorithm::replace_all_copy(remote,".","_");
+    }
+#ifdef DEBUG_APP_PARAM
+	std::cout << typeid(this).name() << ":" << __func__ << ":username=<" << username << ">" << std::endl;
+	std::cout << typeid(this).name() << ":" << __func__ << ":category=<" << category << ">" << std::endl;
+	std::cout << typeid(this).name() << ":" << __func__ << ":repo=<" << repo << ">" << std::endl;
+#endif
+    reply_ = std::shared_ptr<http::server_threadpool::ReplyView>(new DirecoryView(username,use_id,category,repo,path));
 }
 void DirecoryApp::get(const std::string &doc_root, http::server_threadpool::reply& rep)
 {
+    reply_->responseGet(doc_root,rep);
 }
 
 
@@ -156,7 +178,15 @@ void DirecoryView::create_table(std::map<std::string,std::string> &replace)
         }
         else if(fs::is_regular_file(sub))
         {
-            tr += "<td class=\"icon\"><span class=\"mini-icon mini-icon-text-file\"></span></td>\n";
+            if(".gitmodules" == sub_name)
+            {
+                continue;
+            }
+            if(".git" == sub_name)
+            {
+                continue;
+            }
+           tr += "<td class=\"icon\"><span class=\"mini-icon mini-icon-text-file\"></span></td>\n";
         }
         else
         {
@@ -174,7 +204,7 @@ void DirecoryView::create_table(std::map<std::string,std::string> &replace)
         }
         if(false == relative.empty())
         {
-            tr +=  "/" + relative;
+            tr += relative;
         }
         tr +=  "/" + sub_name;
         tr +=  "\" ";

@@ -116,6 +116,43 @@ void BOW::parseUri(const string &uri,string &user,string &cate,string & repo)
     }
     repo = results.front();
 }
+
+void BOW::parseUri(const string &uri,string &user,string &cate,string & repo,list<string> &path)
+{
+    std::list<std::string> results;
+    boost::split(results, uri, boost::is_any_of("/"));
+    results.pop_front();
+    if(results.empty())
+    {
+        return;
+    }
+    results.pop_front();
+    if(results.empty())
+    {
+        return;
+    }
+    user = results.front();
+    results.pop_front();
+    if(results.empty())
+    {
+        return;
+    }
+    cate = results.front();
+    results.pop_front();
+    if(results.empty())
+    {
+        return;
+    }
+    repo = results.front();
+    results.pop_front();
+    if(results.empty())
+    {
+        return;
+    }
+    path = results;
+}
+
+
 void BOW::parseUri(const string &uri,string &user,string &cate,string & repo,string &type)
 {
     std::list<std::string> results;

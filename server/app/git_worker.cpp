@@ -25,6 +25,8 @@ GitWorker::GitWorker(const string &wc,const string & branch,const string &repo)
     "rm -rf " + workspace_,
     "mkdir -p " + workspace_,
     "git clone -q " + git_repositories_+ "/" + repo_path_ + ".git " + workspace_,
+    "cd " + workspace_ + "&& git submodule init && git submodule update",
+    "cd " + workspace_ + "&& git submodule foreach git pull origin master",
     "cd " + workspace_ + "&& git branch " + branch_,
     "cd " + workspace_ + "&& git push --set-upstream origin " + branch_,
     "cd " + workspace_ + "&& git branch ",
@@ -56,6 +58,8 @@ void GitWorker::createWorkSpace(void)
     system_result("mkdir -p " + workspace_);
     string cmd("git clone -q -b " + branch_ + " " + git_repositories_+ "/" + repo_path_+ ".git " + workspace_);
     string result = system_result(cmd);
+    system_result("cd " + workspace_ + "&& git submodule init && git submodule update");
+    system_result("cd " + workspace_ + "&& git submodule foreach git pull origin master");
     result = system_result("cd " + workspace_ + "&& git branch | grep " + branch_);
     if(false == result.empty())
     {

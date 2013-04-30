@@ -274,7 +274,7 @@ static void searchRepo(const string & category)
 static const map<string,vector<string>> & buildNaviTree(void)
 {
     searchRepo("ruby");
-    searchRepo("c_cxx");
+//    searchRepo("c_cxx");
     searchRepo("c");
     searchRepo("cxx");
     return mapNaviTree;
