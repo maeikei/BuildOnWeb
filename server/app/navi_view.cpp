@@ -129,10 +129,7 @@ void NaviView::create_table(std::map<std::string,std::string> &replace)
         if(true == category_.empty())
         {
             string tr("");
-            if(iConstColNum_ == counter)
-            {
-                tr += "<tr>\n";
-            }
+            tr += "<tr>\n";
             tr +=  "<td class=\"content\">";
             tr +=  "<a href=\"/users";
             tr +=  "/" + user_;
@@ -140,11 +137,7 @@ void NaviView::create_table(std::map<std::string,std::string> &replace)
             tr +=  "\">";
             tr +=  it->first;
             tr += "</a></td>\n";
-            if(0 == --counter )
-            {
-                tr += "</tr>\n";
-                counter = iConstColNum_;
-            }
+            tr += "</tr>\n";
             table_navi += tr;
             continue;
         }
