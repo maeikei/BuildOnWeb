@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Build On Web</title>
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/layout_dirctory.css">
+</head>
+<body>
+    <div id="Container">
+	<div id="Header">
+            <div id="HeaderTopLevel">
+                <div id ="SearchText">
+                    <form accept-charset="UTF-8" action="/search" id="top_search_form" method="get">
+                        <input type="text" name="q" id="js-command-bar-field" placeholder="Search or type a command" tabindex="1" data-username="$BOW_TMPL_USER$">
+                    </form>
+                </div>
+                <div id ="UserInfo">
+                    <ul>
+                        <li>
+                            <a href="/users/$BOW_TMPL_USER$">$BOW_TMPL_USER$</a>
+                        </li>
+                        <li>
+                            $BOW_TMPL_USER_LOGINOUT$
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div id="HeaderBottumLevel">
+            </div>
+        </div>
+	<div id="ContentFrame">
+            <div id="SourcePath">$BOW_TMPL_SOURCE_PATH$</div>
+            <div id="TableViewFrame">                
+                <table id="SourceListTable" cellpadding="0" cellspacing="0">
+                    <thead></thead>
+                    <tbody>
+                        $BOW_TMPL_DIRECTORY_TABLE$
+                    </tbody>
+                </table>
+            </div>
+	</div>   
+        <div id="Footer">
+            This site is created by Ma Eikei. All sources is hosted on <a href="https://github.com/maeikei/BuildOnWeb">github</a><br>
+            Any question please contract me. <a href="mailto:maeikei@gmail.com">maeikei@gmail.com</a>
+        </div>
+    </div>
+</body>
+</html>

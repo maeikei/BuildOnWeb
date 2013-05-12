@@ -1,0 +1,74 @@
+body 
+{ 
+    font-family:Verdana; 
+    font-size:14px; margin:0;
+}
+#Container
+{
+    width:96%;
+    margin: 0 auto -30px;
+}
+#Header
+{ 
+    height:50px; 
+/*    border:1px solid blue;*/
+}
+#HeaderTopLevel
+{ 
+    height:40%; 
+    width:98%;
+/*    border:1px solid blue;*/
+}
+#HeaderBottumLevel
+{ 
+    height:40%; 
+    width:98%;
+}
+
+#ContentFrame
+{ 
+    height:450px; 
+    margin-bottom:5px;
+/*    border:1px solid blue;*/
+}
+#Footer {
+    height: 50px;
+/*    border:1px solid blue;*/
+}
+
+
+
+#SearchText
+{
+    height:95%; 
+    float :left;
+    width :45%;
+}
+#top_search_form
+{
+    height:90%;
+    width :90%;    
+    margin:0px auto;
+}
+#UserInfo
+{
+    float :right; 
+    height:95%;
+    width :45%;    
+}
+#UserInfo ul
+{
+    float :right; 
+    list-style-type: none;
+    margin:0px auto;
+}
+
+
+#UserInfo ul li
+{
+    float :left;
+    margin-right: 5px;
+    text-align: center;
+}
+
+

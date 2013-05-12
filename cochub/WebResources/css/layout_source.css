@@ -1,0 +1,78 @@
+/*
+ top 3 in ContentFrame
+*/
+#SourceViewFrame
+{
+    float :top; 
+    height:75%; 
+    width :96%;
+}
+#OutputInfo
+{
+    float :top;
+    height:5%;
+    width :96%;
+}
+#OutPutFrame
+{
+    float :top; 
+    height:18%; 
+    width :96%;
+    position: relative;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border:2px solid gray;
+}
+
+/*
+ top 2 in SourceViewFrame
+*/
+#SourceInfo 
+{
+    float :left; 
+    height:9%;
+    width :100%;
+/*    border:1px solid blue;*/
+}
+
+#SourceView
+{
+    float :left; 
+    height:90%; 
+    width :100%;    
+    position: relative;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border:2px solid gray;
+}
+
+/*
+ top 3 in SourceInfo
+*/
+#SourcePath 
+{
+    float :left; 
+    height:90%;
+    width :50%;
+/*    border:1px solid red;*/
+}
+#SourceSosials
+{
+    float :right; 
+    height:90%;
+    width :20%;    
+    text-align: right;
+/*    border:1px solid red;*/
+}
+#SourceManual
+{
+    float :right; 
+    height:90%;
+    width :20%;
+    text-align: right;
+/*    border:1px solid red;*/
+}
