@@ -17,7 +17,7 @@ static BOW::SettingApp setting_app;
 const std::vector<routepair>
     request_handler::route_
     {
-        {"^/users/\\w+/setting",setting_app},
+        {"^/users/\\w+/setting/.*",setting_app},
         {".*",default_app},
 
     };

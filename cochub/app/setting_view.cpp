@@ -30,7 +30,9 @@ ReplyViewPtr SettingApp::create(const std::string &uri,const std::string &remote
 	std::cout << typeid(this).name() << ":" << __func__ << ":uri=<" << uri << ">" << std::endl;
 #endif
     std::string username;
-    parseUri(uri,username);
+    std::string setting;
+    std::string project;
+    parseUri(uri,username,setting,project);
     string use_id(username);
     if("guest"==username)
     {
@@ -39,30 +41,22 @@ ReplyViewPtr SettingApp::create(const std::string &uri,const std::string &remote
     }
 #ifdef DEBUG_APP_PARAM
 	std::cout << typeid(this).name() << ":" << __func__ << ":username=<" << username << ">" << std::endl;
+	std::cout << typeid(this).name() << ":" << __func__ << ":setting=<" << setting << ">" << std::endl;
+	std::cout << typeid(this).name() << ":" << __func__ << ":project=<" << project << ">" << std::endl;
 #endif
-    return ReplyViewPtr(new SettingView(uri,username,use_id));
+    return ReplyViewPtr(new SettingView(uri,username,use_id,project));
 }
 
 //#define DEBUG_PARAM
-#define DEBUG_CONTENT
-
-const string strConstManualFormat
-(
- "<a href=\"/manual/$category_$/$repo_$\">$repo_$</a>"
- );
-const string strConstSocialsFormat
-(
- "<a href=\"/users/$user_$/$category_$/$repo_$/?socials?\">Socials</a>"
- );
+//#define DEBUG_CONTENT
 
 
-
-
-SettingView::SettingView(const string &uri,const string &username,const std::string &user_uid)
+SettingView::SettingView(const string &uri,const string &username,const std::string &user_uid,const std::string &project)
 :ReplyView()
 ,uri_(uri)
 ,user_(username)
 ,user_uid_(user_uid)
+,project_(project)
 ,workspace_(".temp/" + user_uid_)
 {
 #ifdef DEBUG_PARAM
@@ -74,8 +68,6 @@ SettingView::SettingView(const string &uri,const string &username,const std::str
 SettingView::~ SettingView()
 {
 }
-
-    
     
 bool SettingView::readBody(const string &doc_root,string &contents)
 {
@@ -105,11 +97,24 @@ std::map<std::string,std::string> SettingView::bodyVars(void)
     // replace users
     ret.insert(pair<string,string>("$BOW_TMPL_USER$",user_));
     
-    // replace javascript $BOW_TMPL_PATH$
+    // replace web socket $BOW_TMPL_WS_PATH$
     {
-        ret.insert(pair<string,string>("$BOW_TMPL_PATH$",uri_));
+        ret.insert(pair<string,string>("$BOW_TMPL_WS_PATH$",uri_));
     }
-   
+
+    // replace javascript $BOW_TMPL_PROJECT_NAME$
+    {
+        if( "+" == project_)
+        {
+            ret.insert(pair<string,string>("$BOW_TMPL_PROJECT_NAME$",""));
+        }
+        else
+        {
+            ret.insert(pair<string,string>("$BOW_TMPL_PROJECT_NAME$",project_));            
+        }
+    }
+
+    
     // create output
     this->create_output(ret);
     // replace login/out.

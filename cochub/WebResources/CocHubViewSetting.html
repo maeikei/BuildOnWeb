@@ -18,7 +18,9 @@
                 <div id ="UserInfo">
                     <ul>
                         <li>
-                            <a href="/users/$BOW_TMPL_USER$">$BOW_TMPL_USER$</a>
+                            <a href="/users/$BOW_TMPL_USER$">
+                                $BOW_TMPL_USER$
+                            </a>
                         </li>
                         <li>
                             $BOW_TMPL_USER_LOGINOUT$
@@ -36,15 +38,15 @@
                         <label>
                             Repository of your project
                         </label>
-                        <input type="text" id="ProjectRepoUri"/>
-                        <input type="button" value="Auto Detect"/>
+                        <input type="text" id="ProjectRepoUri" onchange="ProjectRepoUriChanged(this.value)"/>
                         <canvas id="ProjectAutoDetectCanvas" width="20" height="20"></canvas>
                         <label>
                             branchs
                         </label>
                         <select>
-                            <option value = "1">-</option>
+                            $BOW_TMPL_PROJECT_BRANCHES$
                         </select>
+                        <input type="text" id="ProjectName" value="$BOW_TMPL_PROJECT_NAME$"/>
                     </div>
                 </div>
                 <div id="ProjectProperty">
@@ -69,6 +71,18 @@
         output.setTheme("ace/theme/terminal");
         output.getSession().setMode("ace/mode/text");
         output.setReadOnly(true);
+    </script> 
+    <script type="text/javascript">
+        var ws = new WebSocket("$BOW_TMPL_WS_PATH$");
+        function ProjectRepoUriChanged(x){
+            if(ws.readyState == 1) {
+                ws.send(x);
+            }
+        }
+        ws.onmessage = function(e) {
+            
+        }
+        ws.close();
     </script> 
 </body>
 </html>

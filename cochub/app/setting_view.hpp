@@ -31,7 +31,7 @@ namespace BOW {
     class SettingView: public http::server_threadpool::ReplyView
     {
     public:
-        SettingView(const string &uri,const string &username,const std::string &user_uid);
+        SettingView(const string &uri,const string &username,const std::string &user_uid,const std::string &project);
         virtual ~ SettingView();
     protected:
         virtual bool readBody(const std::string &doc_root,std::string &contents);
@@ -47,6 +47,7 @@ namespace BOW {
         const string uri_;
         const string user_;
         const string user_uid_;
+        const string project_;
         const string workspace_;
         shared_ptr<GitWorker> git_;
     };
