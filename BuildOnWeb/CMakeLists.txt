@@ -1,25 +1,10 @@
 include_directories(app)
-include_directories(framework)
+include_directories(${PROJECT_SOURCE_DIR}/httpframework)
 link_directories(${CMAKE_BINARY_DIR}/3rdpart/boost/lib)
 link_directories(${CMAKE_BINARY_DIR}/3rdpart/uri/lib)
 
-aux_source_directory(framework framework_SRCS)
 aux_source_directory(app app_SRCS)
 
-
-add_library(httpframework 
-  framework/connection.hpp
-  framework/header.hpp
-  framework/mime_types.hpp
-  framework/reply.hpp
-  framework/reply_view.hpp
-  framework/request.hpp
-  framework/request_handler.hpp
-  framework/request_parser.hpp
-  framework/resource.hpp
-  framework/server.hpp
-  ${framework_SRCS}
-)
 
 add_executable(BuildOnWeb
   app/default_view.hpp

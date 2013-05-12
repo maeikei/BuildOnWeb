@@ -31,6 +31,6 @@ endif(NOT WIN32)
 
 
 add_subdirectory(3rdpart_build)
-add_subdirectory(server)
+add_subdirectory(httpframework)
+add_subdirectory(BuildOnWeb)
 add_subdirectory(WebResources)
-#add_subdirectory(server-netlib)

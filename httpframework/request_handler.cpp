@@ -20,11 +20,6 @@
 
 #include "resource.hpp"
 #include "reply_view.hpp"
-#include "navi_view.hpp"
-#include "source_view.hpp"
-#include "directory_view.hpp"
-#include "manual_view.hpp"
-#include "redirect_view.hpp"
 
 #include <boost/filesystem.hpp>
 namespace fs = boost::filesystem;
