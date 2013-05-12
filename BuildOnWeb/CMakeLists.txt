@@ -1,3 +1,5 @@
+add_subdirectory(WebResources)
+
 include_directories(app)
 include_directories(${PROJECT_SOURCE_DIR}/httpframework)
 link_directories(${CMAKE_BINARY_DIR}/3rdpart/boost/lib)
