@@ -20,7 +20,7 @@ DirecoryApp::DirecoryApp(void)
 DirecoryApp::~ DirecoryApp()
 {
 }
-void DirecoryApp::create(const std::string &uri,const std::string &remote)
+ReplyViewPtr DirecoryApp::create(const std::string &uri,const std::string &remote)
 {
 #ifdef DEBUG_APP_PARAM
 	std::cout << typeid(this).name() << ":" << __func__ << ":uri=<" << uri << ">" << std::endl;
@@ -41,11 +41,7 @@ void DirecoryApp::create(const std::string &uri,const std::string &remote)
 	std::cout << typeid(this).name() << ":" << __func__ << ":category=<" << category << ">" << std::endl;
 	std::cout << typeid(this).name() << ":" << __func__ << ":repo=<" << repo << ">" << std::endl;
 #endif
-    reply_ = std::shared_ptr<http::server_threadpool::ReplyView>(new DirecoryView(username,use_id,category,repo,path));
-}
-void DirecoryApp::get(const std::string &doc_root, http::server_threadpool::reply& rep)
-{
-    reply_->responseGet(doc_root,rep);
+    return ReplyViewPtr(new DirecoryView(username,use_id,category,repo,path));
 }
 
 

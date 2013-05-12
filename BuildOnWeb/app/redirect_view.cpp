@@ -21,7 +21,7 @@ RedirectApp::RedirectApp(void)
 RedirectApp::~ RedirectApp()
 {
 }
-void RedirectApp::create(const std::string &uri,const std::string &remote)
+ReplyViewPtr RedirectApp::create(const std::string &uri,const std::string &remote)
 {
 #ifdef DEBUG_APP_PARAM
 	std::cout << typeid(this).name() << ":" << __func__ << ":uri=<" << uri << ">" << std::endl;
@@ -34,11 +34,7 @@ void RedirectApp::create(const std::string &uri,const std::string &remote)
         user_uid += "_from_";
         user_uid += boost::algorithm::replace_all_copy(remote,".","_");
     }
-    reply_ = std::shared_ptr<http::server_threadpool::ReplyView>(new RedirectView(username,user_uid));
-}
-void RedirectApp::get(const std::string &doc_root, http::server_threadpool::reply& rep)
-{
-    reply_->responseGet(doc_root,rep);
+    return ReplyViewPtr(new RedirectView(username,user_uid));
 }
 
 //#define DEBUG_CONTENT

@@ -21,14 +21,12 @@ class resource
 public:
     resource(void);
     virtual ~resource(){}
-    virtual void create(const std::string &uri,const std::string &user_uid) = 0;
+    virtual std::shared_ptr<ReplyView> create(const std::string &uri,const std::string &user_uid) = 0;
 //http method
-    virtual void get(const std::string &doc_root, reply& rep){}
-    virtual void post(const std::string &data, reply& rep){}
-    virtual void put(const std::string &doc_root, reply& rep){}
-    virtual void remove(const std::string &doc_root, reply& rep){}
-protected:
-    std::shared_ptr<ReplyView> reply_;
+    void get(std::shared_ptr<ReplyView>,const std::string &doc_root, reply& rep);
+    void post(std::shared_ptr<ReplyView>,const std::string &data, reply& rep);
+    void put(std::shared_ptr<ReplyView>,const std::string &doc_root, reply& rep);
+    void remove(std::shared_ptr<ReplyView>,const std::string &doc_root, reply& rep);
 };
 
 } // namespace server_threadpool

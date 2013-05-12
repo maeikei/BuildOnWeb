@@ -22,7 +22,7 @@ RepositoryApp::RepositoryApp(void)
 RepositoryApp::~ RepositoryApp()
 {
 }
-void RepositoryApp::create(const std::string &uri,const std::string &remote)
+ReplyViewPtr RepositoryApp::create(const std::string &uri,const std::string &remote)
 {
 #ifdef DEBUG_APP_PARAM
 	std::cout << typeid(this).name() << ":" << __func__ << ":uri=<" << uri << ">" << std::endl;
@@ -37,11 +37,7 @@ void RepositoryApp::create(const std::string &uri,const std::string &remote)
         use_id += "_from_";
         use_id += boost::algorithm::replace_all_copy(remote,".","_");
     }
-    reply_ = std::shared_ptr<http::server_threadpool::ReplyView>(new RepositoryView(username,use_id,category,repo));
-}
-void RepositoryApp::get(const std::string &doc_root, http::server_threadpool::reply& rep)
-{
-    reply_->responseGet(doc_root,rep);
+    return ReplyViewPtr(new RepositoryView(username,use_id,category,repo));
 }
 
 //#define DEBUG_CONTENT

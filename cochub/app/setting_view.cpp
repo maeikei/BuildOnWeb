@@ -15,7 +15,7 @@ namespace fs = boost::filesystem;
 
 
 
-//#define DEBUG_APP_PARAM
+#define DEBUG_APP_PARAM
 
 
 SettingApp::SettingApp(void)
@@ -24,7 +24,7 @@ SettingApp::SettingApp(void)
 SettingApp::~ SettingApp()
 {
 }
-void SettingApp::create(const std::string &uri,const std::string &remote)
+ReplyViewPtr SettingApp::create(const std::string &uri,const std::string &remote)
 {
 #ifdef DEBUG_APP_PARAM
 	std::cout << typeid(this).name() << ":" << __func__ << ":uri=<" << uri << ">" << std::endl;
@@ -39,20 +39,8 @@ void SettingApp::create(const std::string &uri,const std::string &remote)
     }
 #ifdef DEBUG_APP_PARAM
 	std::cout << typeid(this).name() << ":" << __func__ << ":username=<" << username << ">" << std::endl;
-	std::cout << typeid(this).name() << ":" << __func__ << ":category=<" << category << ">" << std::endl;
-	std::cout << typeid(this).name() << ":" << __func__ << ":repo=<" << repo << ">" << std::endl;
-	std::cout << typeid(this).name() << ":" << __func__ << ":type=<" << type << ">" << std::endl;
 #endif
-    reply_ = std::shared_ptr<http::server_threadpool::ReplyView>(new SettingView(uri,username,use_id));
-}
-void SettingApp::get(const std::string &doc_root, http::server_threadpool::reply& rep)
-{
-    reply_->responseGet(doc_root,rep);
-}
-void SettingApp::post(const std::string &data, http::server_threadpool::reply& rep)
-{
-    reply_->post(data);
-    reply_->responsePost(rep);
+    return ReplyViewPtr(new SettingView(uri,username,use_id));
 }
 
 //#define DEBUG_PARAM
@@ -75,6 +63,7 @@ SettingView::SettingView(const string &uri,const string &username,const std::str
 ,uri_(uri)
 ,user_(username)
 ,user_uid_(user_uid)
+,workspace_(".temp/" + user_uid_)
 {
 #ifdef DEBUG_PARAM
     std::cout << __func__ <<":username=" <<  username << endl;
@@ -90,123 +79,44 @@ SettingView::~ SettingView()
     
 bool SettingView::readBody(const string &doc_root,string &contents)
 {
-    std::string source_path(workspace_);
-    for(auto it = path_.begin();it != path_.end();it++)
-    {
-        source_path.append( "/" + *it);
-    }
-#ifdef DEBUG_CONTENT
-    std::cout << "source_path=" << source_path << std::endl;
-#endif
-    fs::path src_path(source_path);
     // Open the template file to add to contents.
-    {
-        std::string full_path = doc_root + "/BuildOnWebViewSource.html";
+    std::string full_path = doc_root + "/CocHubViewSetting.html";
 #ifdef DEBUG_CONTENT
-        std::cout << "full_path=" << full_path << std::endl;
+    std::cout << "full_path=" << full_path << std::endl;
 #endif
-        std::ifstream is(full_path.c_str(), std::ios::in | std::ios::binary);
-        if (!is)
-        {
-            return false;
-        }
-        // Fill out the reply to be sent to the client.
-        char buf[512];
-        while (is.read(buf, sizeof(buf)).gcount() > 0) {
-            contents.append(buf, is.gcount());
-        }
-        is.close();
-    }
-    
-    string lastpath(category_ + "/" +repo_ + "/edit");
-    for(auto it = path_.begin();it != path_.end();it++)
+    std::ifstream is(full_path.c_str(), std::ios::in | std::ios::binary);
+    if (!is)
     {
-        lastpath.append( "/" + *it);
+        return false;
     }
-    LastPostion last(user_uid_);
-    last.set(lastpath);
+    // Fill out the reply to be sent to the client.
+    char buf[512];
+    while (is.read(buf, sizeof(buf)).gcount() > 0) {
+        contents.append(buf, is.gcount());
+    }
+    is.close();
     return true;
 }
 
-std::map<std::string,std::string> SourceView::bodyVars(void)
+std::map<std::string,std::string> SettingView::bodyVars(void)
 {
     std::map<std::string,std::string> ret;
 
     // replace users
     ret.insert(pair<string,string>("$BOW_TMPL_USER$",user_));
     
-    // replace manual link $BOW_TMPL_SOURCE_SOSAILS$
-    {
-        std::string socials(strConstSocialsFormat);
-        boost::algorithm::replace_all(socials,"$user_$",user_);
-        boost::algorithm::replace_all(socials,"$category_$",category_);
-        boost::algorithm::replace_all(socials,"$repo_$",repo_);
-        ret.insert(pair<string,string>("$BOW_TMPL_SOURCE_SOSAILS$",socials));
-    }
-    
-    // replace manual link $BOW_TMPL_SOURCE_MANUAL$
-    {
-        std::string manual(strConstManualFormat);
-        boost::algorithm::replace_all(manual,"$category_$",category_);
-        boost::algorithm::replace_all(manual,"$repo_$",repo_);
-        ret.insert(pair<string,string>("$BOW_TMPL_SOURCE_MANUAL$",manual));
-    }
     // replace javascript $BOW_TMPL_PATH$
     {
         ret.insert(pair<string,string>("$BOW_TMPL_PATH$",uri_));
     }
    
-    // create source 
-    this->create_source(ret);
-    // create outpu
+    // create output
     this->create_output(ret);
-    // replace navi path
-    this->create_source_path(ret);
-    // replace navi path
-    this->create_source_path(ret);
     // replace login/out.
     this->create_loginout(ret);
     return ret;
 }
 
-void SettingView::create_source(std::map<std::string,std::string> &replace)
-{
-    std::string source_path(workspace_);
-    for(auto it = path_.begin();it != path_.end();it++)
-    {
-        source_path.append( "/" + *it);
-    }
-    // replace source & file extension type
-    string source;
-    std::ifstream isf(source_path.c_str(), std::ios::in | std::ios::binary);
-    if (isf)
-    {
-        // Fill out the reply to be sent to the client.
-        char buf[512];
-        while (isf.read(buf, sizeof(buf)).gcount() > 0) {
-            source.append(buf, isf.gcount());
-        }
-    }
-    text2html(source);
-    replace.insert(pair<string,string>("$BOW_TMPL_SOURCE$",source));
-    string mode("c_cpp");
-    const fs::path fs_path(source_path);
-    {
-        auto it = extensions_.find( fs_path.extension().string());
-        if(it != extensions_.end())
-        {
-            mode = it->second;
-        }
-    }
-    {
-        auto it = names_.find( fs_path.filename().string());
-        if(it != names_.end())
-        {
-            mode = it->second;
-        }
-    }
-    replace.insert(pair<string,string>("$BOW_TMPL_TYPE$",mode));
-}
 void SettingView::create_output(std::map<std::string,std::string> &replace)
 {
     // replace output
@@ -216,6 +126,7 @@ void SettingView::create_output(std::map<std::string,std::string> &replace)
 }
 void SettingView::read_output(string &output)
 {
+#if 0
     // program run result
     {
         std::ifstream isf(output_.c_str(), std::ios::in | std::ios::binary);
@@ -244,61 +155,9 @@ void SettingView::read_output(string &output)
         }
     }
     output += "---------build log end----------\n";
+#endif
 }
     
-void SettingView::create_source_path(std::map<std::string,std::string> &replace)
-{
-    string href("/users");
-    std::string path;
-// user_
-    href += "/" + user_;
-    path += "<a href=\"";
-    path += href;
-    path += "\">";
-    path += user_;
-    path += "</a>";
-// category_
-    path += "<span>/</span>";
-    href += "/" + category_;
-    path += "<a href=\"";
-    path += href;
-    path += "\">";
-    path += category_;
-    path += "</a>";
-// repo_
-    path += "<span>/</span>";
-    href += "/" + repo_;
-    path += "<a href=\"";
-    path += href;
-    path += "\">";
-    path += repo_;
-    path += "</a>";
-    
-    string href_last(href+"/edit");
-    size_t icounter = 0;
-    const size_t path_size = path_.size();
-// add remain paths.
-    for(auto it = path_.begin();it != path_.end();it++)
-    {
-        path += "<span>/</span>";
-        // path
-        href += "/" + *it;
-        href_last += "/" + *it;
-        path += "<a href=\"";
-        if( path_size -1 == icounter++)
-        {
-            path += href_last;
-        }
-        else
-        {
-            path += href;
-        }
-        path += "\">";
-        path += *it;
-        path += "</a>";        
-    }
-    replace.insert(pair<string,string>("$BOW_TMPL_SOURCE_PATH$",path));
-}
 
 static string strConstLogin =
     "<a href=\"/login.php\" data-method=\"post\" id=\"login\">login</a>";
@@ -322,37 +181,6 @@ void SettingView::create_loginout(std::map<std::string,std::string> &replace)
     
 void SettingView::post(const std::string &data)
 {
-    std::string source_path(workspace_);
-    for(auto it = path_.begin();it != path_.end();it++)
-    {
-        source_path.append( "/" + *it);
-    }
-    fs::path sourefile(source_path);
-    if( not fs::exists(sourefile) )
-    {
-        // new files.
-    }
-    else
-    {
-        string source_replaced(data);
-        html2text(source_replaced);
-        std::ofstream ofs;
-        ofs.open( source_path );
-        ofs << source_replaced;
-        ofs.close();
-    }
-    for_each(_env_commit_commands.begin(),  _env_commit_commands.end(),
-             [](const string &cmd)
-             {
-                 BOW::system_result(cmd);
-             }
-             );
-    for_each(env_build_commands_.begin(),  env_build_commands_.end(),
-             [](const string &cmd)
-             {
-                 BOW::system_result(cmd);
-             }
-             );
 }
 bool SettingView::readPostReply(std::string &contents)
 {

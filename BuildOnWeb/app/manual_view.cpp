@@ -21,7 +21,7 @@ ManualApp::ManualApp(void)
 ManualApp::~ ManualApp()
 {
 }
-void ManualApp::create(const std::string &uri,const std::string &remote)
+ReplyViewPtr ManualApp::create(const std::string &uri,const std::string &remote)
 {
 #ifdef DEBUG_APP_PARAM
 	std::cout << typeid(this).name() << ":" << __func__ << ":uri=<" << uri << ">" << std::endl;
@@ -50,11 +50,7 @@ void ManualApp::create(const std::string &uri,const std::string &remote)
 	std::cout << typeid(this).name() << ":" << __func__ << ":manual=<" << manual << ">" << std::endl;
 	std::cout << typeid(this).name() << ":" << __func__ << ":repo=<" << repo << ">" << std::endl;
 #endif
-    reply_ = std::shared_ptr<http::server_threadpool::ReplyView>(new ManualView(category,repo));
-}
-void ManualApp::get(const std::string &doc_root, http::server_threadpool::reply& rep)
-{
-    reply_->responseGet(doc_root,rep);
+    return  ReplyViewPtr(new ManualView(category,repo));
 }
 
 

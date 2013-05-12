@@ -104,14 +104,14 @@ void request_handler::handle_request(const request& req, reply& rep)
             std::cout << "match req.uri=<" << req.uri << ">" << std::endl;
             std::cout << "match app name =<" << typeid(it->second).name() << ">" << std::endl;
 #endif
-            it->second.create(req.uri,remote_);
+            std::shared_ptr<ReplyView> reply = it->second.create(req.uri,remote_);
             if( "GET" == req.method || "get" == req.method )
             {
-                it->second.get(doc_root_, rep);
+                it->second.get(reply,doc_root_, rep);
             }
             if( "POST" == req.method || "post" == req.method )
             {
-                it->second.post(req.data, rep);
+                it->second.post(reply,req.data, rep);
             }
             break;
         }

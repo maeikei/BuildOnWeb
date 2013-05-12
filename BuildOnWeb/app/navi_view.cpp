@@ -21,7 +21,7 @@ NaviApp::NaviApp(void)
 NaviApp::~ NaviApp()
 {
 }
-void NaviApp::create(const std::string &uri,const std::string &remote)
+ReplyViewPtr NaviApp::create(const std::string &uri,const std::string &remote)
 {
 #ifdef DEBUG_APP_PARAM
 	std::cout << typeid(this).name() << ":" << __func__ << ":uri=<" << uri << ">" << std::endl;
@@ -37,16 +37,12 @@ void NaviApp::create(const std::string &uri,const std::string &remote)
     }
     if(category.empty())
     {
-        reply_ = std::shared_ptr<http::server_threadpool::ReplyView>(new NaviView(username,use_id));
+        return ReplyViewPtr(new NaviView(username,use_id));
     }
     else
     {
-        reply_ = std::shared_ptr<http::server_threadpool::ReplyView>(new NaviView(username,use_id,category));
+        return ReplyViewPtr(new NaviView(username,use_id,category));
     }
-}
-void NaviApp::get(const std::string &doc_root, http::server_threadpool::reply& rep)
-{
-    reply_->responseGet(doc_root,rep);
 }
 
 // #define DEBUG_CONTENT

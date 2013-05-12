@@ -12,10 +12,26 @@ namespace fs = boost::filesystem;
 #include <fstream>
 #include <iostream>
 
-#define DEBUG_PARAM
-//#define DEBUG_CONTENT
 
-void text2html(string &txt);
+
+#define DEBUG_APP_PARAM
+DefaultApp::DefaultApp(void)
+{
+}
+DefaultApp::~ DefaultApp()
+{
+}
+ReplyViewPtr DefaultApp::create(const std::string &uri,const std::string &user_uid)
+{
+#ifdef DEBUG_APP_PARAM
+	std::cout << typeid(this).name() << ":" << __func__ << ":uri=<" << uri << ">" << std::endl;
+#endif
+    return ReplyViewPtr(new DefaultView(uri));
+}
+
+#define DEBUG_PARAM
+#define DEBUG_PATH
+#define DEBUG_CONTENT
 
 DefaultView::DefaultView(const string &uri)
 :ReplyView()
@@ -36,7 +52,7 @@ bool DefaultView::readBody(const string &doc_root,string &contents)
         return false;
     }    
 #ifdef DEBUG_PATH
-	std::cout << "request_path=" << request_path << std::endl;
+	std::cout << "full_path=" << full_path << std::endl;
 #endif
     // Fill out the reply to be sent to the client.
     char buf[512];
@@ -55,26 +71,4 @@ std::map<std::string,std::string> DefaultView::fillHeader(void)
     std::map<std::string,std::string>  ret;
     ret.insert(std::pair<std::string,std::string>("Content-Type",http::server_threadpool::mime_types::extension_to_type(extension)));
     return ret;
-}
-
-
-
-
-#define DEBUG_APP_PARAM
-DefaultApp::DefaultApp(void)
-{
-}
-DefaultApp::~ DefaultApp()
-{
-}
-void DefaultApp::create(const std::string &uri,const std::string &user_uid)
-{
-#ifdef DEBUG_APP_PARAM
-	std::cout << typeid(this).name() << ":" << __func__ << ":uri=<" << uri << ">" << std::endl;
-#endif
-    reply_ = std::shared_ptr<http::server_threadpool::ReplyView>(new DefaultView(uri));
-}
-void DefaultApp::get(const std::string &doc_root, http::server_threadpool::reply& rep)
-{
-    reply_->responseGet(doc_root,rep);
 }

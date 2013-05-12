@@ -24,7 +24,7 @@ SourceApp::SourceApp(void)
 SourceApp::~ SourceApp()
 {
 }
-void SourceApp::create(const std::string &uri,const std::string &remote)
+ReplyViewPtr SourceApp::create(const std::string &uri,const std::string &remote)
 {
 #ifdef DEBUG_APP_PARAM
 	std::cout << typeid(this).name() << ":" << __func__ << ":uri=<" << uri << ">" << std::endl;
@@ -47,16 +47,7 @@ void SourceApp::create(const std::string &uri,const std::string &remote)
 	std::cout << typeid(this).name() << ":" << __func__ << ":repo=<" << repo << ">" << std::endl;
 	std::cout << typeid(this).name() << ":" << __func__ << ":type=<" << type << ">" << std::endl;
 #endif
-    reply_ = std::shared_ptr<http::server_threadpool::ReplyView>(new SourceView(uri,username,use_id,category,repo,path));
-}
-void SourceApp::get(const std::string &doc_root, http::server_threadpool::reply& rep)
-{
-    reply_->responseGet(doc_root,rep);
-}
-void SourceApp::post(const std::string &data, http::server_threadpool::reply& rep)
-{
-    reply_->post(data);
-    reply_->responsePost(rep);
+    return ReplyViewPtr(new SourceView(uri,username,use_id,category,repo,path));
 }
 
 //#define DEBUG_PARAM

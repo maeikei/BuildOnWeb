@@ -67,14 +67,10 @@ DefaultApp::DefaultApp(void)
 DefaultApp::~ DefaultApp()
 {
 }
-void DefaultApp::create(const std::string &uri,const std::string &user_uid)
+ReplyViewPtr DefaultApp::create(const std::string &uri,const std::string &user_uid)
 {
 #ifdef DEBUG_APP_PARAM
 	std::cout << typeid(this).name() << ":" << __func__ << ":uri=<" << uri << ">" << std::endl;
 #endif
-    reply_ = std::shared_ptr<http::server_threadpool::ReplyView>(new DefaultView(uri));
-}
-void DefaultApp::get(const std::string &doc_root, http::server_threadpool::reply& rep)
-{
-    reply_->responseGet(doc_root,rep);
+    return  ReplyViewPtr(new DefaultView(uri));
 }

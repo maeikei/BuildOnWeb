@@ -15,6 +15,7 @@ namespace http
         class resource;
     }
 }
+typedef std::shared_ptr<http::server_threadpool::ReplyView> ReplyViewPtr;
 
 
 namespace BOW {
@@ -23,10 +24,7 @@ namespace BOW {
     public:
        SettingApp(void);
         virtual ~ SettingApp();
-        virtual void create(const std::string &uri,const std::string &user_uid);
-        // http method
-        virtual void get(const std::string &doc_root, http::server_threadpool::reply& rep);
-        virtual void post(const std::string &data, http::server_threadpool::reply& rep);
+        virtual ReplyViewPtr create(const std::string &uri,const std::string &user_uid);
     };
     
     class GitWorker;
@@ -42,7 +40,6 @@ namespace BOW {
         virtual void post(const std::string &data);
         virtual bool readPostReply(std::string &contents);
     private:
-        void create_source(std::map<std::string,std::string> &replace);
         void create_output(std::map<std::string,std::string> &replace);
         void read_output(string &output);
         void create_loginout(std::map<std::string,std::string> &replace);
@@ -50,6 +47,8 @@ namespace BOW {
         const string uri_;
         const string user_;
         const string user_uid_;
+        const string workspace_;
+        shared_ptr<GitWorker> git_;
     };
 }
 #endif // BOW_SETTING_VIEW_HPP

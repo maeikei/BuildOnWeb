@@ -15,6 +15,7 @@ namespace http
         class resource;
     }
 }
+typedef std::shared_ptr<http::server_threadpool::ReplyView> ReplyViewPtr;
 
 namespace BOW {
     class RepositoryApp: public http::server_threadpool::resource
@@ -22,9 +23,7 @@ namespace BOW {
     public:
         RepositoryApp(void);
         virtual ~ RepositoryApp();
-        virtual void create(const std::string &uri,const string& user_uid);
-        //http method
-        virtual void get(const std::string &doc_root, http::server_threadpool::reply& rep);
+        virtual ReplyViewPtr create(const std::string &uri,const string& user_uid);
     };
     class LastPostion;
     class DirecoryView;

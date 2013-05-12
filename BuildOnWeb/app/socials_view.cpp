@@ -22,7 +22,7 @@ SosialApp::SosialApp(void)
 SosialApp::~ SosialApp()
 {
 }
-void SosialApp::create(const std::string &uri,const std::string &remote)
+ReplyViewPtr SosialApp::create(const std::string &uri,const std::string &remote)
 {
 #ifdef DEBUG_APP_PARAM
 	std::cout << typeid(this).name() << ":" << __func__ << ":uri=<" << uri << ">" << std::endl;
@@ -37,16 +37,7 @@ void SosialApp::create(const std::string &uri,const std::string &remote)
         use_id += "_from_";
         use_id += boost::algorithm::replace_all_copy(remote,".","_");
     }
-    reply_ = std::shared_ptr<http::server_threadpool::ReplyView>(new SosialView(uri,username,use_id,category,repo));
-}
-void SosialApp::get(const std::string &doc_root, http::server_threadpool::reply& rep)
-{
-    reply_->responseGet(doc_root,rep);
-}
-void SosialApp::post(const std::string &data, http::server_threadpool::reply& rep)
-{
-    reply_->post(data);
-    reply_->responsePost(rep);
+    return  ReplyViewPtr(new SosialView(uri,username,use_id,category,repo));
 }
 
 //#define DEBUG_PARAM
