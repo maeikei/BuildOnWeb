@@ -9,16 +9,8 @@ aux_source_directory(app app_SRCS)
 
 
 add_executable(cochub
-  app/default_view.hpp
-  app/directory_view.hpp
   app/git_worker.hpp
   app/last_position.hpp
-  app/manual_view.hpp
-  app/navi_view.hpp
-  app/redirect_view.hpp
-  app/repository_view.hpp
-  app/socials_view.hpp
-  app/source_view.hpp
   app/utilities.hpp
   ${app_SRCS}
 )
