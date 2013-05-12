@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>Build On Web</title>
     <link rel="stylesheet" href="css/layout.css">
-    <link rel="stylesheet" href="css/layout_navi.css">
+    <link rel="stylesheet" href="css/layout_setting.css">
 </head>
 <body>
     <div id="Container">
@@ -30,14 +30,27 @@
             </div>
         </div>
 	<div id="ContentFrame">
-            <div id="NaviPathFrame">$BOW_TMPL_NAVI_PATH$</div>
-            <div id="NaviViewFrame">                
-                <table id="NaviListTable">
-                    <thead></thead>
-                    <tbody>
-                        $BOW_TMPL_NAVI_TABLE$
-                    </tbody>
-                </table>
+            <div id="ProjectViewFrame">
+                <div id="ProjectInfo">
+                    <div id="ProjectRepo">
+                        <label>
+                            Repository of your project
+                        </label>
+                        <input type="text" id="ProjectRepoUri"/>
+                        <input type="button" value="Auto Detect"/>
+                        <canvas id="ProjectAutoDetectCanvas" width="20" height="20"></canvas>
+                        <label>
+                            branchs
+                        </label>
+                        <select>
+                            <option value = "1">master</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="ProjectProperty">
+                </div>
+            </div>
+            <div id="ProjectSettingLog">
             </div>
 	</div>   
         <div id="Footer">
@@ -45,5 +58,13 @@
             Any question please contract me. <a href="mailto:maeikei@gmail.com">maeikei@gmail.com</a>
         </div>
     </div>
+    <script src="ace/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+    <!--script src="js/ace_wrap.js" type="text/javascript" charset="utf-8"></script-->    
+    <script type="text/javascript">
+        var output = ace.edit("ProjectSettingLog");
+        output.setTheme("ace/theme/terminal");
+        output.getSession().setMode("ace/mode/text");
+        output.setReadOnly(true);
+    </script> 
 </body>
 </html>

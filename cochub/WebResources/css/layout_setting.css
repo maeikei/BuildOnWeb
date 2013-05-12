@@ -1,0 +1,34 @@
+/*
+ top 2 in ContentFrame
+*/
+#ProjectViewFrame
+{
+    float :top; 
+    height:50%; 
+    width :96%;
+}
+#ProjectSettingLog
+{
+    float :top;
+    height:45%;
+    width :96%;
+    border:2px solid gray;
+}
+
+#ProjectInfo
+{
+    margin:auto;
+    align:center;
+    border:1px solid blue;
+}
+
+#ProjectRepoUri
+{
+    width :300px;
+    border:1px solid red;
+}
+
+#ProjectAutoDetectCanvas
+{
+    border:1px solid red;
+}

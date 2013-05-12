@@ -12,6 +12,7 @@ add_executable(cochub
   app/default_view.hpp
   app/git_worker.hpp
   app/last_position.hpp
+  app/setting_view.hpp
   app/utilities.hpp
   ${app_SRCS}
 )
