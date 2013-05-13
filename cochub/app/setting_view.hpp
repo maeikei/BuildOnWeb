@@ -49,7 +49,7 @@ namespace BOW {
         const string user_uid_;
         const string project_;
         const string workspace_;
-        shared_ptr<GitWorker> git_;
+        const list<string> env_build_commands_;
     };
 }
 #endif // BOW_SETTING_VIEW_HPP

@@ -47,6 +47,8 @@ private:
   std::string doc_root_;
   /// client ip address 
   std::string remote_;
+  /// websocket key
+  std::string wskey_;
   /// route map to apps.
   static const std::vector<routepair> route_;
 

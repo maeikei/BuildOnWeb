@@ -16,6 +16,7 @@ namespace fs = boost::filesystem;
 
 
 #define DEBUG_APP_PARAM
+#define DEBUG_POST_PARAM
 
 
 SettingApp::SettingApp(void)
@@ -58,12 +59,20 @@ SettingView::SettingView(const string &uri,const string &username,const std::str
 ,user_uid_(user_uid)
 ,project_(project)
 ,workspace_(".temp/" + user_uid_)
+,env_build_commands_
+ {
+     "mkdir -p " + workspace_,
+ }
 {
 #ifdef DEBUG_PARAM
     std::cout << __func__ <<":username=" <<  username << endl;
     std::cout << __func__ <<":category=" <<  category << endl;
     std::cout << __func__ <<":repo=" <<  repo << endl;
 #endif
+    for(const auto &cmd :env_build_commands_)
+    {
+        BOW::system_result(cmd);
+    }
 }
 SettingView::~ SettingView()
 {
@@ -95,13 +104,7 @@ std::map<std::string,std::string> SettingView::bodyVars(void)
     std::map<std::string,std::string> ret;
 
     // replace users
-    ret.insert(pair<string,string>("$BOW_TMPL_USER$",user_));
-    
-    // replace web socket $BOW_TMPL_WS_PATH$
-    {
-        ret.insert(pair<string,string>("$BOW_TMPL_WS_PATH$",uri_));
-    }
-
+    ret.insert(pair<string,string>("$BOW_TMPL_USER$",user_));    
     // replace javascript $BOW_TMPL_PROJECT_NAME$
     {
         if( "+" == project_)
@@ -186,9 +189,34 @@ void SettingView::create_loginout(std::map<std::string,std::string> &replace)
     
 void SettingView::post(const std::string &data)
 {
+#ifdef DEBUG_POST_PARAM
+	std::cout << typeid(this).name() << ":" << __func__ << ":data=<" << data << ">" << std::endl;
+#endif
+    string git_cmd("cd " + workspace_ + " && git clone " + data);
+    string result = system_result(git_cmd);
+#ifdef DEBUG_POST_PARAM
+	std::cout << typeid(this).name() << ":" << __func__ << ":result=<" << result << ">" << std::endl;
+#endif    
 }
 bool SettingView::readPostReply(std::string &contents)
 {
+    string find_git_root("find  " + workspace_ + " -type d -name *.git");
+    string gitroot = system_result(find_git_root);
+    boost::algorithm::replace_all(gitroot,"/.git","");
+    boost::algorithm::replace_all(gitroot,"\n","");
+    boost::algorithm::replace_all(gitroot,"\r","");
+#ifdef DEBUG_POST_PARAM
+	std::cout << typeid(this).name() << ":" << __func__ << ":gitroot=<" << gitroot << ">" << std::endl;
+#endif
+    string get_branches = system_result("cd " + gitroot + "&& git branch -r | grep -v \"origin/HEAD\" " );
+    boost::algorithm::replace_all(get_branches,"origin/","");
+    boost::algorithm::replace_all(get_branches," ","");
+    boost::algorithm::replace_all(get_branches,"\n",",");
+    boost::algorithm::replace_all(get_branches,"\r",",");
+#ifdef DEBUG_POST_PARAM
+	std::cout << typeid(this).name() << ":" << __func__ << ":get_branches=<" << get_branches << ">" << std::endl;
+#endif
+
     read_output(contents);
     return true;
 }

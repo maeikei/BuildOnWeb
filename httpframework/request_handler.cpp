@@ -57,21 +57,24 @@ void request_handler::handle_request(const request& req, reply& rep)
     std::cout << "req.http_version_major=" << req.http_version_major << std::endl;
     std::cout << "req.http_version_minor=" << req.http_version_minor << std::endl;
     std::cout << "req.headers------*****------" << std::endl;
-    for(auto it = req.headers.begin();it != req.headers.end();it++)
+    for(const auto &header :req.headers)
     {
-        std::cout << "name=<" << it->name << "> value=<"<< it->value << ">" << std::endl;
+        std::cout << "name=<" << header.name << "> value=<"<< header.value << ">" << std::endl;
     }
     std::cout << "------*****------" << std::endl;
 #endif
 #ifdef DEBUG_DATA
 	std::cout << "data=" << req.data << std::endl;
 #endif
-    for(auto it = req.headers.begin();it != req.headers.end();it++)
+    for(const auto &header : req.headers)
     {
-        if("X-Real-IP" == it->name)
+        if("X-Real-IP" == header.name)
         {
-            remote_ = it->value;
-            break;
+            remote_ = header.value;
+        }
+        if("Sec-WebSocket-Key" == header.name)
+        {
+            wskey_ = header.value;
         }
     }
 #ifdef DEBUG_RET
@@ -105,13 +108,20 @@ void request_handler::handle_request(const request& req, reply& rep)
             std::cout << "match app name =<" << typeid(it->second).name() << ">" << std::endl;
 #endif
             std::shared_ptr<ReplyView> reply = it->second.create(req.uri,remote_);
-            if( "GET" == req.method || "get" == req.method )
+            if( true == wskey_.empty())
             {
-                it->second.get(reply,doc_root_, rep);
+                if( "GET" == req.method || "get" == req.method )
+                {
+                    it->second.get(reply,doc_root_, rep);
+                }
+                if( "POST" == req.method || "post" == req.method )
+                {
+                    it->second.post(reply,req.data, rep);
+                }
             }
-            if( "POST" == req.method || "post" == req.method )
+            else
             {
-                it->second.post(reply,req.data, rep);
+                
             }
             break;
         }

@@ -72,6 +72,7 @@ void connection::handle_read(const boost::system::error_code& e,
     boost::tie(result, boost::tuples::ignore) = request_parser_.parse(
         request_, buffer_.data(), buffer_.data() + bytes_transferred);
 #ifdef DEBUG_READ
+    std::cout << "-----------------****-----------------" << std::endl;
 	std::cout << "bytes_transferred=" << bytes_transferred << std::endl;
 	std::string buff_str(buffer_.data(),bytes_transferred);
 	std::cout << buff_str << std::endl;

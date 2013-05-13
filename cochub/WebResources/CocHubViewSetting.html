@@ -73,16 +73,26 @@
         output.setReadOnly(true);
     </script> 
     <script type="text/javascript">
-        var ws = new WebSocket("$BOW_TMPL_WS_PATH$");
+        var path = window.location.pathname;
+        var xmlHttpRequest = new XMLHttpRequest();
+        xmlHttpRequest.onreadystatechange = function() {
+            var READYSTATE_COMPLETED = 4;
+            var HTTP_STATUS_OK = 200;
+            /*
+                 console.log(xmlHttpRequest.readyState);
+                 console.log(xmlHttpRequest.status);
+         */
+            if( xmlHttpRequest.readyState == READYSTATE_COMPLETED
+                       && xmlHttpRequest.status == HTTP_STATUS_OK )
+               {
+                   
+               }
+        }
         function ProjectRepoUriChanged(x){
-            if(ws.readyState == 1) {
-                ws.send(x);
-            }
+            xmlHttpRequest.open('POST',path);
+            xmlHttpRequest.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded');
+            xmlHttpRequest.send(x);
         }
-        ws.onmessage = function(e) {
-            
-        }
-        ws.close();
     </script> 
 </body>
 </html>
