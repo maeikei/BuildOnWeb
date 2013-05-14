@@ -43,7 +43,6 @@ namespace BOW {
         void create_output(std::map<std::string,std::string> &replace);
         void read_output(string &output);
         void create_loginout(std::map<std::string,std::string> &replace);
-        void getbuildType(const std::string &root,std::string &contents);
     private:
         const string uri_;
         const string user_;
@@ -51,6 +50,12 @@ namespace BOW {
         const string project_;
         const string workspace_;
         const list<string> env_build_commands_;
+/// 
+        string output_;
+        string gitroot_;
+        string projectname_;
+        list<string> gitbranches_;
+        list<string> buildType_;
     };
 }
 #endif // BOW_SETTING_VIEW_HPP

@@ -69,25 +69,22 @@
         output.setTheme("ace/theme/terminal");
         output.getSession().setMode("ace/mode/text");
         output.setReadOnly(true);
-    </script> 
-    <script type="text/javascript">
         var path = window.location.pathname;
         var xmlHttpRequest = new XMLHttpRequest();
         xmlHttpRequest.onreadystatechange = function() {
             var READYSTATE_COMPLETED = 4;
             var HTTP_STATUS_OK = 200;
-            /*
-                 console.log(xmlHttpRequest.readyState);
-                 console.log(xmlHttpRequest.status);
-         */
             if( xmlHttpRequest.readyState == READYSTATE_COMPLETED
                        && xmlHttpRequest.status == HTTP_STATUS_OK )
                {
                    console.log(xmlHttpRequest.responseText);
                    var obj = eval("(" + xmlHttpRequest.responseText + ")");
                    var branchmenu = document.getElementById("ProjectRepoBranch");
+                   while (branchmenu.firstChild) {
+                       branchmenu.removeChild(branchmenu.firstChild);
+                   };
                    for (var i in obj.branches) {
-                       console.log(obj.branches[i]);
+                       /*console.log(obj.branches[i]);*/
                        var option = document.createElement("option");
                        option.setAttribute("value",obj.branches[i]);
                        option.innerHTML = obj.branches[i];
@@ -95,20 +92,55 @@
                    }
                    document.getElementById("ProjectName").setAttribute("value",obj.name);
                    
-                    var buildTypeMenu = document.getElementById("ProjectBuildType");
+                   var buildTypeMenu = document.getElementById("ProjectBuildType");
+                   while (buildTypeMenu.firstChild) {
+                       buildTypeMenu.removeChild(buildTypeMenu.firstChild);
+                   };
                     for (var i in obj.buildtype) {
-                       console.log(obj.buildtype[i]);
+                       /*console.log(obj.buildtype[i]);*/
                        var option = document.createElement("option");
                        option.setAttribute("value",obj.buildtype[i]);
                        option.innerHTML = obj.buildtype[i];
                        buildTypeMenu.appendChild(option);
                    }
+                   output.setValue(obj.output,1);
+                   output.gotoLine(1);
+                   stopAnim();
                }
         }
         function ProjectRepoUriChanged(x){
             xmlHttpRequest.open('POST',path);
             xmlHttpRequest.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded');
-            xmlHttpRequest.send(x);
+            xmlHttpRequest.send(JSON.stringify({"git":x}));
+            startAnim();
+        }
+        
+        /*animations*/
+        var animationCounter = 0;
+        function animLoop() {
+            var canvas = document.getElementById('ProjectAutoDetectCanvas');
+            var cc = canvas.getContext('2d');
+            cc.beginPath();
+            cc.arc(10, 10, 10, 0, Math.PI * 2, false);
+            if( animationCounter != 1) {
+                cc.fillStyle = 'red';
+            }
+            else {
+                cc.fillStyle = 'green';
+            }
+            cc.fill();
+            animationCounter += 1;
+            animationCounter %= 2;
+        }
+        var animTimer;
+        function startAnim(){
+            animTimer = setInterval("animLoop()",400);
+        }
+        function stopAnim(){
+            clearInterval(animTimer);
+            var canvas = document.getElementById('ProjectAutoDetectCanvas');
+            var cc = canvas.getContext('2d');
+            cc.clearRect(0,0,20,20);
         }
     </script> 
 </body>
