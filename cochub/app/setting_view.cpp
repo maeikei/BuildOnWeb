@@ -15,9 +15,9 @@ namespace fs = boost::filesystem;
 
 
 
-#define DEBUG_APP_PARAM
-#define DEBUG_POST_PARAM
-
+//#define DEBUG_APP_PARAM
+//#define DEBUG_POST_PARAM
+#define DEBUG_POST_BUILD_TYPE
 
 SettingApp::SettingApp(void)
 {
@@ -167,9 +167,9 @@ void SettingView::read_output(string &output)
 }
     
 
-static string strConstLogin =
+static const string strConstLogin =
     "<a href=\"/login.php\" data-method=\"post\" id=\"login\">login</a>";
-static string strConstLogout =
+static const string strConstLogout =
     "<a href=\"/logout.php\" data-method=\"post\" id=\"logout\">logout</a>";
     
     
@@ -198,8 +198,15 @@ void SettingView::post(const std::string &data)
 	std::cout << typeid(this).name() << ":" << __func__ << ":result=<" << result << ">" << std::endl;
 #endif    
 }
+
+    
+static const string strConstBranchOption =
+"<option value=\"$option$\">$option$</option>";
+    
 bool SettingView::readPostReply(std::string &contents)
 {
+    contents = "{";
+
     string find_git_root("find  " + workspace_ + " -type d -name *.git");
     string gitroot = system_result(find_git_root);
     boost::algorithm::replace_all(gitroot,"/.git","");
@@ -208,16 +215,67 @@ bool SettingView::readPostReply(std::string &contents)
 #ifdef DEBUG_POST_PARAM
 	std::cout << typeid(this).name() << ":" << __func__ << ":gitroot=<" << gitroot << ">" << std::endl;
 #endif
+    fs::path gitrootpath(gitroot);
+    string name(gitrootpath.stem().string());
     string get_branches = system_result("cd " + gitroot + "&& git branch -r | grep -v \"origin/HEAD\" " );
     boost::algorithm::replace_all(get_branches,"origin/","");
     boost::algorithm::replace_all(get_branches," ","");
-    boost::algorithm::replace_all(get_branches,"\n",",");
-    boost::algorithm::replace_all(get_branches,"\r",",");
+    boost::algorithm::replace_all(get_branches,"\n","\",\"");
+    boost::algorithm::replace_all(get_branches,"\r","\",\"");
+    get_branches = string(get_branches,0,get_branches.size() -2);
 #ifdef DEBUG_POST_PARAM
 	std::cout << typeid(this).name() << ":" << __func__ << ":get_branches=<" << get_branches << ">" << std::endl;
 #endif
-
+    contents += "\"branches\":[\"";
+    contents += get_branches;
+    contents += "],";
+    
+    contents += "\"name\":\"" + name + "\"";
+    
+    getbuildType(gitroot,contents);
+    
+    contents += "}";
     read_output(contents);
     return true;
 }
 
+void SettingView::getbuildType(const std::string &root,std::string &contents)
+{
+    string buildType;
+    buildType += "[";
+    string cmakefile = system_result("cd " + root + "&& find . -type f -name CMakeLists.txt");
+#ifdef DEBUG_POST_BUILD_TYPE
+	std::cout << typeid(this).name() << ":" << __func__ << ":cmakefile=<" << cmakefile << ">" << std::endl;
+#endif
+    if(false == cmakefile.empty())
+    {
+        buildType += "\"CMake\",";
+    }
+    string makefile = system_result("cd " + root + "&& find . -type f -name Makefile");
+#ifdef DEBUG_POST_BUILD_TYPE
+	std::cout << typeid(this).name() << ":" << __func__ << ":makefile=<" << makefile << ">" << std::endl;
+    if(false == makefile.empty())
+    {
+        buildType += "\"Makefile\",";
+    }
+#endif
+    string gnumakefile = system_result("cd " + root + "&& find . -type f -name GNUMakefile");
+#ifdef DEBUG_POST_BUILD_TYPE
+	std::cout << typeid(this).name() << ":" << __func__ << ":gnumakefile=<" << gnumakefile << ">" << std::endl;
+#endif
+    if(false == gnumakefile.empty())
+    {
+        buildType += "\"Makefile\",";
+    }
+    string configure = system_result("cd " + root + "&& find . -type f -name configure");
+#ifdef DEBUG_POST_BUILD_TYPE
+	std::cout << typeid(this).name() << ":" << __func__ << ":configure=<" << configure << ">" << std::endl;
+#endif
+    if(false == configure.empty())
+    {
+        buildType += "\"configure\",";
+    }
+    buildType = string(buildType,0,buildType.size() -1);
+    buildType += "]";
+    contents += ",\"buildtype\":" + buildType;
+}

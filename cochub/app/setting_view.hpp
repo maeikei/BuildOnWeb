@@ -43,6 +43,7 @@ namespace BOW {
         void create_output(std::map<std::string,std::string> &replace);
         void read_output(string &output);
         void create_loginout(std::map<std::string,std::string> &replace);
+        void getbuildType(const std::string &root,std::string &contents);
     private:
         const string uri_;
         const string user_;

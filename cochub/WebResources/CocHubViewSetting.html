@@ -43,17 +43,15 @@
                         <label>
                             branchs
                         </label>
-                        <select>
-                            $BOW_TMPL_PROJECT_BRANCHES$
+                        <select id="ProjectRepoBranch">
                         </select>
-                        <input type="text" id="ProjectName" value="$BOW_TMPL_PROJECT_NAME$"/>
+                        <input type="text" id="ProjectName" value=""/>
+                        <label>Build Type:</label>
+                        <select id="ProjectBuildType">
+                        </select>
                     </div>
                 </div>
                 <div id="ProjectProperty">
-                    <label>Build Type:</label>
-                    <select>
-                            <option value = "1">-</option>
-                    </select>
                 </div>
             </div>
             <div id="ProjectSettingLog">
@@ -85,7 +83,26 @@
             if( xmlHttpRequest.readyState == READYSTATE_COMPLETED
                        && xmlHttpRequest.status == HTTP_STATUS_OK )
                {
+                   console.log(xmlHttpRequest.responseText);
+                   var obj = eval("(" + xmlHttpRequest.responseText + ")");
+                   var branchmenu = document.getElementById("ProjectRepoBranch");
+                   for (var i in obj.branches) {
+                       console.log(obj.branches[i]);
+                       var option = document.createElement("option");
+                       option.setAttribute("value",obj.branches[i]);
+                       option.innerHTML = obj.branches[i];
+                       branchmenu.appendChild(option);
+                   }
+                   document.getElementById("ProjectName").setAttribute("value",obj.name);
                    
+                    var buildTypeMenu = document.getElementById("ProjectBuildType");
+                    for (var i in obj.buildtype) {
+                       console.log(obj.buildtype[i]);
+                       var option = document.createElement("option");
+                       option.setAttribute("value",obj.buildtype[i]);
+                       option.innerHTML = obj.buildtype[i];
+                       buildTypeMenu.appendChild(option);
+                   }
                }
         }
         function ProjectRepoUriChanged(x){
