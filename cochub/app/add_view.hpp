@@ -1,0 +1,61 @@
+#ifndef BOW_SETTING_VIEW_HPP
+#define BOW_SETTING_VIEW_HPP
+#include <string>
+#include <list>
+#include <map>
+#include <memory>
+using namespace std;
+
+namespace http
+{
+    namespace server_threadpool
+    {
+        struct reply;
+        class ReplyView;
+        class resource;
+    }
+}
+typedef std::shared_ptr<http::server_threadpool::ReplyView> ReplyViewPtr;
+
+
+namespace BOW {
+    class AddApp: public http::server_threadpool::resource
+    {
+    public:
+       AddApp(void);
+        virtual ~ AddApp();
+        virtual ReplyViewPtr create(const std::string &uri,const std::string &user_uid);
+    };
+    
+    class GitWorker;
+    class AddView: public http::server_threadpool::ReplyView
+    {
+    public:
+        AddView(const string &uri,const string &username,const std::string &user_uid,const std::string &project);
+        virtual ~ AddView();
+    protected:
+        virtual bool readBody(const std::string &doc_root,std::string &contents);
+        virtual std::map<std::string,std::string> bodyVars(void);
+
+        virtual void post(const std::string &data);
+        virtual bool readPostReply(std::string &contents);
+    private:
+        void create_output(std::map<std::string,std::string> &replace);
+        void read_output(string &output);
+        void create_loginout(std::map<std::string,std::string> &replace);
+    private:
+        const string uri_;
+        const string user_;
+        const string user_uid_;
+        const string project_;
+        const string workspace_;
+        const list<string> env_build_commands_;
+/// 
+        string output_;
+        string gitroot_;
+        string projectname_;
+        list<string> gitbranches_;
+        list<string> buildType_;
+    };
+}
+#endif // BOW_SETTING_VIEW_HPP

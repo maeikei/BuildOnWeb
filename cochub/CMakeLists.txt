@@ -9,6 +9,7 @@ aux_source_directory(app app_SRCS)
 
 
 add_executable(cochub
+  app/add_view.hpp
   app/default_view.hpp
   app/git_worker.hpp
   app/last_position.hpp
