@@ -139,36 +139,6 @@ void AddView::create_output(std::map<std::string,std::string> &replace)
 }
 void AddView::read_output(string &output)
 {
-#if 0
-    // program run result
-    {
-        std::ifstream isf(output_.c_str(), std::ios::in | std::ios::binary);
-        if (isf)
-        {
-            // Fill out the reply to be sent to the client.
-            char buf[512];
-            while (isf.read(buf, sizeof(buf)).gcount() > 0) {
-                output.append(buf, isf.gcount());
-            }
-            isf.close();
-        }
-    }
-    output += "---------build log start---------\n";
-    // build result
-    {
-        std::ifstream isf(build_output_.c_str(), std::ios::in | std::ios::binary);
-        if (isf)
-        {
-            // Fill out the reply to be sent to the client.
-            char buf[512];
-            while (isf.read(buf, sizeof(buf)).gcount() > 0) {
-                output.append(buf, isf.gcount());
-            }
-            isf.close();
-        }
-    }
-    output += "---------build log end----------\n";
-#endif
 }
     
 
